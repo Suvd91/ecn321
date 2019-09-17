@@ -19,7 +19,6 @@ options(htmltools.dir.version = FALSE)
 
 # Улиралын нөлөөг загварчлах
 
---
 Хугацаан цуваа
 $$y_t=Trend_t + \color{red}{Seasonal}_t + Ciclyc_t + \varepsilon_t$$
 --
