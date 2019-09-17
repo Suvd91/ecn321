@@ -5,7 +5,7 @@ tagline:  Багш Д. Хашбаатар
 description: 
 ---
 
-![alt text](river.png "BoE")
+![alt text](pages/Lectures/river.png "BoE")
 
 
 ## Лекцүүд
