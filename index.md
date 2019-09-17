@@ -7,4 +7,4 @@ description:
 
 ## Lectures 
 
-[Сэдэв 4: Трендийг загварчлах, таамаглах](pages/Lectures/slide3.html) ((data)[/home/khashaa/ecn321/pages/Lectures/ch5data.Rdata][R Notebook](pages/Lectures/Notebook1.html))
+[Сэдэв 4: Трендийг загварчлах, таамаглах](pages/Lectures/slide3.html) ([data](pages/Lectures/ch5data.Rdata)[R Notebook](pages/Lectures/Notebook1.html))
