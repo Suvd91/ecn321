@@ -1,8 +1,10 @@
 ---
 layout: page
-title: ssdf
-tagline: 
+title: ECN321
+tagline:  Багш Д. Хашбаатар
 description: Minimal tutorial on making a simple website with GitHub Pages
 ---
 
-[Lecture](https://pages.github.com) provide a s
+## Lectures 
+
+[Lecture 3](pages/Lectures/slide3.html)
