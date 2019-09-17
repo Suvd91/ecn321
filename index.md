@@ -5,7 +5,7 @@ tagline:  Багш Д. Хашбаатар
 description: 
 ---
 
-![alt text](pages/Lectures/river.png "BoE")
+![alt text](pages/Lectures/river.png "from James H. Stock, Mark W. Watson “Introduction to Econometrics”")
 
 
 ## Лекцүүд
