@@ -2,9 +2,9 @@
 layout: page
 title: ECN321
 tagline:  Багш Д. Хашбаатар
-description: Minimal tutorial on making a simple website with GitHub Pages
+description: 
 ---
 
 ## Lectures 
 
-[Lecture 3](pages/Lectures/slide3.html)
+[Сэдэв 4: Трендийг загварчлах, таамаглах](pages/Lectures/slide3.html) ((data)[/home/khashaa/ecn321/pages/Lectures/ch5data.Rdata][R Notebook](pages/Lectures/Notebook1.html))
