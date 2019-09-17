@@ -20,12 +20,13 @@ description:
 
 [Сэдэв 5: Улиралын нөлөөг загварчлах, таамаглах](pages/Lectures/slide4.html) ([data](pages/Lectures/ch6data.Rdata), [R Notebook](pages/Lectures/Notebook2.html))
 
-Сэдэв 6:
+Сэдэв 6: Мөчлөгийг тодорхойлох (Diebold, Chapter 7)
 
-Сэдэв 7:
+Сэдэв 7: Мөчлөгийг загварчлах: МА, AR, ARMA загварууд ((Diebold, Chapter 8)
 
-Сэдэв 8:
+Сэдэв 8: Мөчлөгийг таамаглах (Diebold, Бүлэг 9)
 
+Сэдэв 9: Тренд, улирал, мөчлөг бүхий таамаглал хийх загвар (Д, Бүлэг 10)
 
 ## Сурах бичиг
 
