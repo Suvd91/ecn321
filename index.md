@@ -16,7 +16,7 @@ description:
 
 [Сэдэв 3: График анализ](pages/Lectures/slide2.html)
 
-[Сэдэв 4: Трендийг загварчлах, таамаглах](pages/Lectures/slide3.html) ([data](pages/Lectures/ch5data.Rdata), [R Notebook](pages/Lectures/Notebook1.html))
+[Сэдэв 4: Тренд загварчлах, таамаглах](pages/Lectures/slide3.html) ([data](pages/Lectures/ch5data.Rdata), [R Notebook](pages/Lectures/Notebook1.html))
 
 [Сэдэв 5: Улиралын нөлөөг загварчлах, таамаглах](pages/Lectures/slide4.html) ([data](pages/Lectures/ch6data.Rdata), [R Notebook](pages/Lectures/Notebook2.html))
 
@@ -27,6 +27,12 @@ description:
 Сэдэв 8: Мөчлөгийг таамаглах (Diebold, Бүлэг 9)
 
 Сэдэв 9: Тренд, улирал, мөчлөг бүхий таамаглал хийх загвар (Д, Бүлэг 10)
+
+Сэдэв 10
+
+Сэдэв 11
+
+Сэдэв 12
 
 ## Сурах бичиг
 
