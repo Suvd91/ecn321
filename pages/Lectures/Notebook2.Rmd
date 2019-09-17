@@ -1,6 +1,7 @@
 ---
 title: "Diebold Ch6 R codes"
-html_document:
+output:
+  html_document:
     theme: united
     highlight: tango
 ---
@@ -33,11 +34,7 @@ durables <- ch6data %>%
   filter(date >= as.Date("1980-01-01") & date <= as.Date("1992-01-01") )
 plot(durables$date, durables$dgs, type = "l")
 ```
-улиралын дамми хувьсагчид регрессдэх
-s улиралын тоо
-s = 4 if quarterly data,
-s = 12 if we have monthly data, 
-s = 52 weekly data
+
 
 ```{r}
 housing <- ch6data %>% 

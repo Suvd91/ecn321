@@ -55,7 +55,7 @@ plot(w16 ~ date, data = mw16,
      lwd  = 2, 
      xlab = "Time", 
      ylab = "Rate", 
-     main = "Эрэгтэйчүүдийн хөдөлмөрийн зах зээлийн оролцоо")
+     main = "Эмэгтэйчүүдийн хөдөлмөрийн зах зээлийн оролцоо")
 lines(mw16$date, fitted(reg_w16), col="red")
 plot(residuals(reg_w16), 
      type = "l", 
@@ -144,7 +144,7 @@ evaluatuion_data <- RTRR %>% filter(date >= as.Date("1994-01-01"))
 reg1 <- lm(rtrr~time, data = estimation_data)
 reg2 <- lm(rtrr~time + time2, data = estimation_data)
 reg3 <- nls(rtrr~beta0*exp(beta1*time), data = estimation_data,
-            start =c(beta0=1000, beta1=0))
+            start = list(beta0 = 1000, beta1 = 0))
 plot(rtrr ~ date, data =  estimation_data, 
      type = "l", 
      lwd = 2, 
