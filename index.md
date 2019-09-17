@@ -22,3 +22,10 @@ description:
 Сэдэв 7:
 
 Сэдэв 8:
+
+
+## Сурах бичиг
+
+[Diebold Francis *"Elements of Forecasting"*](https://www.sas.upenn.edu/~fdiebold/Textbooks.html)
+
+[James H. Stock, Mark W. Watson *"Introduction to Econometrics"*](https://scholar.harvard.edu/stock/pages/introduction-econometrics)
