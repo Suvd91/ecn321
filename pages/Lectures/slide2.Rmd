@@ -1,0 +1,352 @@
+---
+title: "Эконометрикс II"
+subtitle: "Лекц 3: График анализ<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>"
+author: "багш: Д. Хашбаатар"
+date: "2019/09/09"
+output: 
+  xaringan::moon_reader:
+    css: [default, metropolis, metropolis-fonts]
+    nature: 
+      beforeInit: "macros.js"
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+# График анализ
+
+## EDA (Explotary Data Analysis)
+
+ - Graphics 
+  - scatterplot, time series plot
+  - barplot, histogram
+
+---
+
+# Анскомбийн дөрвөл
+
+```{r, eval=FALSE}
+anscombe
+```
+<head><style>
+        table {
+              font-family: times ;
+color:  black ;
+text-align: right;}
+        th {
+              padding: 1px 1px 5px 5px;
+	        }
+        td {
+             padding: 1px 1px 5px 5px; }
+      </style></head><table align="center" style="border-collapse: collapse; caption-side:top; font-size:11pt;"><caption style="text-align:center;"></caption><tr>
+<th style="border-left: 0px solid black;background-color: #FFFFFF;border-top: 2px solid gray;border-bottom: 1px solid gray;">&nbsp;</th>
+<th <th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;">x1</th>
+<th <th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;">x2</th>
+<th <th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;">x3</th>
+<th <th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;">x4</th>
+<th <th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;">y1</th>
+<th <th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;">y2</th>
+<th <th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;">y3</th>
+<th <th align="center" style="font-weight: normal;border-left: 0px solid black;border-right:0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;">y4</th>
+</tr>
+<tr>
+<td  style="border-left: 0px solid black; ">1</td>
+<td align="right" style="border-left: 0px solid black;">10.00</td>
+<td align="right" style="border-left: 0px solid black;">10.00</td>
+<td align="right" style="border-left: 0px solid black;">10.00</td>
+<td align="right" style="border-left: 0px solid black;">8.00</td>
+<td align="right" style="border-left: 0px solid black;">8.04</td>
+<td align="right" style="border-left: 0px solid black;">9.14</td>
+<td align="right" style="border-left: 0px solid black;">7.46</td>
+<td align="right" style="border-left: 0px solid black;border-right:0px solid black;">6.58</td>
+</tr>
+<tr>
+<td  style="border-left: 0px solid black; border-top: hidden;">2</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">8.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">8.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">8.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">8.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">6.95</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">8.14</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">6.77</td>
+<td align="right" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">5.76</td>
+</tr>
+<tr>
+<td  style="border-left: 0px solid black; border-top: hidden;">3</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">13.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">13.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">13.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">8.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">7.58</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">8.74</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">12.74</td>
+<td align="right" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">7.71</td>
+</tr>
+<tr>
+<td  style="border-left: 0px solid black; border-top: hidden;">4</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">9.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">9.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">9.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">8.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">8.81</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">8.77</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">7.11</td>
+<td align="right" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">8.84</td>
+</tr>
+<tr>
+<td  style="border-left: 0px solid black; border-top: hidden;">5</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">11.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">11.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">11.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">8.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">8.33</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">9.26</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">7.81</td>
+<td align="right" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">8.47</td>
+</tr>
+<tr>
+<td  style="border-left: 0px solid black; border-top: hidden;">6</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">14.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">14.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">14.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">8.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">9.96</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">8.10</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">8.84</td>
+<td align="right" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">7.04</td>
+</tr>
+<tr>
+<td  style="border-left: 0px solid black; border-top: hidden;">7</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">6.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">6.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">6.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">8.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">7.24</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">6.13</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">6.08</td>
+<td align="right" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">5.25</td>
+</tr>
+<tr>
+<td  style="border-left: 0px solid black; border-top: hidden;">8</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">4.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">4.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">4.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">19.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">4.26</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">3.10</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">5.39</td>
+<td align="right" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">12.50</td>
+</tr>
+<tr>
+<td  style="border-left: 0px solid black; border-top: hidden;">9</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">12.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">12.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">12.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">8.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">10.84</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">9.13</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">8.15</td>
+<td align="right" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">5.56</td>
+</tr>
+<tr>
+<td  style="border-left: 0px solid black; border-top: hidden;">10</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">7.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">7.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">7.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">8.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">4.82</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">7.26</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">6.42</td>
+<td align="right" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">7.91</td>
+</tr>
+<tr>
+<td  style="border-left: 0px solid black; border-top: hidden;">11</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">5.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">5.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">5.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">8.00</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">5.68</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">4.74</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">5.73</td>
+<td align="right" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">6.89</td>
+</tr>
+<tr>
+<td colspan="9" align="left" style="font-size:9pt ;border-top: 1px solid black; border-bottom: hidden;"></td>
+</tr>
+</table>
+
+ - Summary statistics
+
+<head><style>
+        table {
+              font-family: times ;
+color:  black ;
+text-align: right;}
+        th {
+              padding: 1px 1px 5px 5px;
+	        }
+        td {
+             padding: 1px 1px 5px 5px; }
+      </style></head><table align="center" style="border-collapse: collapse; caption-side:top; font-size:11pt;"><caption style="text-align:center;"></caption><tr>
+<th style="border-left: 0px solid black;background-color: #FFFFFF;border-top: 2px solid gray;border-bottom: 1px solid gray;">&nbsp;</th>
+<th <th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;">mean(x)</th>
+<th <th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;">mean(y)</th>
+<th <th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;">var(x)</th>
+<th <th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;">var(y)</th>
+<th <th align="center" style="font-weight: normal;border-left: 0px solid black;border-right:0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;">cov(x, y)</th>
+</tr>
+<tr>
+<td  style="border-left: 0px solid black; ">1</td>
+<td align="right" style="border-left: 0px solid black;">9.00</td>
+<td align="right" style="border-left: 0px solid black;">7.50</td>
+<td align="right" style="border-left: 0px solid black;">11.00</td>
+<td align="right" style="border-left: 0px solid black;">4.13</td>
+<td align="right" style="border-left: 0px solid black;border-right:0px solid black;">5.50</td>
+</tr>
+<tr>
+<td colspan="6" align="left" style="font-size:9pt ;border-top: 1px solid black; border-bottom: hidden;"></td>
+</tr>
+</table>
+---
+
+```{r eval=FALSE}
+lm(y1~x1, data = anscombe)
+```
+<head><style>
+        table {
+              font-family: times ;
+color:  black ;
+text-align: right;}
+        th {
+              padding: 1px 1px 5px 5px;
+	        }
+        td {
+             padding: 1px 1px 5px 5px; }
+      </style></head><table align="center" style="border-collapse: collapse; caption-side:top; font-size:11pt;"><caption style="text-align:center;"></caption><tr>
+<th style="border-left: 0px solid black;background-color: #FFFFFF;border-top: 2px solid gray;border-bottom: 1px solid gray;">&nbsp;</th>
+<th <th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;">Estimate</th>
+<th <th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;">Std. Error</th>
+<th <th align="center" style="font-weight: normal;border-left: 0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;">t value</th>
+<th <th align="center" style="font-weight: normal;border-left: 0px solid black;border-right:0px solid black;border-bottom: 1px solid gray;border-top: 2px solid gray;">Pr(>|t|)</th>
+</tr>
+<tr>
+<td  style="border-left: 0px solid black; ">(Intercept)</td>
+<td align="right" style="border-left: 0px solid black;">3.0001</td>
+<td align="right" style="border-left: 0px solid black;">1.1247</td>
+<td align="right" style="border-left: 0px solid black;">2.67</td>
+<td align="right" style="border-left: 0px solid black;border-right:0px solid black;">0.0257</td>
+</tr>
+<tr>
+<td  style="border-left: 0px solid black; border-top: hidden;">x1</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">0.5001</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">0.1179</td>
+<td align="right" style="border-left: 0px solid black;border-top: hidden;">4.24</td>
+<td align="right" style="border-left: 0px solid black;border-right:0px solid black;border-top: hidden;">0.0022</td>
+</tr>
+<tr>
+<td colspan="5" align="left" style="font-size:9pt ;border-top: 1px solid black; border-bottom: hidden;">Call: lm(formula = y1 ~ x1, data = anscombe)</td>
+</tr>
+</table>
+
+$$y=3+\frac{1}{2}x$$
+---
+
+# Scatterplot
+
+```{r, message=FALSE, echo=FALSE, warning=FALSE}
+library(tidyverse)
+anscombe_tidy <- anscombe %>%
+  mutate(observation = seq_len(n())) %>%
+  gather(key, value, -observation) %>%
+  separate(key, c("variable", "group"), 1, convert = TRUE) %>%
+  mutate(group = c("I", "II", "III", "IV")[group]) %>%
+  spread(variable, value)
+```
+
+
+```{r, echo=FALSE, fig.align='center', warning=FALSE}
+library(ggthemes)
+ggplot(anscombe_tidy, aes(x, y, col=group, alpha = 0.6)) +
+    geom_point() +
+    facet_wrap(~ group) +
+    geom_smooth(method = "lm", se = FALSE) +
+    theme_fivethirtyeight() + theme(legend.position="none")
+```
+
+---
+
+# Хугацаан цувааны график
+
+```{r echo=FALSE, fig.fullwidth=TRUE, fig.align='center'}
+load("interest.Rdata")
+
+date <- seq(1960, 2005, length.out = 624)
+plot(date, interest$Y1, type = "l", col = "blue", 
+     xlab = "Time", ylab = "Rate",
+     main = "1-Year Treasury Bond Rate")
+```
+
+---
+# Change in Rate
+
+```{r echo=FALSE, fig.fullwidth=TRUE, fig.align='center'}
+date <- seq(1960, 2005, length.out = 624)
+plot(date[-1], diff(interest$Y1), type = "l", col = "blue", 
+     xlab = "Time", ylab = "Change in Rate",
+     main = "Change in 1-Year Treasury Bond Rate")
+```
+
+---
+# Liquor Sales
+
+
+```{r echo=FALSE, fig.fullwidth=TRUE, fig.align='center'}
+load("liquor.Rdata")
+plot(liquor, type="l", xlab = "Time", ylab = "Million Dollars",
+     main = "Liquor Sales", lwd=2, col="blue")
+```
+
+---
+# Хистограмм
+
+```{r echo=FALSE, fig.fullwidth=TRUE, fig.align='center'}
+par(mfrow=c(1,2))
+hist(interest$Y1, main = "Histogram of 1-Year Rate", 
+     breaks = 20,
+     col = "blue",
+     xlab = "Rate")
+hist(diff(interest$Y1), main = "Histogram of Change in 1-Year Rate", col = "blue", 
+     breaks = 20,
+     xlab = "Change in Rate")
+```
+
+---
+# Олон хувьсагчийн график
+
+```{r echo=FALSE, fig.fullwidth=TRUE, fig.align='center'}
+plot(Y1~Y10, data = interest,
+     pch = 19, 
+     xlab = "10-Year Rate", ylab = "1-Year Rate",
+     col="steelblue"
+     )
+abline(lm(Y1~Y10, data = interest), col="red")
+
+```
+
+---
+
+# Олон хувьсагчийн хамаарал
+
+Multiway scatterplot
+```{r echo=FALSE, fig.fullwidth=TRUE, fig.align='center', warning=FALSE, message=FALSE}
+library(ggplot2)
+library(GGally)
+interest$Y30 <- NULL
+p <- ggpairs(interest)
+p + theme_bw()
+```
+

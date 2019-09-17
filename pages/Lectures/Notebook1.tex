@@ -1,0 +1,1692 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={Diebold Chapter 5: R codes},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\providecommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{Diebold Chapter 5: R codes}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{}
+    \preauthor{}\postauthor{}
+    \date{}
+    \predate{}\postdate{}
+  
+
+\begin{document}
+\maketitle
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{load}\NormalTok{(}\StringTok{"ch5data.Rdata"}\NormalTok{)}
+\KeywordTok{library}\NormalTok{(dplyr)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Attaching package: 'dplyr'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mw16 <-}\StringTok{ }\NormalTok{ch5data }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{filter}\NormalTok{(date }\OperatorTok{>=}\StringTok{ }\KeywordTok{as.Date}\NormalTok{(}\StringTok{"1955-01-01"}\NormalTok{) }\OperatorTok{&}\StringTok{ }\NormalTok{date}\OperatorTok{<=}\KeywordTok{as.Date}\NormalTok{(}\StringTok{"1993-12-01"}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{select}\NormalTok{(date, m16, w16) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{time        =} \KeywordTok{row_number}\NormalTok{(), }
+         \DataTypeTok{time2       =}\NormalTok{ time}\OperatorTok{^}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(m16 }\OperatorTok{~}\StringTok{ }\NormalTok{date, }\DataTypeTok{data =}\NormalTok{ mw16, }
+     \DataTypeTok{type =} \StringTok{"l"}\NormalTok{, }
+     \DataTypeTok{lwd  =} \DecValTok{2}\NormalTok{, }
+     \DataTypeTok{xlab =} \StringTok{"Time"}\NormalTok{, }
+     \DataTypeTok{ylab=}\StringTok{"Rate"}\NormalTok{, }
+     \DataTypeTok{main =} \StringTok{"Эрэгтэйчүүдийн хөдөлмөрийн зах зээлийн оролцоо"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <ad>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d1>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <80>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d1>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <8d>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b3>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d1>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <82>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d1>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <8d>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b9>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d1>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <87>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d2>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <af>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d2>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <af>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b4>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b8>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b9>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <bd>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d1>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <85>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d3>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <a9>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b4>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d3>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <a9>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <bb>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <bc>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d3>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <a9>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d1>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <80>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b8>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b9>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <bd>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b7>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d1>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <85>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b7>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d1>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <8d>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d1>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <8d>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <bb>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b8>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b9>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <bd>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <be>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d1>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <80>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <be>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <bb>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d1>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <86>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <be>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <be>
+\end{verbatim}
+
+\includegraphics{Notebook1_files/figure-latex/unnamed-chunk-2-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{reg_m16 <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(m16 }\OperatorTok{~}\StringTok{ }\NormalTok{time, }\DataTypeTok{data =}\NormalTok{ mw16)}
+\KeywordTok{plot}\NormalTok{(m16 }\OperatorTok{~}\StringTok{ }\NormalTok{date, }\DataTypeTok{data =}\NormalTok{ mw16, }
+     \DataTypeTok{type =} \StringTok{"l"}\NormalTok{, }
+     \DataTypeTok{lwd  =} \DecValTok{2}\NormalTok{, }
+     \DataTypeTok{xlab =} \StringTok{"Time"}\NormalTok{, }
+     \DataTypeTok{ylab =} \StringTok{"Rate"}\NormalTok{, }
+     \DataTypeTok{main =} \StringTok{"Эрэгтэйчүүдийн хөдөлмөрийн зах зээлийн оролцоо"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <ad>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d1>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <80>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d1>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <8d>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b3>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d1>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <82>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d1>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <8d>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b9>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d1>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <87>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d2>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <af>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d2>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <af>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b4>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b8>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b9>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <bd>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d1>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <85>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d3>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <a9>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b4>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d3>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <a9>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <bb>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <bc>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d3>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <a9>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d1>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <80>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b8>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b9>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <bd>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b7>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d1>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <85>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b7>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d1>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <8d>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d1>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <8d>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <bb>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b8>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b9>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <bd>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <be>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d1>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <80>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <be>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <bb>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d1>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <86>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <be>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <be>
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{lines}\NormalTok{(mw16}\OperatorTok{$}\NormalTok{date, }\KeywordTok{fitted}\NormalTok{(reg_m16), }\DataTypeTok{col=}\StringTok{"red"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Notebook1_files/figure-latex/unnamed-chunk-3-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(}\KeywordTok{residuals}\NormalTok{(reg_m16), }
+     \DataTypeTok{type =} \StringTok{"l"}\NormalTok{, }
+     \DataTypeTok{ylab =} \StringTok{"residuals"}\NormalTok{,}
+     \DataTypeTok{col  =} \StringTok{"red"}\NormalTok{)}
+\KeywordTok{points}\NormalTok{(}\KeywordTok{residuals}\NormalTok{(reg_m16), }\DataTypeTok{col =} \StringTok{"red"}\NormalTok{, }\DataTypeTok{pch =} \DecValTok{19}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Notebook1_files/figure-latex/unnamed-chunk-3-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{hist}\NormalTok{(}\KeywordTok{residuals}\NormalTok{(reg_m16), }\DataTypeTok{probability =} \OtherTok{TRUE}\NormalTok{, }
+     \DataTypeTok{main =} \StringTok{"Histogram of Residuals"}\NormalTok{, }
+     \DataTypeTok{col  =} \StringTok{"steelblue4"}\NormalTok{, }
+     \DataTypeTok{xlab =} \StringTok{"Residuals"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Notebook1_files/figure-latex/unnamed-chunk-3-3.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{reg_w16 <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(w16 }\OperatorTok{~}\StringTok{ }\NormalTok{time, }\DataTypeTok{data =}\NormalTok{ mw16)}
+\KeywordTok{plot}\NormalTok{(w16 }\OperatorTok{~}\StringTok{ }\NormalTok{date, }\DataTypeTok{data =}\NormalTok{ mw16, }
+     \DataTypeTok{type =} \StringTok{"l"}\NormalTok{, }
+     \DataTypeTok{lwd  =} \DecValTok{2}\NormalTok{, }
+     \DataTypeTok{xlab =} \StringTok{"Time"}\NormalTok{, }
+     \DataTypeTok{ylab =} \StringTok{"Rate"}\NormalTok{, }
+     \DataTypeTok{main =} \StringTok{"Эрэгтэйчүүдийн хөдөлмөрийн зах зээлийн оролцоо"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <ad>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d1>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <80>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d1>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <8d>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b3>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d1>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <82>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d1>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <8d>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b9>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d1>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <87>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d2>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <af>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d2>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <af>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b4>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b8>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b9>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <bd>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d1>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <85>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d3>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <a9>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b4>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d3>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <a9>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <bb>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <bc>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d3>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <a9>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d1>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <80>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b8>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b9>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <bd>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b7>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d1>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <85>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b7>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d1>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <8d>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d1>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <8d>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <bb>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b8>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <b9>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <bd>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <be>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d1>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <80>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <be>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <bb>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d1>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <86>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <be>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <d0>
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in title(...): conversion failure on 'Эрэгтэйчүүдийн хөдөлмөрийн
+## зах зээлийн оролцоо' in 'mbcsToSbcs': dot substituted for <be>
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{lines}\NormalTok{(mw16}\OperatorTok{$}\NormalTok{date, }\KeywordTok{fitted}\NormalTok{(reg_w16), }\DataTypeTok{col=}\StringTok{"red"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Notebook1_files/figure-latex/unnamed-chunk-4-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(}\KeywordTok{residuals}\NormalTok{(reg_w16), }
+     \DataTypeTok{type =} \StringTok{"l"}\NormalTok{, }
+     \DataTypeTok{xlab =} \StringTok{"Time"}\NormalTok{,}
+     \DataTypeTok{ylab =} \StringTok{"residuals"}\NormalTok{,}
+     \DataTypeTok{col  =} \StringTok{"red"}\NormalTok{)}
+\KeywordTok{points}\NormalTok{(}\KeywordTok{residuals}\NormalTok{(reg_w16), }\DataTypeTok{col =} \StringTok{"red"}\NormalTok{, }\DataTypeTok{pch =} \DecValTok{19}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Notebook1_files/figure-latex/unnamed-chunk-4-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{hist}\NormalTok{(}\KeywordTok{residuals}\NormalTok{(reg_w16), }\DataTypeTok{probability =} \OtherTok{TRUE}\NormalTok{, }
+     \DataTypeTok{main =} \StringTok{"Histogram of Residuals"}\NormalTok{, }
+     \DataTypeTok{col  =} \StringTok{"steelblue4"}\NormalTok{, }
+     \DataTypeTok{xlab =} \StringTok{"Residuals"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Notebook1_files/figure-latex/unnamed-chunk-4-3.pdf}
+
+\hypertarget{nonlinear-trend}{%
+\section{Nonlinear Trend}\label{nonlinear-trend}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{nyse <-}\StringTok{ }\NormalTok{ch5data }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{filter}\NormalTok{(date }\OperatorTok{>=}\StringTok{ }\KeywordTok{as.Date}\NormalTok{(}\StringTok{"1955-01-01"}\NormalTok{) }\OperatorTok{&}\StringTok{ }\NormalTok{date}\OperatorTok{<=}\KeywordTok{as.Date}\NormalTok{(}\StringTok{"1993-12-01"}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{select}\NormalTok{(date, nysevol) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{time        =} \KeywordTok{row_number}\NormalTok{(), }
+         \DataTypeTok{time2       =}\NormalTok{ time}\OperatorTok{^}\DecValTok{2}\NormalTok{)}
+\NormalTok{reg1 <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(nysevol }\OperatorTok{~}\StringTok{ }\NormalTok{time }\OperatorTok{+}\StringTok{ }\NormalTok{time2, }\DataTypeTok{data =}\NormalTok{ nyse)}
+\NormalTok{reg2 <-}\StringTok{ }\KeywordTok{nls}\NormalTok{(nysevol }\OperatorTok{~}\StringTok{ }\NormalTok{beta0 }\OperatorTok{*}\StringTok{ }\KeywordTok{exp}\NormalTok{(beta1 }\OperatorTok{*}\StringTok{ }\NormalTok{time), }\DataTypeTok{data =}\NormalTok{ nyse , }
+            \DataTypeTok{start =} \KeywordTok{list}\NormalTok{(}\DataTypeTok{beta0 =} \DecValTok{1000}\NormalTok{, }\DataTypeTok{beta1 =} \DecValTok{0}\NormalTok{),}
+            \DataTypeTok{trace =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 1085476822 :  1000    0
+## 782092648 :  4.895169e+02 2.366568e-03
+## 616404164 :  2.217936e+02 4.607635e-03
+## 499930168 :  1.078206e+02 6.622604e-03
+## 476504320 :  32.233714998  0.009551794
+## 136649839 :  50.68512698  0.01053893
+## 70593027 :  53.43676424  0.01001623
+## 70249496 :  53.03875433  0.01000009
+## 70249473 :  52.99161885  0.01000204
+## 70249473 :  52.99742200  0.01000177
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(nysevol }\OperatorTok{~}\StringTok{ }\NormalTok{date, }\DataTypeTok{data =}\NormalTok{ nyse, }
+     \DataTypeTok{type =} \StringTok{"l"}\NormalTok{,}
+     \DataTypeTok{xlab =} \StringTok{"Time"}\NormalTok{, }
+     \DataTypeTok{ylab =} \StringTok{"Volume"}\NormalTok{, }\DataTypeTok{lwd =} \DecValTok{2}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(nyse}\OperatorTok{$}\NormalTok{date, }\KeywordTok{fitted}\NormalTok{(reg1), }\DataTypeTok{col =} \StringTok{"green4"}\NormalTok{, }\DataTypeTok{lty =} \DecValTok{2}\NormalTok{, }\DataTypeTok{lwd =} \DecValTok{2}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(nyse}\OperatorTok{$}\NormalTok{date, }\KeywordTok{fitted}\NormalTok{(reg2), }\DataTypeTok{col =} \StringTok{"steelblue4"}\NormalTok{, }\DataTypeTok{lty =} \DecValTok{3}\NormalTok{, }\DataTypeTok{lwd =} \DecValTok{2}\NormalTok{)}
+\KeywordTok{legend}\NormalTok{(}\StringTok{"topleft"}\NormalTok{, }\KeywordTok{c}\NormalTok{(}\StringTok{"Actual"}\NormalTok{, }\StringTok{"Quadratic"}\NormalTok{, }\StringTok{"Exponential"}\NormalTok{),}
+       \DataTypeTok{lty =} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{), }
+       \DataTypeTok{col =} \KeywordTok{c}\NormalTok{(}\StringTok{"black"}\NormalTok{, }\StringTok{"green4"}\NormalTok{,}\StringTok{"steelblue4"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Notebook1_files/figure-latex/unnamed-chunk-6-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(}\KeywordTok{residuals}\NormalTok{(reg1), }\DataTypeTok{type =} \StringTok{"l"}\NormalTok{, }\DataTypeTok{xlab =} \StringTok{"Time"}\NormalTok{, }\DataTypeTok{col=}\StringTok{"green"}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(}\KeywordTok{residuals}\NormalTok{(reg2), }\DataTypeTok{col=}\StringTok{"blue"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Notebook1_files/figure-latex/unnamed-chunk-6-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{hist}\NormalTok{(}\KeywordTok{residuals}\NormalTok{(reg2), }\DataTypeTok{probability =} \OtherTok{TRUE}\NormalTok{,  }
+     \DataTypeTok{main =} \StringTok{"Histogram of Residuals"}\NormalTok{, }
+     \DataTypeTok{col  =} \StringTok{"steelblue4"}\NormalTok{, }
+     \DataTypeTok{xlab =} \StringTok{"Residuals"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Notebook1_files/figure-latex/unnamed-chunk-6-3.pdf}
+
+\hypertarget{log}{%
+\section{log}\label{log}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{loglinear <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(}\KeywordTok{log}\NormalTok{(nysevol) }\OperatorTok{~}\StringTok{ }\NormalTok{time, }\DataTypeTok{data =}\NormalTok{ nyse)}
+
+\KeywordTok{plot}\NormalTok{(}\KeywordTok{log}\NormalTok{(nysevol) }\OperatorTok{~}\StringTok{ }\NormalTok{date, }\DataTypeTok{data =}\NormalTok{ nyse, }
+     \DataTypeTok{type =} \StringTok{"l"}\NormalTok{, }
+     \DataTypeTok{lwd =} \DecValTok{2}\NormalTok{, }
+     \DataTypeTok{xlab =} \StringTok{"Time"}\NormalTok{, }
+     \DataTypeTok{ylab=}\StringTok{"Volume"}\NormalTok{)}
+
+\KeywordTok{lines}\NormalTok{(nyse}\OperatorTok{$}\NormalTok{date, }\KeywordTok{fitted}\NormalTok{(loglinear), }\DataTypeTok{col=}\StringTok{"red4"}\NormalTok{, }\DataTypeTok{lty=}\DecValTok{2}\NormalTok{)}
+\KeywordTok{legend}\NormalTok{(}\StringTok{"topleft"}\NormalTok{, }\KeywordTok{c}\NormalTok{(}\StringTok{"Actual"}\NormalTok{, }\StringTok{"Fitted"}\NormalTok{), }
+       \DataTypeTok{lty =} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{), }
+       \DataTypeTok{col =} \KeywordTok{c}\NormalTok{(}\StringTok{"black"}\NormalTok{, }\StringTok{"red4"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Notebook1_files/figure-latex/unnamed-chunk-7-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(}\KeywordTok{residuals}\NormalTok{(loglinear), }\DataTypeTok{type =} \StringTok{"l"}\NormalTok{, }
+     \DataTypeTok{xlab =} \StringTok{""}\NormalTok{, }
+     \DataTypeTok{ylab =} \StringTok{""}\NormalTok{, }
+     \DataTypeTok{main =} \StringTok{"Residuals"}\NormalTok{, }
+     \DataTypeTok{col  =} \StringTok{"green4"}\NormalTok{, )}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Notebook1_files/figure-latex/unnamed-chunk-7-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{hist}\NormalTok{(}\KeywordTok{residuals}\NormalTok{(loglinear), }\DataTypeTok{probability =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{breaks =} \DecValTok{20}\NormalTok{, }
+     \DataTypeTok{main =} \StringTok{"Histogram of Residuals"}\NormalTok{, }
+     \DataTypeTok{col  =} \StringTok{"steelblue4"}\NormalTok{, }
+     \DataTypeTok{xlab =} \StringTok{"Residuals"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Notebook1_files/figure-latex/unnamed-chunk-7-3.pdf}
+
+\hypertarget{application}{%
+\section{Application}\label{application}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{RTRR <-}\StringTok{ }\NormalTok{ch5data }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{select}\NormalTok{(date, rtrr) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{filter}\NormalTok{(date }\OperatorTok{>}\StringTok{ }\KeywordTok{as.Date}\NormalTok{(}\StringTok{"1954-12-01"}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{time        =} \KeywordTok{row_number}\NormalTok{(), }
+         \DataTypeTok{time2       =}\NormalTok{ time}\OperatorTok{^}\DecValTok{2}\NormalTok{)}
+\NormalTok{train <-}\StringTok{ }\NormalTok{RTRR }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(date }\OperatorTok{<}\StringTok{ }\KeywordTok{as.Date}\NormalTok{(}\StringTok{"1994-01-01"}\NormalTok{))}
+\NormalTok{test <-}\StringTok{ }\NormalTok{RTRR }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(date }\OperatorTok{>=}\StringTok{ }\KeywordTok{as.Date}\NormalTok{(}\StringTok{"1994-01-01"}\NormalTok{))}
+\NormalTok{reg1 <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(rtrr}\OperatorTok{~}\NormalTok{time, }\DataTypeTok{data =}\NormalTok{ train)}
+\NormalTok{reg2 <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(rtrr}\OperatorTok{~}\NormalTok{time }\OperatorTok{+}\StringTok{ }\NormalTok{time2, }\DataTypeTok{data =}\NormalTok{ train)}
+\NormalTok{reg3 <-}\StringTok{ }\KeywordTok{nls}\NormalTok{(rtrr}\OperatorTok{~}\NormalTok{beta0}\OperatorTok{*}\KeywordTok{exp}\NormalTok{(beta1}\OperatorTok{*}\NormalTok{time), }\DataTypeTok{data =}\NormalTok{ train,}
+            \DataTypeTok{start =}\KeywordTok{c}\NormalTok{(}\DataTypeTok{beta0=}\DecValTok{1000}\NormalTok{, }\DataTypeTok{beta1=}\DecValTok{0}\NormalTok{))}
+\KeywordTok{plot}\NormalTok{(rtrr }\OperatorTok{~}\StringTok{ }\NormalTok{date, }\DataTypeTok{data =}\NormalTok{  train, }
+     \DataTypeTok{type =} \StringTok{"l"}\NormalTok{, }
+     \DataTypeTok{lwd =} \DecValTok{2}\NormalTok{, }
+     \DataTypeTok{xlab =} \StringTok{"Time"}\NormalTok{, }
+     \DataTypeTok{ylab=}\StringTok{"Sales"}\NormalTok{,}
+     \DataTypeTok{main =} \StringTok{"Monthly Retail Sales: 1955.01-1993.12"}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(train}\OperatorTok{$}\NormalTok{date, }\KeywordTok{fitted}\NormalTok{(reg1), }\DataTypeTok{col=}\StringTok{"blue"}\NormalTok{, }\DataTypeTok{lty=}\DecValTok{2}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(train}\OperatorTok{$}\NormalTok{date, }\KeywordTok{fitted}\NormalTok{(reg2), }\DataTypeTok{col=}\StringTok{"red"}\NormalTok{, }\DataTypeTok{lty=}\DecValTok{3}\NormalTok{, }\DataTypeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(train}\OperatorTok{$}\NormalTok{date, }\KeywordTok{fitted}\NormalTok{(reg3), }\DataTypeTok{col=}\StringTok{"green4"}\NormalTok{, }\DataTypeTok{lty=}\DecValTok{4}\NormalTok{)}
+\KeywordTok{legend}\NormalTok{(}\StringTok{"topleft"}\NormalTok{, }\KeywordTok{c}\NormalTok{(}\StringTok{"Linear"}\NormalTok{, }\StringTok{"Quadratic"}\NormalTok{, }\StringTok{"Exponential"}\NormalTok{), }
+       \DataTypeTok{lty =} \KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{), }
+       \DataTypeTok{col =} \KeywordTok{c}\NormalTok{(}\StringTok{"blue"}\NormalTok{, }\StringTok{"red"}\NormalTok{, }\StringTok{"green"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Notebook1_files/figure-latex/unnamed-chunk-8-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{point_forecasts <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(reg1, test)}
+\NormalTok{plot_data <-}\StringTok{ }\NormalTok{RTRR }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(date }\OperatorTok{>}\StringTok{ }\KeywordTok{as.Date}\NormalTok{(}\StringTok{"1990-01-01"}\NormalTok{) }\OperatorTok{&}\StringTok{ }\NormalTok{date}\OperatorTok{<}\KeywordTok{as.Date}\NormalTok{(}\StringTok{"1995-01-01"}\NormalTok{))}
+\KeywordTok{plot}\NormalTok{(plot_data}\OperatorTok{$}\NormalTok{date, plot_data}\OperatorTok{$}\NormalTok{rtrr,  }
+     \DataTypeTok{type =} \StringTok{"l"}\NormalTok{, }
+     \DataTypeTok{lwd =} \DecValTok{2}\NormalTok{, }
+     \DataTypeTok{xlab =} \StringTok{"Time"}\NormalTok{, }
+     \DataTypeTok{ylab=}\StringTok{"History, Forecasts, Realization"}\NormalTok{,}
+     \DataTypeTok{main =} \StringTok{"Monthly Retail Sales"}\NormalTok{, }\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{110000}\NormalTok{, }\DecValTok{200000}\NormalTok{))}
+\KeywordTok{abline}\NormalTok{(}\DataTypeTok{v =} \KeywordTok{as.Date}\NormalTok{(}\StringTok{"1994-01-01"}\NormalTok{), }\DataTypeTok{lty=}\DecValTok{2}\NormalTok{,}\DataTypeTok{col =} \StringTok{"gray"}\NormalTok{)}
+\KeywordTok{polygon}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\KeywordTok{as.Date}\NormalTok{(}\StringTok{"1994-01-01"}\NormalTok{) ,  }\KeywordTok{as.Date}\NormalTok{(}\StringTok{"1994-01-01"}\NormalTok{), }\KeywordTok{as.Date}\NormalTok{(}\StringTok{"1995-01-01"}\NormalTok{), }\KeywordTok{as.Date}\NormalTok{(}\StringTok{"1995-01-01"}\NormalTok{)), }
+        \KeywordTok{c}\NormalTok{(}\DecValTok{110000}\NormalTok{, }\DecValTok{200000}\NormalTok{,  }\DecValTok{200000}\NormalTok{, }\DecValTok{11000}\NormalTok{), }\DataTypeTok{col =} \StringTok{"grey85"}\NormalTok{, }\DataTypeTok{border =} \OtherTok{NA}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(plot_data}\OperatorTok{$}\NormalTok{date, plot_data}\OperatorTok{$}\NormalTok{rtrr, }\DataTypeTok{lwd =} \DecValTok{2}\NormalTok{) }
+\NormalTok{lower <-}\StringTok{ }\NormalTok{point_forecasts }\OperatorTok{-}\StringTok{ }\FloatTok{1.96}\OperatorTok{*}\DecValTok{15870}
+\NormalTok{upper <-}\StringTok{ }\NormalTok{point_forecasts }\OperatorTok{+}\StringTok{ }\FloatTok{1.96}\OperatorTok{*}\DecValTok{15870}
+\KeywordTok{lines}\NormalTok{(point_forecasts, }\DataTypeTok{type =} \StringTok{"l"}\NormalTok{, }\DataTypeTok{lwd=}\DecValTok{2}\NormalTok{, }\DataTypeTok{col=}\StringTok{"red"}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(test}\OperatorTok{$}\NormalTok{date , point_forecasts, }\DataTypeTok{type =} \StringTok{"l"}\NormalTok{, }\DataTypeTok{col =} \StringTok{"red"}\NormalTok{, }\DataTypeTok{lwd=}\DecValTok{2}\NormalTok{, }\DataTypeTok{lty=}\DecValTok{2}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(test}\OperatorTok{$}\NormalTok{date , lower, }\DataTypeTok{type =} \StringTok{"l"}\NormalTok{, }\DataTypeTok{col =} \StringTok{"red"}\NormalTok{, }\DataTypeTok{lty =} \DecValTok{2}\NormalTok{)}
+\KeywordTok{lines}\NormalTok{(test}\OperatorTok{$}\NormalTok{date , upper, }\DataTypeTok{type =} \StringTok{"l"}\NormalTok{, }\DataTypeTok{col =} \StringTok{"red"}\NormalTok{, }\DataTypeTok{lty =} \DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Notebook1_files/figure-latex/unnamed-chunk-9-1.pdf}
+
+
+\end{document}

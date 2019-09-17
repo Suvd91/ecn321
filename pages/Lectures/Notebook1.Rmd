@@ -1,0 +1,186 @@
+---
+title: 'Diebold Chapter 5: R codes'
+output:
+  html_document:
+    theme: united
+    highlight: tango
+---
+
+
+```{r, message=FALSE}
+load("ch5data.Rdata")
+library(dplyr)
+mw16 <- ch5data %>% 
+  filter(date >= as.Date("1955-01-01") & date<=as.Date("1993-12-01")) %>% 
+  select(date, m16, w16) %>% 
+  mutate(time        = row_number(), 
+         time2       = time^2)
+```
+
+```{r}
+plot(m16 ~ date, data = mw16, 
+     type = "l", 
+     lwd  = 2, 
+     xlab = "Time", 
+     ylab = "Rate", 
+     main = "Эрэгтэйчүүдийн хөдөлмөрийн зах зээлийн оролцоо")
+```
+
+```{r}
+reg_m16 <- lm(m16 ~ time, data = mw16)
+plot(m16 ~ date, data = mw16, 
+     type = "l", 
+     lwd  = 2, 
+     xlab = "Time", 
+     ylab = "Rate", 
+     main = "Эрэгтэйчүүдийн хөдөлмөрийн зах зээлийн оролцоо")
+lines(mw16$date, fitted(reg_m16), col="red")
+plot(residuals(reg_m16), 
+     type = "l", 
+     ylab = "residuals",
+     col  = "red")
+points(residuals(reg_m16), col = "red", pch = 19)
+hist(residuals(reg_m16), probability = TRUE, 
+     main = "Histogram of Residuals", 
+     col  = "steelblue4", 
+     xlab = "Residuals")
+
+```
+
+
+```{r}
+reg_w16 <- lm(w16 ~ time, data = mw16)
+plot(w16 ~ date, data = mw16, 
+     type = "l", 
+     lwd  = 2, 
+     xlab = "Time", 
+     ylab = "Rate", 
+     main = "Эрэгтэйчүүдийн хөдөлмөрийн зах зээлийн оролцоо")
+lines(mw16$date, fitted(reg_w16), col="red")
+plot(residuals(reg_w16), 
+     type = "l", 
+     xlab = "Time",
+     ylab = "residuals",
+     col  = "red")
+points(residuals(reg_w16), col = "red", pch = 19)
+hist(residuals(reg_w16), probability = TRUE, 
+     main = "Histogram of Residuals", 
+     col  = "steelblue4", 
+     xlab = "Residuals")
+```
+
+# Nonlinear Trend
+
+```{r}
+nyse <- ch5data %>% 
+  filter(date >= as.Date("1955-01-01") & date<=as.Date("1993-12-01")) %>% 
+  select(date, nysevol) %>% 
+  mutate(time        = row_number(), 
+         time2       = time^2)
+reg1 <- lm(nysevol ~ time + time2, data = nyse)
+reg2 <- nls(nysevol ~ beta0 * exp(beta1 * time), data = nyse , 
+            start = list(beta0 = 1000, beta1 = 0),
+            trace = TRUE)
+```
+
+```{r}
+plot(nysevol ~ date, data = nyse, 
+     type = "l",
+     xlab = "Time", 
+     ylab = "Volume", lwd = 2)
+lines(nyse$date, fitted(reg1), col = "green4", lty = 2, lwd = 2)
+lines(nyse$date, fitted(reg2), col = "steelblue4", lty = 3, lwd = 2)
+legend("topleft", c("Actual", "Quadratic", "Exponential"),
+       lty = c(1, 1, 2), 
+       col = c("black", "green4","steelblue4"))
+plot(residuals(reg1), type = "l", xlab = "Time", col="green")
+lines(residuals(reg2), col="blue")
+
+hist(residuals(reg2), probability = TRUE,  
+     main = "Histogram of Residuals", 
+     col  = "steelblue4", 
+     xlab = "Residuals")
+
+```
+
+
+
+# log linear model
+
+```{r}
+loglinear <- lm(log(nysevol) ~ time, data = nyse)
+
+plot(log(nysevol) ~ date, data = nyse, 
+     type = "l", 
+     lwd = 2, 
+     xlab = "Time", 
+     ylab = "Volume")
+
+lines(nyse$date, fitted(loglinear), col="red4", lty=2)
+legend("topleft", c("Actual", "Fitted"), 
+       lty = c(1, 2), 
+       col = c("black", "red4"))
+plot(residuals(loglinear), type = "l", 
+     xlab = "", 
+     ylab = "", 
+     main = "Residuals", 
+     col  = "green4", )
+hist(residuals(loglinear), probability = TRUE, breaks = 20, 
+     main = "Histogram of Residuals", 
+     col  = "steelblue4", 
+     xlab = "Residuals")
+
+```
+
+# Application
+```{r}
+RTRR <- ch5data %>% 
+  select(date, rtrr) %>% 
+  filter(date > as.Date("1954-12-01")) %>% 
+  mutate(time        = row_number(), 
+         time2       = time^2)
+estimation_data <- RTRR %>% filter(date < as.Date("1994-01-01"))
+evaluatuion_data <- RTRR %>% filter(date >= as.Date("1994-01-01"))
+reg1 <- lm(rtrr~time, data = estimation_data)
+reg2 <- lm(rtrr~time + time2, data = estimation_data)
+reg3 <- nls(rtrr~beta0*exp(beta1*time), data = estimation_data,
+            start =c(beta0=1000, beta1=0))
+plot(rtrr ~ date, data =  estimation_data, 
+     type = "l", 
+     lwd = 2, 
+     xlab = "Time", 
+     ylab="Sales",
+     main = "Monthly Retail Sales: 1955.01-1993.12")
+lines(estimation_data$date, fitted(reg1), col="blue", lty=2)
+lines(estimation_data$date, fitted(reg2), col="red", lty=3, lwd=2)
+lines(estimation_data$date, fitted(reg3), col="green4", lty=4)
+legend("topleft", c("Linear", "Quadratic", "Exponential"), 
+       lty = c(2, 3, 4), 
+       col = c("blue", "red", "green"))
+
+```
+
+## Forecasts
+
+```{r}
+plot_data <- RTRR %>% 
+  filter(date > as.Date("1990-01-01") & date <= as.Date("1995-01-01"))
+plot(plot_data$date, plot_data$rtrr,  
+     type = "l", 
+     lwd = 2, 
+     xlab = "Time", 
+     ylab="History, Forecasts, Realization",
+     main = "Monthly Retail Sales", ylim=c(110000, 200000))
+polygon(c(as.Date("1994-01-01") ,  as.Date("1994-01-01"), as.Date("1995-01-01"), as.Date("1995-01-01")), 
+        c(110000, 200000,  200000, 11000), col = "grey85", border = NA)
+lines(plot_data$date, plot_data$rtrr, lwd = 2) 
+point_forecasts <- predict(reg1, evaluatuion_data) # shugaman trend zagvariin taamaglal
+# interval forecasts
+lower <- point_forecasts - 1.96*summary(reg1)$sigma
+upper <- point_forecasts + 1.96*summary(reg1)$sigma
+lines(point_forecasts, type = "l", lwd=2, col="red")
+lines(evaluatuion_data$date , point_forecasts, type = "l", col = "red", lwd=2, lty=2)
+lines(evaluatuion_data$date , lower, type = "l", col = "red", lty = 2)
+lines(evaluatuion_data$date , upper, type = "l", col = "red", lty = 2)
+```
+

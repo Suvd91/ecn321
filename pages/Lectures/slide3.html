@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Эконометрикс II</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="багш: Д. Хашбаатар" />
+    <link href="slide3_files/remark-css/default.css" rel="stylesheet" />
+    <link href="slide3_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="slide3_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Эконометрикс II
+## Лекц 4: Трендийг загварчлах, таамаглах
+<html>
+<div style="float:left">
+
+</div>
+<hr color='#EB811B' size=1px width=796px>
+</html>
+### багш: Д. Хашбаатар
+### 2019/09/16
+
+---
+
+
+
+
+# **Агуулга**
+
+- **Трендийг загварчлах**
+
+- **Трендийн загваруудыг үнэлэх**
+
+- **Трендийг таамаглах**
+
+- **Таамаглал хийх загваруудыг сонгох шалгуурууд**
+
+- **Хэрэглээ: Жижиглэн худалдааны борлуулалтыг таамаглах**
+
+---
+
+# Трендийг загварчлах
+
+ - **Тренд**: хугацаан цуваан дахь удаан, урт хугацааны өөрчлөлт
+ 
+ - **Детерминистик тренд**: Урьдчилан мэдэгдэх тренд (`time trend`)
+
+--
+
+.pull-left[
+&lt;img src="osoh.png" width=483 height=300&gt;
+ 
+ - *Өсөх Тренд: Эмэгтэйчүүдийн хөдөлмөрийн зах зээлийн оролцоо*
+
+]
+
+--
+.pull-right[
+&lt;img src="buurah.png" width=483 height=300&gt;
+
+ - *Буурах Тренд: Эрэгтэйчүүдийн хөдөлмөрийн зах зээлийн оролцоо*
+
+]
+ 
+---
+# Трендийг загварчлах
+
+ - **Хугацаан цуваа**: `\(\{y_1, ...,y_T\}\)`
+
+ - **Хугацааны индекс**: `\((1, ...,T)\)`
+
+Хугацаан цувааны индекс нь трендийг тайлбарлах гол хувьсагч: `\(\text{TIME}_t=t\)`
+
+`$$\text{TIME}=\begin{bmatrix}1 \\ 2 \\ \vdots \\ T\end{bmatrix}$$`
+
+## Тренд
+
+ - Трендийг зөвхөн `TIME`-с хамааруулан загварчилдаг. 
+ - **Шугаман трендийн загвар**
+ 
+ `$$\text{Trend}_t=\beta_0+\beta_1\text{TIME}_t$$`
+---
+# Шугаман трендийн загвар
+ 
+ `$$\text{Trend}_t=\beta_0+\beta_1\text{TIME}_t$$`
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="slide3_files/figure-html/unnamed-chunk-1-1.png" alt="Өсөх, буурах шугаман тренд"  /&gt;
+&lt;p class="caption"&gt;Өсөх, буурах шугаман тренд&lt;/p&gt;
+&lt;/div&gt;
+
+---
+# Шугаман трендийн загвар
+
+.pull-left[
+&lt;img src="osohu.png" width=483 height=300&gt;
+ 
+ - *Өсөх Тренд: Эмэгтэйчүүдийн хөдөлмөрийн зах зээлийн оролцоо*
+
+]
+
+
+.pull-right[
+&lt;img src="buurahu.png" width=483 height=300&gt;
+
+ - *Буурах Тренд: Эрэгтэйчүүдийн хөдөлмөрийн зах зээлийн оролцоо*
+
+]
+
+---
+
+# Шугаман бус трендийн загвар
+
+.center[&lt;img src="nonlinear trend.png" width=600 height=400&gt;
+]
+ Зарим тохиолдолд хугацаан цуваа илт шугаман бус трендтэй байдаг.
+ 
+---
+# Шугаман бус тренд загвар
+
+ - **Квадрат Тренд** `$$\text{Trend}_t=\beta_0+\beta_1\text{TIME}_t+\beta_2\text{TIME}_t^2$$`
+ - **Экспоненциал Тренд** `$$\text{Trend}_t=\beta_0\exp(\beta_1\text{TIME}_t)$$`
+   
+   - log linear trend: `$$\log(\text{Trend}_t)=\log(\beta_0) + \beta_1\text{TIME}_t$$`
+
+---
+# Шугаман бус тренд загварын хэлбэрүүд
+.pull-left[
+&lt;img src="log.png" width=400 height=400&gt;
+ - *&lt;font color="red"&gt;Квадрат трендийн хэлбэрүүд&lt;/font&gt;*
+ ]
+.pull-right[
+&lt;img src="exp.png" width=400 height=400&gt;
+ - *&lt;font color="red"&gt;Экспоненциал трендийн хэлбэрүүд&lt;/font&gt;*
+ ]
+
+---
+# Шугаман бус тренд загварын таарамж
+
+.pull-left[
+&lt;img src="quadest.png" width=400 height=400&gt;
+ - *&lt;font color="red"&gt;Экспоненциал трендийн таарамж&lt;/font&gt;*
+]
+
+
+.pull-right[
+&lt;img src="expest.png" width=400 height=400&gt;
+  - *&lt;font color="red"&gt;Лог трендийн таарамж&lt;/font&gt;*
+
+]
+
+---
+
+# Тренд Загварын Үнэлгээ
+
+
+&lt;font color="blue"&gt;Шугаман Тренд&lt;/font&gt; : (R code `lm(y~time)`)
+`$$(\hat\beta_0, \hat\beta_1) = \underset{\beta_0, \beta_1, }{\text{argmin}}\sum_{t=1}^T(y_t-\beta_0-\beta_1\text{TIME}_t)^2$$`
+&lt;font color="blue"&gt;Квадрат Тренд&lt;/font&gt; (R code `lm(y~time + time2)`)
+`$$(\hat\beta_0, \hat\beta_1, \hat\beta_2) = \underset{\beta_0, \beta_1, \beta_2}{\text{argmin}}\sum_{t=1}^T(y_t-\beta_0-\beta_1\text{TIME}_t-\beta_2\text{TIME}_t^2)^2$$`
+&lt;font color="blue"&gt;Экспоненциал Тренд&lt;/font&gt; (Rcode `nls(y~beta0*exp(beta1*time))`
+`$$(\hat\beta_0, \hat\beta_1)=\underset{\beta_0, \beta_1}{\text{argmin}}\sum_{t=1}^T(y_t-\beta_0\exp(\beta_1\text{TIME}_t))^2$$`
+&lt;font color="blue"&gt;log-linear&lt;/font&gt;(Rcode `lm(log(y) ~ time)`
+`$$(\hat\beta_0, \hat\beta_1) = \underset{\beta_0, \beta_1, }{\text{argmin}}\sum_{t=1}^T(\log(y_t)-log(\beta_0)-\beta_1\text{TIME}_t)^2$$`
+---
+
+# Үнэлгээ
+
+.center[&lt;img src="loglinear.png" width=800, height=600&gt;
+]
+
+---
+# Үнэлгээ
+
+.center[&lt;img src="loglinear.png" width=800, height=600&gt;
+]
+
+---
+# Тренд загварыг таамаглах
+Шугаман тренд загвар
+
+`$$\color{red}{y_t = \beta_0 + \beta_1 \text{TIME}_t + \varepsilon_t,\quad \varepsilon_t\sim \text{i.i.d}N(0, \sigma^2)}$$`
+Ирээдүйн `\(T+h\)` цэгт хугацаан цувааны утга
+`$$y_{T+h}= \beta_0 + \beta_1 \text{TIME}_{T+h} + \varepsilon_{T+h}$$`
+Мэдэгдэж буй хувьсагч `\(\text{TIME}_{T+h}\)`
+`$$y_{T+h,T} = \beta_0 + \beta_1 \text{TIME}_{T+h}$$`
+**h-ahead forecasts**
+
+--
+
+
+|                                                    &lt;font color="red"&gt;Цэгэн таамаглал&lt;/font&gt; 	|                                 &lt;font color="blue"&gt;Интервал таамаглал&lt;/font&gt; 	|                               Нягтын таамаглал 	|
+|------------------------------------------------------------------:	|--------------------------------------------------:	|-----------------------------------------------:	|
+| `$$\color{red}{\hat{y}_{T+h,T} =\hat\beta_0 + \hat\beta_1 \text{TIME}_ {T+h}}$$` 	| `$$\color{blue}{\hat{y}_{T+h,T}\pm 1.96\hat\sigma_\varepsilon}$$` 	| `$$N(\hat{y}_{T+h,T}, \hat\sigma_\varepsilon)$$` 	|
+
+---
+# Модел сонголтын шинжүүр
+
+`$$MSE=\frac{\sum_{t=1}^Te_t^2}{T}$$`
+`$$R^2=1-\frac{\sum_{t=1}^Te_t^2}{\sum_{t=1}^T(y_t-\bar{y})^2}$$`
+Сул тал: хувьсагчдын тоог нэмэх тусам MSE буурна.
+
+`$$\bar{R}^2=1-\frac{\sum_{t=1}^Te_t^2/(T-k)}{\sum_{t=1}^T(y_t-\bar{y})^2/(T-1)}=1-\frac{s^2}{\sum_{t=1}^T(y_t-\bar{y})^2/(T-1)}$$`
+
+---
+# Модел сонголтын шинжүүр
+
+## Akaike Information Criterion
+
+`$$AIC=e^{\frac{2k}{T}}\frac{\sum_{t=1}^Te_t^2}{T}$$`
+
+## Schwartz Information Criterion
+`$$SIC=T^{\frac{k}{T}}\frac{\sum_{t=1}^Te_t^2}{T}$$`
+
+---
+# Хэрэглээ
+
+## Жижиглэн худалдааны борлуулалтыг таамаглах
+&lt;img src="slide3_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+&lt;table style="text-align:center"&gt;&lt;caption&gt;&lt;strong&gt;Retail Sales Models&lt;/strong&gt;&lt;/caption&gt;
+&lt;tr&gt;&lt;td colspan="4" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td colspan="3"&gt;&lt;em&gt;Dependent variable:&lt;/em&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td colspan="3" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td colspan="3"&gt;Monthly Retail Sales&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;Linear&lt;/td&gt;&lt;td&gt;Quadratic&lt;/td&gt;&lt;td&gt;Exponential&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="4" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;time&lt;/td&gt;&lt;td&gt;349.773&lt;/td&gt;&lt;td&gt;-98.311&lt;/td&gt;&lt;td&gt;0.005944&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;time2&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;0.955&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;Constant&lt;/td&gt;&lt;td&gt;-16,391.250&lt;/td&gt;&lt;td&gt;18,708.700&lt;/td&gt;&lt;td&gt;11967.80&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="4" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style="text-align:left"&gt;Observations&lt;/td&gt;&lt;td&gt;468&lt;/td&gt;&lt;td&gt;468&lt;/td&gt;&lt;td&gt;468&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;R&lt;sup&gt;2&lt;/sup&gt;&lt;/td&gt;&lt;td&gt;0.899&lt;/td&gt;&lt;td&gt;0.997&lt;/td&gt;&lt;td&gt;0.988&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;AIC&lt;/td&gt;&lt;td&gt;10,385.060&lt;/td&gt;&lt;td&gt;8,738.186&lt;/td&gt;&lt;td&gt;9335.215&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style="text-align:left"&gt;BIC&lt;/td&gt;&lt;td&gt;10397.5&lt;/td&gt;&lt;td&gt;8754.78&lt;/td&gt;&lt;td&gt;9347.66&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="4" style="border-bottom: 1px solid black"&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+---
+
+|     	| Linear 	| &lt;font color="red"&gt;Quadratic&lt;/font&gt; 	| Exponential 	|
+|:---:	|:------:	|:---------:	|:-----------:	|
+| AIC 	|  19.35 	|   &lt;font color="red"&gt;15.83&lt;/font&gt;   	|    17.15    	|
+| SIC 	|  19.37 	|   &lt;font color="red"&gt;15.86&lt;/font&gt;   	|    17.17    	|
+
+Сонгогдсон загвар
+
+`$$y_t=18708.70 - 98.31130*t+0.955404*t^2,\quad \hat\sigma_\varepsilon=2725.276$$`
+
+1-step ahead forecast
+
+`$$\hat y_{T+1, T}=18708.70 - 98.31130*469+0.955404*469^2=182752.3$$`
+95% interval : `$$[177404.5, 188098.3]$$` 
+---
+# Квадрат Трендийн таамаглал
+
+&lt;img src="slide3_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Шугаман трендийн таамаглал
+
+&lt;img src="slide3_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

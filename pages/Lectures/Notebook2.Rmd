@@ -1,0 +1,168 @@
+---
+title: "Diebold Ch6 R codes"
+html_document:
+    theme: united
+    highlight: tango
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, message=FALSE}
+load("ch6data.Rdata")
+library(dplyr)
+gasoline <- ch6data %>% 
+  select(date, gs) %>% 
+  filter(date >= as.Date("1980-01-01") & date <= as.Date("1992-01-01") )
+plot(gasoline$date, gasoline$gs, type = "l")
+```
+
+
+
+
+```{r}
+liquor <- ch6data %>% 
+  select(date, ls) %>% 
+  filter(date >= as.Date("1980-01-01") & date <= as.Date("1992-01-01") )
+plot(liquor$date, liquor$ls, type = "l")
+```
+```{r}
+durables <- ch6data %>% 
+  select(date, dgs) %>% 
+  filter(date >= as.Date("1980-01-01") & date <= as.Date("1992-01-01") )
+plot(durables$date, durables$dgs, type = "l")
+```
+улиралын дамми хувьсагчид регрессдэх
+s улиралын тоо
+s = 4 if quarterly data,
+s = 12 if we have monthly data, 
+s = 52 weekly data
+
+```{r}
+housing <- ch6data %>% 
+  select(date, hstarts, seasonal) %>% 
+  filter(date >= as.Date("1946-01-01") & date <= as.Date("1994-11-01"))
+
+plot(housing$date, housing$hstarts, type = "l")
+```
+
+
+```{r}
+estimation_data <- housing[1:576,]
+evaluation_data <- housing[-1:-576,]
+res1 <- lm(hstarts ~ seasonal - 1, data = estimation_data)
+#library(stargazer)
+#stargazer(res1, 
+          #type = "html", 
+          #add.lines = list(c("AIC", AIC(res1)),
+          #                 c("BIC", BIC(res1)))
+          #)
+```
+<table style="text-align:center"><tr><td colspan="2" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left"></td><td><em>Dependent variable:</em></td></tr>
+<tr><td></td><td colspan="1" style="border-bottom: 1px solid black"></td></tr>
+<tr><td style="text-align:left"></td><td>hstarts</td></tr>
+<tr><td colspan="2" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left">seasonal1</td><td>86.504<sup>***</sup></td></tr>
+<tr><td style="text-align:left"></td><td>(4.029)</td></tr>
+<tr><td style="text-align:left"></td><td></td></tr>
+<tr><td style="text-align:left">seasonal2</td><td>89.504<sup>***</sup></td></tr>
+<tr><td style="text-align:left"></td><td>(4.029)</td></tr>
+<tr><td style="text-align:left"></td><td></td></tr>
+<tr><td style="text-align:left">seasonal3</td><td>122.883<sup>***</sup></td></tr>
+<tr><td style="text-align:left"></td><td>(4.029)</td></tr>
+<tr><td style="text-align:left"></td><td></td></tr>
+<tr><td style="text-align:left">seasonal4</td><td>142.169<sup>***</sup></td></tr>
+<tr><td style="text-align:left"></td><td>(4.029)</td></tr>
+<tr><td style="text-align:left"></td><td></td></tr>
+<tr><td style="text-align:left">seasonal5</td><td>147.500<sup>***</sup></td></tr>
+<tr><td style="text-align:left"></td><td>(4.029)</td></tr>
+<tr><td style="text-align:left"></td><td></td></tr>
+<tr><td style="text-align:left">seasonal6</td><td>145.998<sup>***</sup></td></tr>
+<tr><td style="text-align:left"></td><td>(4.029)</td></tr>
+<tr><td style="text-align:left"></td><td></td></tr>
+<tr><td style="text-align:left">seasonal7</td><td>139.113<sup>***</sup></td></tr>
+<tr><td style="text-align:left"></td><td>(4.029)</td></tr>
+<tr><td style="text-align:left"></td><td></td></tr>
+<tr><td style="text-align:left">seasonal8</td><td>138.417<sup>***</sup></td></tr>
+<tr><td style="text-align:left"></td><td>(4.029)</td></tr>
+<tr><td style="text-align:left"></td><td></td></tr>
+<tr><td style="text-align:left">seasonal9</td><td>130.562<sup>***</sup></td></tr>
+<tr><td style="text-align:left"></td><td>(4.029)</td></tr>
+<tr><td style="text-align:left"></td><td></td></tr>
+<tr><td style="text-align:left">seasonal10</td><td>134.092<sup>***</sup></td></tr>
+<tr><td style="text-align:left"></td><td>(4.029)</td></tr>
+<tr><td style="text-align:left"></td><td></td></tr>
+<tr><td style="text-align:left">seasonal11</td><td>111.833<sup>***</sup></td></tr>
+<tr><td style="text-align:left"></td><td>(4.029)</td></tr>
+<tr><td style="text-align:left"></td><td></td></tr>
+<tr><td style="text-align:left">seasonal12</td><td>92.158<sup>***</sup></td></tr>
+<tr><td style="text-align:left"></td><td>(4.029)</td></tr>
+<tr><td style="text-align:left"></td><td></td></tr>
+<tr><td colspan="2" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left">AIC</td><td>5483.65094679802</td></tr>
+<tr><td style="text-align:left">BIC</td><td>5540.28034638707</td></tr>
+<tr><td style="text-align:left">Observations</td><td>576</td></tr>
+<tr><td style="text-align:left">R<sup>2</sup></td><td>0.954</td></tr>
+<tr><td style="text-align:left">Adjusted R<sup>2</sup></td><td>0.953</td></tr>
+<tr><td style="text-align:left">Residual Std. Error</td><td>27.914 (df = 564)</td></tr>
+<tr><td style="text-align:left">F Statistic</td><td>967.232<sup>***</sup> (df = 12; 564)</td></tr>
+<tr><td colspan="2" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left"><em>Note:</em></td><td style="text-align:right"><sup>*</sup>p<0.1; <sup>**</sup>p<0.05; <sup>***</sup>p<0.01</td></tr>
+</table>
+```{r}
+plot(hstarts ~ date, data =  estimation_data, 
+      type = "l", 
+      lwd = 2, 
+      xlab = "Time", 
+      ylab="Sales",
+      main = "Monthly Retail Sales: 1955.01-1993.12")
+lines(estimation_data$date, fitted(res1), col="blue", lty=2,lwd=2)
+legend("topright", c("Actual", "Fitted"), 
+       lty = c(1, 2), 
+       col = c("black", "blue"), cex=0.6)
+```
+```{r}
+plot(residuals(res1), type = "l", 
+     xlab = "", 
+     ylab = "", 
+     main = "Residuals", 
+     col  = "green4", )
+hist(residuals(res1), probability = TRUE, breaks = 20, 
+     main = "Histogram of Residuals", 
+     col  = "steelblue4", 
+     xlab = "Residuals")
+```
+
+## Estimated Seasonal Factors
+```{r}
+bar <- barplot(res1$coefficients, names.arg = paste0("s", 1:12), border=FALSE)
+text(bar, res1$coefficients , signif(res1$coefficients, 3) , cex=0.7)
+```
+
+
+## Forecasts
+```{r}
+plot_data <- ch6data %>% 
+  select(date, hstarts, seasonal) %>% 
+  filter(date >= as.Date("1990-01-01") & date <= as.Date("1994-11-01"))
+plot(plot_data$date, plot_data$hstarts, 
+     type = "l", 
+     ylim = c(30, 210))
+polygon(c(as.Date("1994-01-01") ,  as.Date("1994-01-01"), as.Date("1994-11-01"), as.Date("1994-11-01")), 
+        c(30, 210,  210, 30), col = "grey85", border = NA)
+lines(plot_data$date, plot_data$hstarts, lwd = 2) 
+point_forecasts <- predict(res1, evaluation_data) 
+# interval forecasts
+lower <- point_forecasts - 1.96*summary(res1)$sigma
+upper <- point_forecasts + 1.96*summary(res1)$sigma
+lines(evaluation_data$date , point_forecasts, 
+      type = "l", 
+      col = "red", 
+      lwd=2, 
+      lty=2)
+lines(evaluation_data$date , lower, 
+      type = "l", 
+      col = "red", 
+      lty = 2)
+lines(evaluation_data$date , upper, type = "l", col = "red", lty = 2)
+
+```
+
