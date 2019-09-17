@@ -17,306 +17,169 @@ output:
 options(htmltools.dir.version = FALSE)
 ```
 
----
-
 # Улиралын нөлөөг загварчлах
 
- - **Тренд**: хугацаан цуваан дахь удаан, урт хугацааны өөрчлөлт
- 
- - **Детерминистик тренд**: Урьдчилан мэдэгдэх тренд (`time trend`)
- 
- улиралын дамми хувьсагчид регрессдэх
-$s$ улиралын тоо
-s = 4 if quarterly data,
-s = 12 if we have monthly data, 
-s = 52 weekly data
-
 --
-
-.pull-left[
-<img src="osoh.png" width=483 height=300>
- 
- - *Өсөх Тренд: Эмэгтэйчүүдийн хөдөлмөрийн зах зээлийн оролцоо*
-
-]
-
+Хугацаан цуваа
+$$y_t=Trend_t + \color{red}{Seasonal}_t + Ciclyc_t + \varepsilon_t$$
 --
-.pull-right[
-<img src="buurah.png" width=483 height=300>
-
- - *Буурах Тренд: Эрэгтэйчүүдийн хөдөлмөрийн зах зээлийн оролцоо*
-
-]
- 
----
-# Трендийг загварчлах
-
- - **Хугацаан цуваа**: $\{y_1, ...,y_T\}$
-
- - **Хугацааны индекс**: $(1, ...,T)$
-
-Хугацаан цувааны индекс нь трендийг тайлбарлах гол хувьсагч: $\text{TIME}_t=t$
-
-$$\text{TIME}=\begin{bmatrix}1 \\ 2 \\ \vdots \\ T\end{bmatrix}$$
-
-## Тренд
-
- - Трендийг зөвхөн `TIME`-с хамааруулан загварчилдаг. 
- - **Шугаман трендийн загвар**
- 
- $$\text{Trend}_t=\beta_0+\beta_1\text{TIME}_t$$
----
-# Шугаман трендийн загвар
- 
- $$\text{Trend}_t=\beta_0+\beta_1\text{TIME}_t$$
-
-```{r, echo=FALSE, fig.fullwidth=TRUE, fig.align='center', fig.width = 9,fig.height=5.59,fig.cap="Өсөх, буурах шугаман тренд"}
-plot(x = NULL, y = NULL,
-     xlim = c(0, 100),
-     ylim = c(-60, 40), xlab = "Time", ylab="Trend")
-abline(a = 10,b = -0.25)
-abline(a = -50, b = 0.8,lty="dashed")
-text(20,15,"Trend = 10 - 0.25*Time")
-text(32,-42,"Trend =- 50 + .8*Time")
-```
-
----
-# Шугаман трендийн загвар
-
-.pull-left[
-<img src="osohu.png" width=483 height=300>
- 
- - *Өсөх Тренд: Эмэгтэйчүүдийн хөдөлмөрийн зах зээлийн оролцоо*
-
-]
-
-
-.pull-right[
-<img src="buurahu.png" width=483 height=300>
-
- - *Буурах Тренд: Эрэгтэйчүүдийн хөдөлмөрийн зах зээлийн оролцоо*
-
-]
-
----
-
-# Шугаман бус трендийн загвар
-
-.center[<img src="nonlinear trend.png" width=600 height=400>
-]
- Зарим тохиолдолд хугацаан цуваа илт шугаман бус трендтэй байдаг.
- 
----
-# Шугаман бус тренд загвар
-
- - **Квадрат Тренд** $$\text{Trend}_t=\beta_0+\beta_1\text{TIME}_t+\beta_2\text{TIME}_t^2$$
- - **Экспоненциал Тренд** $$\text{Trend}_t=\beta_0\exp(\beta_1\text{TIME}_t)$$
-   
-   - log linear trend: $$\log(\text{Trend}_t)=\log(\beta_0) + \beta_1\text{TIME}_t$$
-
----
-# Шугаман бус тренд загварын хэлбэрүүд
-.pull-left[
-<img src="log.png" width=400 height=400>
- - *<font color="red">Квадрат трендийн хэлбэрүүд</font>*
- ]
-.pull-right[
-<img src="exp.png" width=400 height=400>
- - *<font color="red">Экспоненциал трендийн хэлбэрүүд</font>*
- ]
-
----
-# Шугаман бус тренд загварын таарамж
-
-.pull-left[
-<img src="quadest.png" width=400 height=400>
- - *<font color="red">Экспоненциал трендийн таарамж</font>*
-]
-
-
-.pull-right[
-<img src="expest.png" width=400 height=400>
-  - *<font color="red">Лог трендийн таарамж</font>*
-
-]
-
----
-
-# Тренд Загварын Үнэлгээ
-
-
-<font color="blue">Шугаман Тренд</font> : (R code `lm(y~time)`)
-$$(\hat\beta_0, \hat\beta_1) = \underset{\beta_0, \beta_1, }{\text{argmin}}\sum_{t=1}^T(y_t-\beta_0-\beta_1\text{TIME}_t)^2$$
-<font color="blue">Квадрат Тренд</font> (R code `lm(y~time + time2)`)
-$$(\hat\beta_0, \hat\beta_1, \hat\beta_2) = \underset{\beta_0, \beta_1, \beta_2}{\text{argmin}}\sum_{t=1}^T(y_t-\beta_0-\beta_1\text{TIME}_t-\beta_2\text{TIME}_t^2)^2$$
-<font color="blue">Экспоненциал Тренд</font> (Rcode `nls(y~beta0*exp(beta1*time))`
-$$(\hat\beta_0, \hat\beta_1)=\underset{\beta_0, \beta_1}{\text{argmin}}\sum_{t=1}^T(y_t-\beta_0\exp(\beta_1\text{TIME}_t))^2$$
-<font color="blue">log-linear</font>(Rcode `lm(log(y) ~ time)`
-$$(\hat\beta_0, \hat\beta_1) = \underset{\beta_0, \beta_1, }{\text{argmin}}\sum_{t=1}^T(\log(y_t)-log(\beta_0)-\beta_1\text{TIME}_t)^2$$
----
-
-# Үнэлгээ
-
-.center[<img src="loglinear.png" width=800, height=600>
-]
-
----
-# Үнэлгээ
-
-.center[<img src="loglinear.png" width=800, height=600>
-]
-
----
-# Тренд загварыг таамаглах
-Шугаман тренд загвар
-
-$$\color{red}{y_t = \beta_0 + \beta_1 \text{TIME}_t + \varepsilon_t,\quad \varepsilon_t\sim \text{i.i.d}N(0, \sigma^2)}$$
-Ирээдүйн $T+h$ цэгт хугацаан цувааны утга
-$$y_{T+h}= \beta_0 + \beta_1 \text{TIME}_{T+h} + \varepsilon_{T+h}$$
-Мэдэгдэж буй хувьсагч $\text{TIME}_{T+h}$
-$$y_{T+h,T} = \beta_0 + \beta_1 \text{TIME}_{T+h}$$
-**h-ahead forecasts**
-
+Улиралын нөлөөтэй цуваа
+$$y_t=S_t + \varepsilon_t$$
 --
+ 
+**Урьдчилан мэдэгдэх улиралын нөлөө** (perfectly predictable seasonality)
+
+**Улиралын тоо** $s$ 
+   - улиралын өгөгдөл (quarterly) 4
+   - сарын өгөгдөл (monthly) 12
+   - 7 хоногийн өгөгдөл (weekly) 52
+
+---
+# Улиралын дамми хувьсагч
+
+дамми хувьсагч
+
+$$D_s=\begin{cases}1,& \text{if observation is in s-th season} \\
+                   0,& \text{else }\end{cases}$$
+
+$s=4$ үед
+
+| t 	| Date       	| $D_1$ 	| $D_2$ 	| $D_3$ 	| $D_4$ 	|
+|---	|------------	|-------	|-------	|-------	|-------	|
+| 1 	| 2001.01.01 	| 1     	| 0     	| 0     	| 0     	|
+| 2 	| 2001.04.01 	| 0     	| 1     	| 0     	| 0     	|
+| 3 	| 2001.07.01 	| 0     	| 0     	| 1     	| 0     	|
+| 4 	| 2001.10.01 	| 0     	| 0     	| 0     	| 1     	|
+| 5 	| 2002.01.01 	| 1     	| 0     	| 0     	| 0     	|
+
+---
+# Seasonal Component
+
+Seasonal Component
+
+$$S_t=\sum_{i=1}^s\gamma_{i}D_{it},\quad t=1,\ldots,T$$
+ 
+ - $s=4$ үед
+$$S_t=\gamma_1D_{1t}+\gamma_2D_{2t}+\gamma_3D_{3t}+\gamma_4D_{4t}.$$
+
+ - $\gamma_i$ коэффициентүүдийг улиралын фактор (seasonal factor) гэдэг
+ - *хуанлийн нөлөөг* оруулах боломжтой (баяр ёслолын өдөр, амралтын өдөр гэх мэт)
+ 
+Улиралын нөлөө бүxий цуваа
+$$\color{red}{y_t=\sum_{i=1}^s\gamma_{i}D_{it}+\varepsilon_t,\quad t=1,\ldots,T}$$
+---
+# Үнэлгээ болон таамаглал
+
+ 1. Улиралын дамми бүxий шугаман регрессийг үнэлнэ
+$$\hat y_t=\sum_{i=1}^s\hat\gamma_{i}D_{it}$$ 
+ 2. Ирээдүйн $T+h$ цэгт хугацаан цувааны утгыг таамаглана
+ 
 
 
 |                                                    <font color="red">Цэгэн таамаглал</font> 	|                                 <font color="blue">Интервал таамаглал</font> 	|                               Нягтын таамаглал 	|
 |------------------------------------------------------------------:	|--------------------------------------------------:	|-----------------------------------------------:	|
-| $$\color{red}{\hat{y}_{T+h,T} =\hat\beta_0 + \hat\beta_1 \text{TIME}_ {T+h}}$$ 	| $$\color{blue}{\hat{y}_{T+h,T}\pm 1.96\hat\sigma_\varepsilon}$$ 	| $$N(\hat{y}_{T+h,T}, \hat\sigma_\varepsilon)$$ 	|
-
+| $$\color{red}{\hat{y}_{T+h,T} =\sum_{i=1}^s\hat\gamma_{i}D_{i,T+h}}$$ 	| $$\color{blue}{\hat{y}_{T+h,T}\pm 1.96\hat\sigma_\varepsilon}$$ 	| $$N(\hat{y}_{T+h,T}, \hat\sigma_\varepsilon)$$ 	|
+|
+ 
 ---
-# Модел сонголтын шинжүүр
+# Хэрэглээ: Шинээр баригдаж буй орон сууц
 
-$$MSE=\frac{\sum_{t=1}^Te_t^2}{T}$$
-$$R^2=1-\frac{\sum_{t=1}^Te_t^2}{\sum_{t=1}^T(y_t-\bar{y})^2}$$
-Сул тал: хувьсагчдын тоог нэмэх тусам MSE буурна.
 
-$$\bar{R}^2=1-\frac{\sum_{t=1}^Te_t^2/(T-k)}{\sum_{t=1}^T(y_t-\bar{y})^2/(T-1)}=1-\frac{s^2}{\sum_{t=1}^T(y_t-\bar{y})^2/(T-1)}$$
-
----
-# Модел сонголтын шинжүүр
-
-## Akaike Information Criterion
-
-$$AIC=e^{\frac{2k}{T}}\frac{\sum_{t=1}^Te_t^2}{T}$$
-
-## Schwartz Information Criterion
-$$SIC=T^{\frac{k}{T}}\frac{\sum_{t=1}^Te_t^2}{T}$$
-
----
-# Хэрэглээ
-
-## Жижиглэн худалдааны борлуулалтыг таамаглах
-```{r, echo=FALSE, message=FALSE,fig.fullwidth=TRUE, fig.align='center', fig.width = 11,fig.height=7}
+|date       | hstarts|
+|:----------|-------:|
+|1946-01-01 |      57|
+|1946-02-01 |      65|
+|1946-03-01 |      95|
+|1946-04-01 |     103|
+|1946-05-01 |     103|
+|1946-06-01 |      97|
+|1946-07-01 |      94|
+|1946-08-01 |      96|
+Table: Сар бүр шинээр баригдаж буй орон сууцын тоо: 1946-1994
+```{r message=FALSE, echo=FALSE}
+load("ch6data.Rdata")
 library(dplyr)
-load("ch5data.Rdata")
-RTRR <- ch5data %>% select(date, rtrr) %>% 
-  filter(!rtrr %in% NA, date > as.Date("1954-12-01")) %>% 
-  mutate(time        = row_number(), 
-         time2       = time^2)
-train <- RTRR %>% filter(date < as.Date("1994-01-01"))
-test <- RTRR %>% filter(date >= as.Date("1994-01-01"))
-reg1 <- lm(rtrr~time, data = train)
-reg2 <- lm(rtrr~time + time2, data = train)
-reg3 <- nls(rtrr~beta0*exp(beta1*time), data = train,
-            start =c(beta0=1000, beta1=0))
-plot(rtrr ~ date, data =  train, 
-     type = "l", 
-     lwd = 2, 
-     xlab = "Time", 
-     ylab="Sales",
-     main = "Monthly Retail Sales:1955.01-1993.12")
-lines(train$date, fitted(reg1), col="blue", lty=2)
-lines(train$date, fitted(reg2), col="red", lty=3, lwd=2)
-lines(train$date, fitted(reg3), col="green4", lty=4)
-legend("topleft", c("Linear", "Quadratic", "Exponential"), 
-       lty = c(2, 3, 4), 
-       col = c("blue", "red", "green"),
-       cex = .7)
+housing <- ch6data %>% 
+  select(date, hstarts, seasonal) %>% 
+  filter(date >= as.Date("1946-01-01") & date <= as.Date("1994-11-01"))
+
 ```
 
 ---
-
-<table style="text-align:center"><caption><strong>Retail Sales Models</strong></caption>
-<tr><td colspan="4" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left"></td><td colspan="3"><em>Dependent variable:</em></td></tr>
-<tr><td></td><td colspan="3" style="border-bottom: 1px solid black"></td></tr>
-<tr><td style="text-align:left"></td><td colspan="3">Monthly Retail Sales</td></tr>
-<tr><td style="text-align:left"></td><td>Linear</td><td>Quadratic</td><td>Exponential</td></tr>
-<tr><td colspan="4" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left">time</td><td>349.773</td><td>-98.311</td><td>0.005944</td></tr>
-<tr><td style="text-align:left"></td><td></td><td></td><td></td></tr>
-<tr><td style="text-align:left">time2</td><td></td><td>0.955</td><td></td></tr>
-<tr><td style="text-align:left"></td><td></td><td></td><td></td></tr>
-<tr><td style="text-align:left">Constant</td><td>-16,391.250</td><td>18,708.700</td><td>11967.80</td></tr>
-<tr><td style="text-align:left"></td><td></td><td></td><td></td></tr>
-<tr><td colspan="4" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left">Observations</td><td>468</td><td>468</td><td>468</td></tr>
-<tr><td style="text-align:left">R<sup>2</sup></td><td>0.899</td><td>0.997</td><td>0.988</td></tr>
-<tr><td style="text-align:left">AIC</td><td>10,385.060</td><td>8,738.186</td><td>9335.215</td></tr>
-<tr><td style="text-align:left">BIC</td><td>10397.5</td><td>8754.78</td><td>9347.66</td></tr>
-<tr><td colspan="4" style="border-bottom: 1px solid black"></td></tr></table>
----
-
-|     	| Linear 	| <font color="red">Quadratic</font> 	| Exponential 	|
-|:---:	|:------:	|:---------:	|:-----------:	|
-| AIC 	|  19.35 	|   <font color="red">15.83</font>   	|    17.15    	|
-| SIC 	|  19.37 	|   <font color="red">15.86</font>   	|    17.17    	|
-
-Сонгогдсон загвар
-
-$$y_t=18708.70 - 98.31130*t+0.955404*t^2,\quad \hat\sigma_\varepsilon=2725.276$$
-
-1-step ahead forecast
-
-$$\hat y_{T+1, T}=18708.70 - 98.31130*469+0.955404*469^2=182752.3$$
-95% interval : $$[177404.5, 188098.3]$$ 
----
-# Квадрат Трендийн таамаглал
-
-```{r, echo=FALSE, message=FALSE,fig.fullwidth=TRUE, fig.align='center', fig.width = 11,fig.height=7}
-point_forecasts <- predict(reg2, test)
-plot_data <- RTRR %>% filter(date > as.Date("1990-01-01"))
-plot(plot_data$date, plot_data$rtrr,  
-     type = "l", 
-     lwd = 2, 
-     xlab = "Time", 
-     ylab="History, Forecasts, Realization",
-     main = "Monthly Retail Sales")
-abline(v = as.Date("1994-01-01"), lty=2,col = "gray")
-polygon(c(as.Date("1994-01-01") ,  as.Date("1994-01-01"), as.Date("1995-01-01"), as.Date("1995-01-01")), 
-        c(min(plot_data$rtrr), max(plot_data$rtrr),  max(plot_data$rtrr), min(plot_data$rtrr)), col = "grey85", border = NA)
-lines(plot_data$date, plot_data$rtrr, lwd = 2) 
-lower <- point_forecasts - 1.96*2728
-upper <- point_forecasts + 1.96*2728
-lines(point_forecasts, type = "l", lwd=2, col="red")
-lines(test$date , point_forecasts, type = "l", col = "red", lwd=2, lty=2)
-lines(test$date , lower, type = "l", col = "red", lty = 2)
-lines(test$date , upper, type = "l", col = "red", lty = 2)
+```{r message=FALSE,fig.fullwidth=TRUE, fig.align='center', fig.width = 11,fig.height=7}
+plot(housing$date, housing$hstarts, type = "l", ylab="Starts", xlab = "Time", lwd = 2)
 ```
-
 ---
-
-# Шугаман трендийн таамаглал
+# Үнэлгээ
 
 ```{r echo=FALSE, message=FALSE,fig.fullwidth=TRUE, fig.align='center', fig.width = 11,fig.height=7}
-point_forecasts <- predict(reg1, test)
-plot_data <- RTRR %>% filter(date > as.Date("1990-01-01"))
-plot(plot_data$date, plot_data$rtrr,  
-     type = "l", 
-     lwd = 2, 
-     xlab = "Time", 
-     ylab="History, Forecasts, Realization",
-     main = "Monthly Retail Sales", ylim=c(110000, 200000))
-abline(v = as.Date("1994-01-01"), lty=2,col = "gray")
-polygon(c(as.Date("1994-01-01") ,  as.Date("1994-01-01"), as.Date("1995-01-01"), as.Date("1995-01-01")), 
-        c(110000, 200000,  200000, 11000), col = "grey85", border = NA)
-lines(plot_data$date, plot_data$rtrr, lwd = 2) 
-lower <- point_forecasts - 1.96*15870
-upper <- point_forecasts + 1.96*15870
-lines(point_forecasts, type = "l", lwd=2, col="red")
-lines(test$date , point_forecasts, type = "l", col = "red", lwd=2, lty=2)
-lines(test$date , lower, type = "l", col = "red", lty = 2)
-lines(test$date , upper, type = "l", col = "red", lty = 2)
+estimation_data <- housing[1:576,]
+evaluation_data <- housing[-1:-576,]
+res1 <- lm(hstarts ~ seasonal - 1, data = estimation_data)
+```
+|term       |  estimate| std.error| statistic| p.value|
+|:----------|---------:|---------:|---------:|-------:|
+|seasonal1  |  86.50417|  4.029055|  21.47009|       0|
+|seasonal2  |  89.50417|  4.029055|  22.21468|       0|
+|seasonal3  | 122.88333|  4.029055|  30.49929|       0|
+|seasonal4  | 142.16875|  4.029055|  35.28588|       0|
+|seasonal5  | 147.50000|  4.029055|  36.60908|       0|
+|seasonal6  | 145.99792|  4.029055|  36.23627|       0|
+|seasonal7  | 139.11250|  4.029055|  34.52733|       0|
+|seasonal8  | 138.41667|  4.029055|  34.35462|       0|
+|seasonal9  | 130.56250|  4.029055|  32.40524|       0|
+|seasonal10 | 134.09167|  4.029055|  33.28117|       0|
+|seasonal11 | 111.83333|  4.029055|  27.75671|       0|
+|seasonal12 |  92.15833|  4.029055|  22.87344|       0|
+
+---
+# Улиралын фактор
+
+```{r echo=FALSE, message=FALSE,fig.fullwidth=TRUE, fig.align='center', fig.width = 11,fig.height=7}
+bar <- barplot(res1$coefficients, names.arg = paste0("s", 1:12), border=FALSE)
+text(bar, res1$coefficients , signif(res1$coefficients, 3) , cex=0.7)
 ```
 
+---
+```{r echo=FALSE, message=FALSE,fig.fullwidth=TRUE, fig.align='center', fig.width = 11,fig.height=7}
+plot(hstarts ~ date, data =  estimation_data, 
+      type = "l", 
+      lwd = 2, 
+      xlab = "Time", 
+      ylab="Sales",
+      main = "Housing Starts")
+lines(estimation_data$date, fitted(res1), col="blue", lty=2,lwd=2)
+legend("topright", c("Actual", "Fitted"), 
+       lty = c(1, 2), 
+       col = c("black", "blue"), cex=0.6)
+```
+---
+# Forecasts
+```{r echo=FALSE, message=FALSE,fig.fullwidth=TRUE, fig.align='center', fig.width = 11,fig.height=7}
+plot_data <- ch6data %>% 
+  select(date, hstarts, seasonal) %>% 
+  filter(date >= as.Date("1990-01-01") & date <= as.Date("1994-11-01"))
+plot(plot_data$date, plot_data$hstarts, 
+     type = "l",
+     xlab = "Time", 
+     ylab="History, Forecasts, Realization",
+     ylim = c(30, 210))
+polygon(c(as.Date("1994-01-01") ,  as.Date("1994-01-01"), as.Date("1994-11-01"), as.Date("1994-11-01")), 
+        c(30, 210,  210, 30), col = "grey85", border = NA)
+lines(plot_data$date, plot_data$hstarts, lwd = 2) 
+point_forecasts <- predict(res1, evaluation_data) 
+# interval forecasts
+lower <- point_forecasts - 1.96*summary(res1)$sigma
+upper <- point_forecasts + 1.96*summary(res1)$sigma
+lines(evaluation_data$date , point_forecasts, 
+      type = "l", 
+      col = "red", 
+      lwd=2, 
+      lty=2)
+lines(evaluation_data$date , lower, 
+      type = "l", 
+      col = "red", 
+      lty = 2)
+lines(evaluation_data$date , upper, type = "l", col = "red", lty = 2)
 
-
-Экспоненциал Тренд $$(\hat\beta_0, \hat\beta_1)=\underset{\beta_0, \beta_1, \beta_2}{\text{argmin}}\sum_{t=1}^T(y_t-\beta_0\exp(\beta_1\text{TIME}_t))^2$$c
+```

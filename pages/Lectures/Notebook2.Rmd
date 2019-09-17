@@ -141,7 +141,9 @@ plot_data <- ch6data %>%
   select(date, hstarts, seasonal) %>% 
   filter(date >= as.Date("1990-01-01") & date <= as.Date("1994-11-01"))
 plot(plot_data$date, plot_data$hstarts, 
-     type = "l", 
+     type = "l",
+     xlab = "Time", 
+     ylab="History, Forecasts, Realization",
      ylim = c(30, 210))
 polygon(c(as.Date("1994-01-01") ,  as.Date("1994-01-01"), as.Date("1994-11-01"), as.Date("1994-11-01")), 
         c(30, 210,  210, 30), col = "grey85", border = NA)
