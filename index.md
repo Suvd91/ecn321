@@ -46,5 +46,8 @@ description:
 
 [James H. Stock, Mark W. Watson *"Introduction to Econometrics"*](https://scholar.harvard.edu/stock/pages/introduction-econometrics)
 
+## R Sources
+
 [Christoph Hanck, Martin Arnold, Alexander Gerber and Martin Schmelzer *"Introduction to Econometrics with R"*](https://www.econometrics-with-r.org/index.html)
 
+[Florian Heiss *"Using R for Introductory Econometrics"*](http://www.urfie.net/)
