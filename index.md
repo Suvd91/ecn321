@@ -10,7 +10,7 @@ description:
 
 ## Лекцүүд
 
-[Сэдэв 1: Хичээлийн судлах зүйлс, Шугаман регрессийн мэдлэгээ бататгах](pages/Lectures/slide.html)
+[Сэдэв 1: Хичээлийн судлах зүйлс, Шугаман регрессийн мэдлэгээ бататгах](pages/Lectures/slide.html) [Нэмэлт унших материал](https://www.econometrics-with-r.org/4-lrwor.html)
 
 Сэдэв 2: Амжилттай таамаглал хийх үндсүүд (Diebold Chapter 3)
 
@@ -45,3 +45,6 @@ description:
 [Diebold Francis *"Elements of Forecasting"*](https://www.sas.upenn.edu/~fdiebold/Textbooks.html)
 
 [James H. Stock, Mark W. Watson *"Introduction to Econometrics"*](https://scholar.harvard.edu/stock/pages/introduction-econometrics)
+
+[Christoph Hanck, Martin Arnold, Alexander Gerber and Martin Schmelzer *"Introduction to Econometrics with R"*](https://www.econometrics-with-r.org/index.html)
+
