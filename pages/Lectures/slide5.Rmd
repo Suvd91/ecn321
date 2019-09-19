@@ -1,0 +1,37 @@
+---
+title: "Эконометрикс II"
+subtitle: "Лекц 6: Мөчлөгийг тодорхойлох<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>"
+author: "багш: Д. Хашбаатар"
+date: "2019/09/23"
+output: 
+  xaringan::moon_reader:
+    css: [default, metropolis, metropolis-fonts]
+    nature: 
+      beforeInit: "macros.js"
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+# Улиралын нөлөөг загварчлах
+
+Хугацаан цуваа
+```{r}
+library(kableExtra)
+kable(cbind(mtcars, mtcars)) %>%
+  kable_styling() %>%
+  scroll_box(width = "500px", height = "200px")
+```
+
+---
+#White noise
+
+```{r}
+set.seed(1)
+plot(rnorm(100), type="l", ylab="Process", main="Realization of White Noise Process")
+```
+
