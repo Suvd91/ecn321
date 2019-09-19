@@ -35,3 +35,23 @@ set.seed(1)
 plot(rnorm(100), type="l", ylab="Process", main="Realization of White Noise Process")
 ```
 
+---
+<div class = "keyconcept" id="KC4.1">
+<h3 class = "right"> Key Concept 4.1 </h3>          
+<h3 class = "left"> Terminology for the Linear Regression Model with a Single Regressor </h3>
+
+<p> The linear regression model is 
+
+$$Y_i = \beta_0 + \beta_1 X_i + u_i$$
+
+where
+
+- the index $i$ runs over the observations, $i=1,\dots,n$
+- $Y_i$ is the *dependent variable*, the *regressand*, or simply the *left-hand variable*
+- $X_i$ is the *independent variable*, the *regressor*, or simply the *right-hand variable*
+- $Y = \beta_0 + \beta_1 X$ is the *population regression line* also called the *population regression function*
+- $\beta_0$ is the *intercept* of the population regression line
+- $\beta_1$ is the *slope* of the population regression line
+- $u_i$ is the *error term*.
+</p>
+</div>
