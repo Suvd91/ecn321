@@ -3,29 +3,143 @@ title: "Эконометрикс II"
 subtitle: "Лекц 6: Мөчлөгийг тодорхойлох<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>"
 author: "багш: Д. Хашбаатар"
 date: "2019/09/23"
-output: 
+output:
   xaringan::moon_reader:
-    css: [default, metropolis, metropolis-fonts]
-    nature: 
-      beforeInit: "macros.js"
+    css: ['default', 'metropolis', 'metropolis-fonts', 'my-css.css']
+    # self_contained: true
+    nature:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
 ---
 
-```{r setup, include=FALSE}
+```{R, setup, include = F}
 options(htmltools.dir.version = FALSE)
+library(pacman)
+p_load(
+  broom, here, tidyverse,
+  latex2exp, ggplot2, ggthemes, viridis, extrafont, gridExtra,
+  kableExtra,
+  dplyr,
+  lubridate,
+  magrittr, knitr, parallel
+)
+# Define pink color
+red_pink <- "#e64173"
+turquoise <- "#20B2AA"
+grey_light <- "grey70"
+grey_mid <- "grey50"
+grey_dark <- "grey20"
+# Dark slate grey: #314f4f
+# Knitr options
+opts_chunk$set(
+  comment = "#>",
+  fig.align = "center",
+  fig.height = 7,
+  fig.width = 10.5,
+  warning = F,
+  message = F
+)
+opts_chunk$set(dev = "svg")
+options(device = function(file, width, height) {
+  svg(tempfile(), width = width, height = height)
+})
+# A blank theme for ggplot
+theme_empty <- theme_bw() + theme(
+  line = element_blank(),
+  rect = element_blank(),
+  strip.text = element_blank(),
+  axis.text = element_blank(),
+  plot.title = element_blank(),
+  axis.title = element_blank(),
+  plot.margin = structure(c(0, 0, -0.5, -1), unit = "lines", valid.unit = 3L, class = "unit"),
+  legend.position = "none"
+)
+theme_simple <- theme_bw() + theme(
+  line = element_blank(),
+  panel.grid = element_blank(),
+  rect = element_blank(),
+  strip.text = element_blank(),
+  axis.text.x = element_text(size = 18, family = "STIXGeneral"),
+  axis.text.y = element_blank(),
+  axis.ticks = element_blank(),
+  plot.title = element_blank(),
+  axis.title = element_blank(),
+  # plot.margin = structure(c(0, 0, -1, -1), unit = "lines", valid.unit = 3L, class = "unit"),
+  legend.position = "none"
+)
+theme_axes_math <- theme_void() + theme(
+  text = element_text(family = "MathJax_Math"),
+  axis.title = element_text(size = 22),
+  axis.title.x = element_text(hjust = .95, margin = margin(0.15, 0, 0, 0, unit = "lines")),
+  axis.title.y = element_text(vjust = .95, margin = margin(0, 0.15, 0, 0, unit = "lines")),
+  axis.line = element_line(
+    color = "grey70",
+    size = 0.25,
+    arrow = arrow(angle = 30, length = unit(0.15, "inches")
+  )),
+  plot.margin = structure(c(1, 0, 1, 0), unit = "lines", valid.unit = 3L, class = "unit"),
+  legend.position = "none"
+)
+theme_axes_serif <- theme_void() + theme(
+  text = element_text(family = "MathJax_Main"),
+  axis.title = element_text(size = 22),
+  axis.title.x = element_text(hjust = .95, margin = margin(0.15, 0, 0, 0, unit = "lines")),
+  axis.title.y = element_text(vjust = .95, margin = margin(0, 0.15, 0, 0, unit = "lines")),
+  axis.line = element_line(
+    color = "grey70",
+    size = 0.25,
+    arrow = arrow(angle = 30, length = unit(0.15, "inches")
+  )),
+  plot.margin = structure(c(1, 0, 1, 0), unit = "lines", valid.unit = 3L, class = "unit"),
+  legend.position = "none"
+)
+theme_axes <- theme_void() + theme(
+  text = element_text(family = "Fira Sans Book"),
+  axis.title = element_text(size = 18),
+  axis.title.x = element_text(hjust = .95, margin = margin(0.15, 0, 0, 0, unit = "lines")),
+  axis.title.y = element_text(vjust = .95, margin = margin(0, 0.15, 0, 0, unit = "lines")),
+  axis.line = element_line(
+    color = grey_light,
+    size = 0.25,
+    arrow = arrow(angle = 30, length = unit(0.15, "inches")
+  )),
+  plot.margin = structure(c(1, 0, 1, 0), unit = "lines", valid.unit = 3L, class = "unit"),
+  legend.position = "none"
+)
+theme_set(theme_gray(base_size = 20))
 ```
 
+```{R, colors, include = F}
+# Define pink color
+red_pink <- "#e64173"
+turquoise <- "#20B2AA"
+orange <- "#FFA500"
+red <- "#fb6107"
+blue <- "#2b59c3"
+green <- "#8bb174"
+grey_light <- "grey70"
+grey_mid <- "grey50"
+grey_dark <- "grey20"
+purple <- "#6A5ACD"
+```
+
+Changes to our model/framework.
+
+- Our model now has $\color{#e64173}{t}$ subscripts for .hi[time periods].
+
+- .hi[Dynamic models] allow .hi[lags] of explanatory and/or outcome variables.
+
+- We changed our **exogeneity** assumption to .hi[contemporaneous exogeneity], _i.e._, $\mathop{\boldsymbol{E}}\left[ u_t \middle| X_t \right] = 0$
+
+- Including .hi-orange[lags of outcome variables] can lead to .hi[biased coefficient estimates] from OLS.
+
+- .hi-orange[Lagged explanatory variables] make .hi[OLS inefficient].
+
+---
 # Улиралын нөлөөг загварчлах
 
 Хугацаан цуваа
-```{r}
-library(kableExtra)
-kable(cbind(mtcars, mtcars)) %>%
-  kable_styling() %>%
-  scroll_box(width = "500px", height = "200px")
-```
 
 ---
 #White noise
@@ -36,3 +150,245 @@ plot(rnorm(100), type="l", ylab="Process", main="Realization of White Noise Proc
 ```
 
 ---
+layout: false
+class: inverse, middle
+
+# Autocorrelation
+---
+layout: false
+name: intro
+# Autocorrelation
+## What is it?
+
+.hi[Autocorrelation] occurs when our disturbances are correlated over time, _i.e._, $\mathop{\text{Cov}} \left( u_t,\, u_s \right) \neq 0$ for $t\neq s$.
+
+--
+
+Another way to think about: If the *shock* from disturbance $t$ correlates with "nearby" shocks in $t-1$ and $t+1$.
+
+--
+
+*Note:* **Serial correlation** and **autocorrelation** are the same thing.
+
+--
+
+Why is autocorrelation prevalent in time-series analyses?
+---
+class: clear
+
+.hi-slate[Positive autocorrelation]: Disturbances $\left( u_t \right)$ over time
+```{R, positive auto u, echo = F, fig.height = 7.25}
+# Number of observations
+T <- 1e2
+# Rho
+rho <- 0.95
+# Set seed and starting point
+set.seed(1234)
+start <- rnorm(1)
+# Generate the data
+ar_df <- tibble(
+  t = 1:T,
+  x = runif(T, min = 0, max = 1),
+  e = rnorm(T, mean = 0, sd = 2),
+  u = NA
+)
+for (x in 1:T) {
+  if (x == 1) {
+    ar_df$u[x] <- rho * start + ar_df$e[x]
+  } else {
+    ar_df$u[x] <- rho * ar_df$u[x-1] + ar_df$e[x]
+  }
+}
+ar_df %<>% mutate(y = 1 + 3 * x + u)
+# Plot disturbances over time
+ggplot(data = ar_df,
+  aes(t, u)
+) +
+geom_line(color = "grey85", size = 0.35) +
+geom_point(color = red_pink, size = 2.25) +
+ylab("u") +
+xlab("t") +
+# theme_pander(base_family = "Fira Sans Book", base_size = 20)
+theme_axes_math
+```
+---
+class: clear
+
+.hi-slate[Positive autocorrelation]: Outcomes $\left( y_t \right)$ over time
+```{R, positive auto y, echo = F, fig.height = 7.25}
+# Plot outcomes over time
+ggplot(data = ar_df,
+  aes(t, y)
+) +
+geom_line(color = "grey85", size = 0.35) +
+geom_point(color = red_pink, size = 2.25) +
+ylab("y") +
+xlab("t") +
+# theme_pander(base_family = "Fira Sans Book", base_size = 20)
+theme_axes_math
+```
+---
+class: clear
+
+.hi-slate[Negative autocorrelation]: Disturbances $\left( u_t \right)$ over time
+```{R, negative auto u, echo = F, fig.height = 7.25}
+# Number of observations
+T <- 1e2
+# Rho
+rho <- -0.95
+# Set seed and starting point
+set.seed(1234)
+start <- rnorm(1)
+# Generate the data
+ar_df <- tibble(
+  t = 1:T,
+  x = runif(T, min = 0, max = 1),
+  e = rnorm(T, mean = 0, sd = 2),
+  u = NA
+)
+for (x in 1:T) {
+  if (x == 1) {
+    ar_df$u[x] <- rho * start + ar_df$e[x]
+  } else {
+    ar_df$u[x] <- rho * ar_df$u[x-1] + ar_df$e[x]
+  }
+}
+ar_df %<>% mutate(y = 1 + 3 * x + u)
+# Plot disturbances over time
+ggplot(data = ar_df,
+  aes(t, u)
+) +
+geom_line(color = "grey85", size = 0.35) +
+geom_point(color = red_pink, size = 2.25) +
+ylab("u") +
+xlab("t") +
+# theme_pander(base_family = "Fira Sans Book", base_size = 20)
+theme_axes_math
+```
+---
+class: clear
+
+.hi-slate[Negative autocorrelation]: Outcomes $\left( y_t \right)$ over time
+```{R, negative auto y, echo = F, fig.height = 7.25}
+# Plot outcomes over time
+ggplot(data = ar_df,
+  aes(t, y)
+) +
+geom_line(color = "grey85", size = 0.35) +
+geom_point(color = red_pink, size = 2.25) +
+ylab("y") +
+xlab("t") +
+# theme_pander(base_family = "Fira Sans Book", base_size = 20)
+theme_axes_math
+```
+---
+layout: true
+# Autocorrelation
+## In static time-series models
+---
+name: static_models
+
+Let's start with a very common model: a static time-series model whose disturbances exhibit .hi[first-order autocorrelation], *a.k.a.* .pink[AR(1)]:
+
+$$
+\begin{align}
+  \text{Births}_t &= \beta_0 + \beta_1 \text{Income}_t + u_t
+\end{align}
+$$
+where
+$$
+\begin{align}
+  \color{#e64173}{u_t} = \color{#e64173}{\rho \, u_{t-1}} + \varepsilon_t
+\end{align}
+$$
+and the $\varepsilon_t$ are independently and identically distributed (*i.i.d.*).
+
+--
+
+.hi-purple[Second-order autocorrelation], or .purple[AR(2)], would be
+
+$$
+\begin{align}
+  \color{#6A5ACD}{u_t} = \color{#6A5ACD}{\rho_1 u_{t-1}} + \color{#6A5ACD}{\rho_2 u_{t-2}} + \varepsilon_t
+\end{align}
+$$
+---
+
+An .turquoise[AR(p)] model/process has a disturbance structure of
+
+$$
+\begin{align}
+  u_t = \sum_{j=1}^\color{#20B2AA}{p} \rho_j u_{t-j} + \varepsilon_t
+\end{align}
+$$
+
+allowing the current disturbance to correlated with up to $\color{#20B2AA}{p}$ of its lags.
+
+---
+layout: false
+name: ols_static
+# Autocorrelation
+## OLS
+
+For **static models** or **dynamic models with lagged explanatory variables**, in the presence of autocorrelation
+
+1. OLS provides .pink[**unbiased** estimates for the coefficients.]
+
+1. OLS creates .pink[**biased** estimates for the standard errors.]
+
+1. OLS is .pink[**inefficient**.]
+
+*Recall:* Same implications as heteroskedasticity.
+
+Autocorrelation get trickier with lagged outcome variables.
+---
+layout: true
+# Autocorrelation
+## OLS and lagged outcome variables
+---
+name: ols_adl
+
+Consider a model with one lag of the outcome variable—ADL(1, 0)—model with AR(1) disturbances
+
+$$
+\begin{align}
+  \text{Births}_t = \beta_0 + \beta_1 \text{Income}_t + \beta_2 \text{Births}_{t-1} + u_t
+\end{align}
+$$
+where
+$$
+\begin{align}
+  u_t = \rho u_{t-1} + \varepsilon_t
+\end{align}
+$$
+
+--
+
+**Problem:**
+--
+ Both $\text{Births}_{t-1}$ (a regressor in the model for time $t$) and $u_{t}$ (the disturbance for time $t$) depend upon $u_{t-1}$. *I.e.*, a regressor is correlated with its contemporaneous disturbance.
+
+--
+
+**Q:** Why is this a problem?
+--
+<br>
+**A:** It violates .pink[contemporaneous exogeneity]
+--
+, *i.e.*, $\mathop{\text{Cov}} \left( x_t,\,u_t \right) \neq 0$.
+---
+
+To see this problem, first write out the model for $t$ and $t-1$:
+$$
+\begin{align}
+  \text{Births}_t &= \beta_0 + \beta_1 \text{Income}_t + \beta_2 \text{Births}_{t-1} + u_t \\
+  \text{Births}_{t-1} &= \beta_0 + \beta_1 \text{Income}_{t-1} + \beta_2 \text{Births}_{t-2} + u_{t-1}
+\end{align}
+$$
+and now note that $u_t = \rho u_{t-1} + \varepsilon_t$. Substituting...
+$$
+\begin{align}
+  \text{Births}_t &= \beta_0 + \beta_1 \text{Income}_t + \beta_2 \color{#6A5ACD}{\text{Births}_{t-1}} + \overbrace{\left( \rho \color{#e64173}{u_{t-1}} + \varepsilon_t \right)}^{u_t} \tag{1} \\
+  \color{#6A5ACD}{\text{Births}_{t-1}} &= \beta_0 + \beta_1 \text{Income}_{t-1} + \beta_2 \text{Births}_{t-2} + \color{#e64173}{u_{t-1}} \tag{2}
+\end{align}
+$$

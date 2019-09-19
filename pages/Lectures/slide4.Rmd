@@ -3,18 +3,126 @@ title: "Эконометрикс II"
 subtitle: "Лекц 5: Улиралын нөлөөг загварчлах, таамаглах <html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>"
 author: "багш: Д. Хашбаатар"
 date: "2019/09/18"
-output: 
+output:
   xaringan::moon_reader:
-    css: [default, metropolis, metropolis-fonts]
-    nature: 
-      beforeInit: "macros.js"
+    css: ['default', 'metropolis', 'metropolis-fonts', 'my-css.css']
+    # self_contained: true
+    nature:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
 ---
 
-```{r setup, include=FALSE}
+```{R, setup, include = F}
 options(htmltools.dir.version = FALSE)
+library(pacman)
+p_load(
+  broom, here, tidyverse,
+  latex2exp, ggplot2, ggthemes, viridis, extrafont, gridExtra,
+  kableExtra,
+  dplyr,
+  lubridate,
+  magrittr, knitr, parallel
+)
+# Define pink color
+red_pink <- "#e64173"
+turquoise <- "#20B2AA"
+grey_light <- "grey70"
+grey_mid <- "grey50"
+grey_dark <- "grey20"
+# Dark slate grey: #314f4f
+# Knitr options
+opts_chunk$set(
+  comment = "#>",
+  fig.align = "center",
+  fig.height = 7,
+  fig.width = 10.5,
+  warning = F,
+  message = F
+)
+opts_chunk$set(dev = "svg")
+options(device = function(file, width, height) {
+  svg(tempfile(), width = width, height = height)
+})
+# A blank theme for ggplot
+theme_empty <- theme_bw() + theme(
+  line = element_blank(),
+  rect = element_blank(),
+  strip.text = element_blank(),
+  axis.text = element_blank(),
+  plot.title = element_blank(),
+  axis.title = element_blank(),
+  plot.margin = structure(c(0, 0, -0.5, -1), unit = "lines", valid.unit = 3L, class = "unit"),
+  legend.position = "none"
+)
+theme_simple <- theme_bw() + theme(
+  line = element_blank(),
+  panel.grid = element_blank(),
+  rect = element_blank(),
+  strip.text = element_blank(),
+  axis.text.x = element_text(size = 18, family = "STIXGeneral"),
+  axis.text.y = element_blank(),
+  axis.ticks = element_blank(),
+  plot.title = element_blank(),
+  axis.title = element_blank(),
+  # plot.margin = structure(c(0, 0, -1, -1), unit = "lines", valid.unit = 3L, class = "unit"),
+  legend.position = "none"
+)
+theme_axes_math <- theme_void() + theme(
+  text = element_text(family = "MathJax_Math"),
+  axis.title = element_text(size = 22),
+  axis.title.x = element_text(hjust = .95, margin = margin(0.15, 0, 0, 0, unit = "lines")),
+  axis.title.y = element_text(vjust = .95, margin = margin(0, 0.15, 0, 0, unit = "lines")),
+  axis.line = element_line(
+    color = "grey70",
+    size = 0.25,
+    arrow = arrow(angle = 30, length = unit(0.15, "inches")
+  )),
+  plot.margin = structure(c(1, 0, 1, 0), unit = "lines", valid.unit = 3L, class = "unit"),
+  legend.position = "none"
+)
+theme_axes_serif <- theme_void() + theme(
+  text = element_text(family = "MathJax_Main"),
+  axis.title = element_text(size = 22),
+  axis.title.x = element_text(hjust = .95, margin = margin(0.15, 0, 0, 0, unit = "lines")),
+  axis.title.y = element_text(vjust = .95, margin = margin(0, 0.15, 0, 0, unit = "lines")),
+  axis.line = element_line(
+    color = "grey70",
+    size = 0.25,
+    arrow = arrow(angle = 30, length = unit(0.15, "inches")
+  )),
+  plot.margin = structure(c(1, 0, 1, 0), unit = "lines", valid.unit = 3L, class = "unit"),
+  legend.position = "none"
+)
+theme_axes <- theme_void() + theme(
+  text = element_text(family = "Fira Sans Book"),
+  axis.title = element_text(size = 18),
+  axis.title.x = element_text(hjust = .95, margin = margin(0.15, 0, 0, 0, unit = "lines")),
+  axis.title.y = element_text(vjust = .95, margin = margin(0, 0.15, 0, 0, unit = "lines")),
+  axis.line = element_line(
+    color = grey_light,
+    size = 0.25,
+    arrow = arrow(angle = 30, length = unit(0.15, "inches")
+  )),
+  plot.margin = structure(c(1, 0, 1, 0), unit = "lines", valid.unit = 3L, class = "unit"),
+  legend.position = "none"
+)
+theme_set(theme_gray(base_size = 20))
+```
+
+
+```{R, colors, include = F}
+# Define pink color
+red_pink <- "#e64173"
+turquoise <- "#20B2AA"
+orange <- "#FFA500"
+red <- "#fb6107"
+blue <- "#2b59c3"
+green <- "#8bb174"
+grey_light <- "grey70"
+grey_mid <- "grey50"
+grey_dark <- "grey20"
+purple <- "#6A5ACD"
 ```
 
 # Улиралын нөлөөг загварчлах
@@ -65,7 +173,7 @@ $$S_t=\gamma_1D_{1t}+\gamma_2D_{2t}+\gamma_3D_{3t}+\gamma_4D_{4t}.$$
  - *хуанлийн нөлөөг* оруулах боломжтой (баяр ёслолын өдөр, амралтын өдөр гэх мэт)
  
 Улиралын нөлөө бүxий цуваа
-$$\color{red}{y_t=\sum_{i=1}^s\gamma_{i}D_{it}+\varepsilon_t,\quad t=1,\ldots,T}$$
+$$\color{#e64173}{y_t=\sum_{i=1}^s\gamma_{i}D_{it}+\varepsilon_t,\quad t=1,\ldots,T}$$
 ---
 # Үнэлгээ болон таамаглал
 
@@ -75,9 +183,9 @@ $$\hat y_t=\sum_{i=1}^s\hat\gamma_{i}D_{it}$$
  
 
 
-|                                                    <font color="red">Цэгэн таамаглал</font> 	|                                 <font color="blue">Интервал таамаглал</font> 	|                               Нягтын таамаглал 	|
+|                                                    <font color="#e64173">Цэгэн таамаглал</font> 	|                                 <font color="blue">Интервал таамаглал</font> 	|                               Нягтын таамаглал 	|
 |------------------------------------------------------------------:	|--------------------------------------------------:	|-----------------------------------------------:	|
-| $$\color{red}{\hat{y}_{T+h,T} =\sum_{i=1}^s\hat\gamma_{i}D_{i,T+h}}$$ 	| $$\color{blue}{\hat{y}_{T+h,T}\pm 1.96\hat\sigma_\varepsilon}$$ 	| $$N(\hat{y}_{T+h,T}, \hat\sigma_\varepsilon)$$ 	|
+| $$\color{#e64173}{\hat{y}_{T+h,T} =\sum_{i=1}^s\hat\gamma_{i}D_{i,T+h}}$$ 	| $$\color{blue}{\hat{y}_{T+h,T}\pm 1.96\hat\sigma_\varepsilon}$$ 	| $$N(\hat{y}_{T+h,T}, \hat\sigma_\varepsilon)$$ 	|
 |
  
 ---
@@ -95,23 +203,31 @@ $$\hat y_t=\sum_{i=1}^s\hat\gamma_{i}D_{it}$$
 |1946-07-01 |      94|
 |1946-08-01 |      96|
 Table: Сар бүр шинээр баригдаж буй орон сууцын тоо: 1946-1994
-```{r message=FALSE, echo=FALSE}
+
+---
+layout: false
+class: clear
+
+Сар бүр шинээр баригдаж буй орон сууцын тоо: 1946-1994
+```{R, dev = "svg", echo = F, fig.height = 7}
 load("ch6data.Rdata")
 library(dplyr)
 housing <- ch6data %>% 
   select(date, hstarts, seasonal) %>% 
   filter(date >= as.Date("1946-01-01") & date <= as.Date("1994-11-01"))
-
+p <- ggplot(data = housing, aes(x = date, y = hstarts)) +
+  geom_line(color = "black", size = 0.5, alpha=0.3) +
+  geom_point(color = "black", size = 1, alpha=0.5) +
+  xlab("Starts") +
+  ylab("Time") +
+  theme_pander(base_size = 20) 
+p
 ```
 
----
-```{r message=FALSE,fig.fullwidth=TRUE, fig.align='center', fig.width = 11,fig.height=7}
-plot(housing$date, housing$hstarts, type = "l", ylab="Starts", xlab = "Time", lwd = 2)
-```
 ---
 # Үнэлгээ
 
-```{r echo=FALSE, message=FALSE,fig.fullwidth=TRUE, fig.align='center', fig.width = 11,fig.height=7}
+```{r echo=FALSE, message=FALSE}
 estimation_data <- housing[1:576,]
 evaluation_data <- housing[-1:-576,]
 res1 <- lm(hstarts ~ seasonal - 1, data = estimation_data)
@@ -134,51 +250,43 @@ res1 <- lm(hstarts ~ seasonal - 1, data = estimation_data)
 ---
 # Улиралын фактор
 
-```{r echo=FALSE, message=FALSE,fig.fullwidth=TRUE, fig.align='center', fig.width = 11,fig.height=7}
+```{r echo=FALSE, message=FALSE,fig.fullwidth=TRUE, fig.align='center'}
 bar <- barplot(res1$coefficients, names.arg = paste0("s", 1:12), border=FALSE)
-text(bar, res1$coefficients , signif(res1$coefficients, 3) , cex=0.7)
+text(bar, res1$coefficients - 1, signif(res1$coefficients, 3) , cex=0.7)
 ```
 
 ---
-```{r echo=FALSE, message=FALSE,fig.fullwidth=TRUE, fig.align='center', fig.width = 11,fig.height=7}
-plot(hstarts ~ date, data =  estimation_data, 
-      type = "l", 
-      lwd = 2, 
-      xlab = "Time", 
-      ylab="Sales",
-      main = "Housing Starts")
-lines(estimation_data$date, fitted(res1), col="blue", lty=2,lwd=2)
-legend("topright", c("Actual", "Fitted"), 
-       lty = c(1, 2), 
-       col = c("black", "blue"), cex=0.6)
+layout: false
+class: clear
+.hi-slate[Housing starts]: Actual vs .pink[Fitted]
+```{r echo=FALSE, message=FALSE}
+estimation_data$fitted <- fitted(res1)
+p <- ggplot(data = estimation_data, aes(x = date, y = hstarts)) +
+  geom_line(color = "black", size = 1, alpha=0.3) +
+  geom_point(color = "black", size = 1) +
+  geom_line(aes(x = date, y = fitted), color = "#e64173", size = 1, alpha=0.3) +
+  geom_point(aes(x = date, y = fitted), color = "#e64173", size = 1) 
+p  + xlab("Time") +
+  ylab("Starts") +
+  theme_pander(base_size = 20) 
 ```
 ---
-# Forecasts
-```{r echo=FALSE, message=FALSE,fig.fullwidth=TRUE, fig.align='center', fig.width = 11,fig.height=7}
+# Таамаглал
+```{r echo=FALSE, message=FALSE,fig.fullwidth=TRUE, fig.align='center'}
 plot_data <- ch6data %>% 
   select(date, hstarts, seasonal) %>% 
   filter(date >= as.Date("1990-01-01") & date <= as.Date("1994-11-01"))
-plot(plot_data$date, plot_data$hstarts, 
-     type = "l",
-     xlab = "Time", 
-     ylab="History, Forecasts, Realization",
-     ylim = c(30, 210))
-polygon(c(as.Date("1994-01-01") ,  as.Date("1994-01-01"), as.Date("1994-11-01"), as.Date("1994-11-01")), 
-        c(30, 210,  210, 30), col = "grey85", border = NA)
-lines(plot_data$date, plot_data$hstarts, lwd = 2) 
-point_forecasts <- predict(res1, evaluation_data) 
-# interval forecasts
-lower <- point_forecasts - 1.96*summary(res1)$sigma
-upper <- point_forecasts + 1.96*summary(res1)$sigma
-lines(evaluation_data$date , point_forecasts, 
-      type = "l", 
-      col = "red", 
-      lwd=2, 
-      lty=2)
-lines(evaluation_data$date , lower, 
-      type = "l", 
-      col = "red", 
-      lty = 2)
-lines(evaluation_data$date , upper, type = "l", col = "red", lty = 2)
-
+plot_data$forecast <- predict(res1, plot_data) 
+plot_data$forecast[1:48] <- NA 
+plot_data %<>% mutate(up = forecast + 1.96*summary(res1)$sigma, 
+                      lo = forecast - 1.96*summary(res1)$sigma) 
+ggplot(data = plot_data, aes(x = date, y = hstarts)) +
+  geom_line(color = "black", size = 1, alpha=0.3) +
+  geom_point(color = "black", size = 1) +
+  geom_line(aes(x = date, y = forecast), colour=red_pink) +
+  geom_ribbon(aes(x = date, ymin = lo, ymax = up), fill = red_pink, alpha = 0.2) +
+ # scale_fill_manual("", values="red") +
+  ylab("Starts") +
+  xlab("Time") +
+  theme_pander(base_size = 20) 
 ```

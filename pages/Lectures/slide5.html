@@ -7,7 +7,7 @@
     <link href="slide5_files/remark-css/default.css" rel="stylesheet" />
     <link href="slide5_files/remark-css/metropolis.css" rel="stylesheet" />
     <link href="slide5_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
-    <script src="slide5_files/kePrint/kePrint.js"></script>
+    <link rel="stylesheet" href="my-css.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
@@ -29,848 +29,24 @@ class: center, middle, inverse, title-slide
 
 
 
+
+
+Changes to our model/framework.
+
+- Our model now has `\(\color{#e64173}{t}\)` subscripts for .hi[time periods].
+
+- .hi[Dynamic models] allow .hi[lags] of explanatory and/or outcome variables.
+
+- We changed our **exogeneity** assumption to .hi[contemporaneous exogeneity], _i.e._, `\(\mathop{\boldsymbol{E}}\left[ u_t \middle| X_t \right] = 0\)`
+
+- Including .hi-orange[lags of outcome variables] can lead to .hi[biased coefficient estimates] from OLS.
+
+- .hi-orange[Lagged explanatory variables] make .hi[OLS inefficient].
+
+---
 # Улиралын нөлөөг загварчлах
 
 Хугацаан цуваа
-
-```r
-library(kableExtra)
-kable(cbind(mtcars, mtcars)) %&gt;%
-  kable_styling() %&gt;%
-  scroll_box(width = "500px", height = "200px")
-```
-
-&lt;div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:200px; overflow-x: scroll; width:500px; "&gt;&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;"&gt;   &lt;/th&gt;
-   &lt;th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;"&gt; mpg &lt;/th&gt;
-   &lt;th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;"&gt; cyl &lt;/th&gt;
-   &lt;th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;"&gt; disp &lt;/th&gt;
-   &lt;th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;"&gt; hp &lt;/th&gt;
-   &lt;th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;"&gt; drat &lt;/th&gt;
-   &lt;th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;"&gt; wt &lt;/th&gt;
-   &lt;th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;"&gt; qsec &lt;/th&gt;
-   &lt;th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;"&gt; vs &lt;/th&gt;
-   &lt;th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;"&gt; am &lt;/th&gt;
-   &lt;th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;"&gt; gear &lt;/th&gt;
-   &lt;th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;"&gt; carb &lt;/th&gt;
-   &lt;th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;"&gt; mpg &lt;/th&gt;
-   &lt;th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;"&gt; cyl &lt;/th&gt;
-   &lt;th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;"&gt; disp &lt;/th&gt;
-   &lt;th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;"&gt; hp &lt;/th&gt;
-   &lt;th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;"&gt; drat &lt;/th&gt;
-   &lt;th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;"&gt; wt &lt;/th&gt;
-   &lt;th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;"&gt; qsec &lt;/th&gt;
-   &lt;th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;"&gt; vs &lt;/th&gt;
-   &lt;th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;"&gt; am &lt;/th&gt;
-   &lt;th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;"&gt; gear &lt;/th&gt;
-   &lt;th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;"&gt; carb &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Mazda RX4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 21.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 160.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 110 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.90 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2.620 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 16.46 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 21.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 160.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 110 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.90 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2.620 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 16.46 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Mazda RX4 Wag &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 21.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 160.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 110 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.90 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2.875 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 17.02 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 21.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 160.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 110 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.90 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2.875 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 17.02 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Datsun 710 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 22.8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 108.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 93 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.85 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2.320 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 18.61 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 22.8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 108.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 93 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.85 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2.320 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 18.61 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Hornet 4 Drive &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 21.4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 258.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 110 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.08 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.215 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 19.44 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 21.4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 258.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 110 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.08 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.215 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 19.44 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Hornet Sportabout &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 18.7 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 360.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 175 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.15 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.440 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 17.02 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 18.7 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 360.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 175 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.15 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.440 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 17.02 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Valiant &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 18.1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 225.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 105 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2.76 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.460 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 20.22 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 18.1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 225.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 105 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2.76 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.460 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 20.22 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Duster 360 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 14.3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 360.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 245 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.21 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.570 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 15.84 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 14.3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 360.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 245 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.21 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.570 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 15.84 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Merc 240D &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 24.4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 146.7 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 62 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.69 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.190 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 20.00 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 24.4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 146.7 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 62 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.69 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.190 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 20.00 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Merc 230 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 22.8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 140.8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 95 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.92 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.150 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 22.90 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 22.8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 140.8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 95 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.92 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.150 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 22.90 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Merc 280 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 19.2 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 167.6 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 123 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.92 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.440 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 18.30 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 19.2 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 167.6 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 123 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.92 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.440 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 18.30 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Merc 280C &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 17.8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 167.6 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 123 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.92 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.440 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 18.90 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 17.8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 167.6 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 123 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.92 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.440 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 18.90 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Merc 450SE &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 16.4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 275.8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 180 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.07 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4.070 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 17.40 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 16.4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 275.8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 180 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.07 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4.070 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 17.40 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Merc 450SL &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 17.3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 275.8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 180 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.07 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.730 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 17.60 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 17.3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 275.8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 180 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.07 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.730 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 17.60 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Merc 450SLC &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 15.2 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 275.8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 180 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.07 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.780 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 18.00 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 15.2 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 275.8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 180 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.07 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.780 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 18.00 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Cadillac Fleetwood &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 10.4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 472.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 205 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2.93 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 5.250 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 17.98 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 10.4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 472.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 205 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2.93 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 5.250 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 17.98 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Lincoln Continental &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 10.4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 460.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 215 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.00 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 5.424 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 17.82 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 10.4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 460.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 215 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.00 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 5.424 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 17.82 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Chrysler Imperial &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 14.7 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 440.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 230 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.23 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 5.345 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 17.42 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 14.7 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 440.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 230 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.23 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 5.345 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 17.42 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Fiat 128 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 32.4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 78.7 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 66 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4.08 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2.200 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 19.47 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 32.4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 78.7 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 66 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4.08 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2.200 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 19.47 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Honda Civic &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 30.4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 75.7 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 52 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4.93 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1.615 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 18.52 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 30.4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 75.7 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 52 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4.93 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1.615 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 18.52 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Toyota Corolla &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 33.9 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 71.1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 65 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4.22 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1.835 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 19.90 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 33.9 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 71.1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 65 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4.22 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1.835 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 19.90 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Toyota Corona &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 21.5 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 120.1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 97 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.70 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2.465 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 20.01 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 21.5 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 120.1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 97 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.70 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2.465 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 20.01 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Dodge Challenger &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 15.5 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 318.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 150 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2.76 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.520 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 16.87 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 15.5 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 318.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 150 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2.76 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.520 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 16.87 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; AMC Javelin &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 15.2 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 304.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 150 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.15 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.435 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 17.30 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 15.2 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 304.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 150 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.15 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.435 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 17.30 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Camaro Z28 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 13.3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 350.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 245 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.73 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.840 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 15.41 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 13.3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 350.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 245 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.73 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.840 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 15.41 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Pontiac Firebird &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 19.2 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 400.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 175 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.08 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.845 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 17.05 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 19.2 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 400.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 175 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.08 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.845 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 17.05 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Fiat X1-9 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 27.3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 79.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 66 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4.08 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1.935 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 18.90 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 27.3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 79.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 66 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4.08 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1.935 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 18.90 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Porsche 914-2 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 26.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 120.3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 91 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4.43 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2.140 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 16.70 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 26.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 120.3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 91 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4.43 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2.140 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 16.70 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Lotus Europa &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 30.4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 95.1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 113 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.77 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1.513 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 16.90 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 30.4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 95.1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 113 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.77 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1.513 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 16.90 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Ford Pantera L &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 15.8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 351.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 264 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4.22 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.170 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 14.50 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 15.8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 351.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 264 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4.22 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.170 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 14.50 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Ferrari Dino &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 19.7 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 145.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 175 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.62 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2.770 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 15.50 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 19.7 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 145.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 175 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.62 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2.770 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 15.50 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Maserati Bora &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 15.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 301.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 335 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.54 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.570 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 14.60 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 15.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 301.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 335 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.54 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.570 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 14.60 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Volvo 142E &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 21.4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 121.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 109 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4.11 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2.780 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 18.60 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 21.4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 121.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 109 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4.11 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2.780 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 18.60 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;&lt;/div&gt;
 
 ---
 #White noise
@@ -881,32 +57,166 @@ set.seed(1)
 plot(rnorm(100), type="l", ylab="Process", main="Realization of White Noise Process")
 ```
 
-![](slide5_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+&lt;img src="slide5_files/figure-html/unnamed-chunk-1-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
-&lt;div class = "keyconcept" id="KC4.1"&gt;
-&lt;h3 class = "right"&gt; Key Concept 4.1 &lt;/h3&gt;          
-&lt;h3 class = "left"&gt; Terminology for the Linear Regression Model with a Single Regressor &lt;/h3&gt;
+layout: false
+class: inverse, middle
 
-&lt;p&gt; The linear regression model is 
+# Autocorrelation
+---
+layout: false
+name: intro
+# Autocorrelation
+## What is it?
 
-`$$Y_i = \beta_0 + \beta_1 X_i + u_i$$`
+.hi[Autocorrelation] occurs when our disturbances are correlated over time, _i.e._, `\(\mathop{\text{Cov}} \left( u_t,\, u_s \right) \neq 0\)` for `\(t\neq s\)`.
 
+--
+
+Another way to think about: If the *shock* from disturbance `\(t\)` correlates with "nearby" shocks in `\(t-1\)` and `\(t+1\)`.
+
+--
+
+*Note:* **Serial correlation** and **autocorrelation** are the same thing.
+
+--
+
+Why is autocorrelation prevalent in time-series analyses?
+---
+class: clear
+
+.hi-slate[Positive autocorrelation]: Disturbances `\(\left( u_t \right)\)` over time
+&lt;img src="slide5_files/figure-html/positive auto u-1.svg" style="display: block; margin: auto;" /&gt;
+---
+class: clear
+
+.hi-slate[Positive autocorrelation]: Outcomes `\(\left( y_t \right)\)` over time
+&lt;img src="slide5_files/figure-html/positive auto y-1.svg" style="display: block; margin: auto;" /&gt;
+---
+class: clear
+
+.hi-slate[Negative autocorrelation]: Disturbances `\(\left( u_t \right)\)` over time
+&lt;img src="slide5_files/figure-html/negative auto u-1.svg" style="display: block; margin: auto;" /&gt;
+---
+class: clear
+
+.hi-slate[Negative autocorrelation]: Outcomes `\(\left( y_t \right)\)` over time
+&lt;img src="slide5_files/figure-html/negative auto y-1.svg" style="display: block; margin: auto;" /&gt;
+---
+layout: true
+# Autocorrelation
+## In static time-series models
+---
+name: static_models
+
+Let's start with a very common model: a static time-series model whose disturbances exhibit .hi[first-order autocorrelation], *a.k.a.* .pink[AR(1)]:
+
+$$
+`\begin{align}
+  \text{Births}_t &amp;= \beta_0 + \beta_1 \text{Income}_t + u_t
+\end{align}`
+$$
 where
+$$
+`\begin{align}
+  \color{#e64173}{u_t} = \color{#e64173}{\rho \, u_{t-1}} + \varepsilon_t
+\end{align}`
+$$
+and the `\(\varepsilon_t\)` are independently and identically distributed (*i.i.d.*).
 
-- the index `\(i\)` runs over the observations, `\(i=1,\dots,n\)`
-- `\(Y_i\)` is the *dependent variable*, the *regressand*, or simply the *left-hand variable*
-- `\(X_i\)` is the *independent variable*, the *regressor*, or simply the *right-hand variable*
-- `\(Y = \beta_0 + \beta_1 X\)` is the *population regression line* also called the *population regression function*
-- `\(\beta_0\)` is the *intercept* of the population regression line
-- `\(\beta_1\)` is the *slope* of the population regression line
-- `\(u_i\)` is the *error term*.
-&lt;/p&gt;
-&lt;/div&gt;
+--
+
+.hi-purple[Second-order autocorrelation], or .purple[AR(2)], would be
+
+$$
+`\begin{align}
+  \color{#6A5ACD}{u_t} = \color{#6A5ACD}{\rho_1 u_{t-1}} + \color{#6A5ACD}{\rho_2 u_{t-2}} + \varepsilon_t
+\end{align}`
+$$
+---
+
+An .turquoise[AR(p)] model/process has a disturbance structure of
+
+$$
+`\begin{align}
+  u_t = \sum_{j=1}^\color{#20B2AA}{p} \rho_j u_{t-j} + \varepsilon_t
+\end{align}`
+$$
+
+allowing the current disturbance to correlated with up to `\(\color{#20B2AA}{p}\)` of its lags.
+
+---
+layout: false
+name: ols_static
+# Autocorrelation
+## OLS
+
+For **static models** or **dynamic models with lagged explanatory variables**, in the presence of autocorrelation
+
+1. OLS provides .pink[**unbiased** estimates for the coefficients.]
+
+1. OLS creates .pink[**biased** estimates for the standard errors.]
+
+1. OLS is .pink[**inefficient**.]
+
+*Recall:* Same implications as heteroskedasticity.
+
+Autocorrelation get trickier with lagged outcome variables.
+---
+layout: true
+# Autocorrelation
+## OLS and lagged outcome variables
+---
+name: ols_adl
+
+Consider a model with one lag of the outcome variable—ADL(1, 0)—model with AR(1) disturbances
+
+$$
+`\begin{align}
+  \text{Births}_t = \beta_0 + \beta_1 \text{Income}_t + \beta_2 \text{Births}_{t-1} + u_t
+\end{align}`
+$$
+where
+$$
+`\begin{align}
+  u_t = \rho u_{t-1} + \varepsilon_t
+\end{align}`
+$$
+
+--
+
+**Problem:**
+--
+ Both `\(\text{Births}_{t-1}\)` (a regressor in the model for time `\(t\)`) and `\(u_{t}\)` (the disturbance for time `\(t\)`) depend upon `\(u_{t-1}\)`. *I.e.*, a regressor is correlated with its contemporaneous disturbance.
+
+--
+
+**Q:** Why is this a problem?
+--
+&lt;br&gt;
+**A:** It violates .pink[contemporaneous exogeneity]
+--
+, *i.e.*, `\(\mathop{\text{Cov}} \left( x_t,\,u_t \right) \neq 0\)`.
+---
+
+To see this problem, first write out the model for `\(t\)` and `\(t-1\)`:
+$$
+`\begin{align}
+  \text{Births}_t &amp;= \beta_0 + \beta_1 \text{Income}_t + \beta_2 \text{Births}_{t-1} + u_t \\
+  \text{Births}_{t-1} &amp;= \beta_0 + \beta_1 \text{Income}_{t-1} + \beta_2 \text{Births}_{t-2} + u_{t-1}
+\end{align}`
+$$
+and now note that `\(u_t = \rho u_{t-1} + \varepsilon_t\)`. Substituting...
+$$
+`\begin{align}
+  \text{Births}_t &amp;= \beta_0 + \beta_1 \text{Income}_t + \beta_2 \color{#6A5ACD}{\text{Births}_{t-1}} + \overbrace{\left( \rho \color{#e64173}{u_{t-1}} + \varepsilon_t \right)}^{u_t} \tag{1} \\
+  \color{#6A5ACD}{\text{Births}_{t-1}} &amp;= \beta_0 + \beta_1 \text{Income}_{t-1} + \beta_2 \text{Births}_{t-2} + \color{#e64173}{u_{t-1}} \tag{2}
+\end{align}`
+$$
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
-<script src="macros.js"></script>
 <script>var slideshow = remark.create({
 "highlightStyle": "github",
 "highlightLines": true,

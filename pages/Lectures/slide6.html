@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Metrics Review, Part 2</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Edward Rubin" />
+    <meta name="date" content="2019-09-19" />
+    <link href="slide6_files/remark-css/default.css" rel="stylesheet" />
+    <link href="slide6_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="slide6_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Metrics Review, Part 2
+## EC 421, Set 3
+### Edward Rubin
+### 19 September 2019
+
+---
+
+class: inverse, middle
+
+
+
+
+
+# Prologue
+
+---
+# .mono[R] showcase
+
+**[.mono[ggplot2]](https://ggplot2.tidyverse.org/reference/index.html)**
+
+- Incredibly powerful graphing and mapping package for .mono[R].
+- Written in a way that helps you build your figures layer by layer.
+- Exportable to many applications.
+- Party of the `tidyverse`.
+
+**[.mono[shiny]](https://shiny.rstudio.com)**
+
+- Export your figures and code to interactive web apps.
+- Enormous range of applications
+  - [Distribution calculator](https://gallery.shinyapps.io/dist_calc/)
+  - [Tabsets](https://shiny.rstudio.com/gallery/tabsets.html)
+  - [Traveling salesman](https://gallery.shinyapps.io/shiny-salesman/)
+
+---
+name: schedule
+
+# Schedule
+
+### Last Time
+
+We reviewed the fundamentals of statistics and econometrics.
+
+### Today
+
+We review more of the main/basic results in metrics.
+
+### This week
+
+We will post the **first assignment** Saturday (4/13). Due 4/21.
+
+---
+class: inverse, middle
+
+# Multiple regression
+
+---
+layout: true
+# Multiple regression
+
+---
+
+## More explanatory variables
+
+We're moving from **simple linear regression** (one .pink[outcome variable] and one .purple[explanatory variable])
+
+$$ \color{#e64173}{y_i} = \beta_0 + \beta_1 \color{#6A5ACD}{x_i} + u_i $$
+
+to the land of **multiple linear regression** (one .pink[outcome variable] and multiple .purple[explanatory variables])
+
+$$ \color{#e64173}{y\_i} = \beta\_0 + \beta\_1 \color{#6A5ACD}{x\_{1i}} + \beta\_2 \color{#6A5ACD}{x\_{2i}} + \cdots + \beta\_k \color{#6A5ACD}{x\_{ki}} + u\_i $$
+
+--
+
+**Why?**
+--
+ We can better explain the variation in `\(y\)`, improve predictions, avoid omitted-variable bias, ...
+ 
+---
+
+`\(y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + u_i \quad\)` `\(x_1\)` is continuous `\(\quad x_2\)` is categorical
+
+
+---
+
+Let's try to see this result graphically.
+
+
+
+The population model:
+
+$$ \text{Pay}_i = 20 + 0.5 \times \text{School}_i + 10 \times \text{Male}_i + u_i $$
+
+Our regression model that suffers from omitted-variable bias:
+
+$$ \text{Pay}_i = \hat{\beta}_0 + \hat{\beta}_1 \times \text{School}_i + e_i $$
+
+Finally, imagine that women, on average, receive more schooling than men.
+
+---
+layout: true
+# Omitted-variable bias
+**Example, continued:** `\(\text{Pay}_i = 20 + 0.5 \times \text{School}_i + 10 \times \text{Male}_i + u_i\)`
+
+---
+
+The relationship between pay and schooling.
+
+&lt;img src="slide6_files/figure-html/plot ovb 1-1.svg" style="display: block; margin: auto;" /&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

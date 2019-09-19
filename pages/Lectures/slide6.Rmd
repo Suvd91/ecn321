@@ -1,0 +1,203 @@
+---
+title: "Metrics Review, Part 2"
+subtitle: "EC 421, Set 3"
+author: "Edward Rubin"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output:
+  xaringan::moon_reader:
+    css: ['default', 'metropolis', 'metropolis-fonts', 'my-css.css']
+    # self_contained: true
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+class: inverse, middle
+
+```{r Setup, include = F}
+options(htmltools.dir.version = FALSE)
+library(pacman)
+p_load(broom, latex2exp, ggplot2, ggthemes, ggforce, viridis, dplyr, magrittr, knitr, parallel)
+# Notes directory
+dir_slides <- "~/Dropbox/UO/Teaching/EC421W19/LectureNotes/02Review/"
+# Knitr options
+opts_chunk$set(
+  comment = "#>",
+  fig.align = "center",
+  fig.height = 7,
+  fig.width = 10.5,
+  warning = F,
+  message = F
+)
+# A blank theme for ggplot
+theme_empty <- theme_bw() + theme(
+  line = element_blank(),
+  rect = element_blank(),
+  strip.text = element_blank(),
+  axis.text = element_blank(),
+  plot.title = element_blank(),
+  axis.title = element_blank(),
+  plot.margin = structure(c(0, 0, -0.5, -1), unit = "lines", valid.unit = 3L, class = "unit"),
+  legend.position = "none"
+)
+theme_simple <- theme_bw() + theme(
+  line = element_blank(),
+  panel.grid = element_blank(),
+  rect = element_blank(),
+  strip.text = element_blank(),
+  axis.text.x = element_text(size = 14),
+  axis.text.y = element_blank(),
+  axis.ticks = element_blank(),
+  plot.title = element_blank(),
+  axis.title = element_blank(),
+  # plot.margin = structure(c(0, 0, -1, -1), unit = "lines", valid.unit = 3L, class = "unit"),
+  legend.position = "none"
+)
+theme_axes <- theme_empty + theme(
+  axis.title = element_text(size = 18),
+  plot.margin = structure(c(0, 0, 0.1, 0), unit = "lines", valid.unit = 3L, class = "unit"),
+)
+```
+
+```{R, colors, include = F}
+# Define pink color
+red_pink <- "#e64173"
+turquoise <- "#20B2AA"
+orange <- "#FFA500"
+red <- "#fb6107"
+blue <- "#2b59c3"
+green <- "#8bb174"
+grey_light <- "grey70"
+grey_mid <- "grey50"
+grey_dark <- "grey20"
+purple <- "#6A5ACD"
+```
+
+# Prologue
+
+---
+# .mono[R] showcase
+
+**[.mono[ggplot2]](https://ggplot2.tidyverse.org/reference/index.html)**
+
+- Incredibly powerful graphing and mapping package for .mono[R].
+- Written in a way that helps you build your figures layer by layer.
+- Exportable to many applications.
+- Party of the `tidyverse`.
+
+**[.mono[shiny]](https://shiny.rstudio.com)**
+
+- Export your figures and code to interactive web apps.
+- Enormous range of applications
+  - [Distribution calculator](https://gallery.shinyapps.io/dist_calc/)
+  - [Tabsets](https://shiny.rstudio.com/gallery/tabsets.html)
+  - [Traveling salesman](https://gallery.shinyapps.io/shiny-salesman/)
+
+---
+name: schedule
+
+# Schedule
+
+### Last Time
+
+We reviewed the fundamentals of statistics and econometrics.
+
+### Today
+
+We review more of the main/basic results in metrics.
+
+### This week
+
+We will post the **first assignment** Saturday (4/13). Due 4/21.
+
+---
+class: inverse, middle
+
+# Multiple regression
+
+---
+layout: true
+# Multiple regression
+
+---
+
+## More explanatory variables
+
+We're moving from **simple linear regression** (one .pink[outcome variable] and one .purple[explanatory variable])
+
+$$ \color{#e64173}{y_i} = \beta_0 + \beta_1 \color{#6A5ACD}{x_i} + u_i $$
+
+to the land of **multiple linear regression** (one .pink[outcome variable] and multiple .purple[explanatory variables])
+
+$$ \color{#e64173}{y\_i} = \beta\_0 + \beta\_1 \color{#6A5ACD}{x\_{1i}} + \beta\_2 \color{#6A5ACD}{x\_{2i}} + \cdots + \beta\_k \color{#6A5ACD}{x\_{ki}} + u\_i $$
+
+--
+
+**Why?**
+--
+ We can better explain the variation in $y$, improve predictions, avoid omitted-variable bias, ...
+ 
+---
+
+$y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + u_i \quad$ $x_1$ is continuous $\quad x_2$ is categorical
+
+
+---
+
+Let's try to see this result graphically.
+
+```{R, gen ovb data, include = F, cache = T}
+# Set seed
+set.seed(12345)
+# Sample size
+n <- 1e3
+# Parameters
+beta0 <- 20; beta1 <- 0.5; beta2 <- 10
+# Dataset
+omit_df <- tibble(
+  male = sample(x = c(F, T), size = n, replace = T),
+  school = runif(n, 3, 9) - 3 * male,
+  pay = beta0 + beta1 * school + beta2 * male + rnorm(n, sd = 7)
+)
+lm_bias <- lm(pay ~ school, data = omit_df)
+bb0 <- lm_bias$coefficients[1] %>% round(1)
+bb1 <- lm_bias$coefficients[2] %>% round(1)
+lm_unbias <- lm(pay ~ school + male, data = omit_df)
+bu0 <- lm_unbias$coefficients[1] %>% round(1)
+bu1 <- lm_unbias$coefficients[2] %>% round(1)
+bu2 <- lm_unbias$coefficients[3] %>% round(1)
+```
+
+The population model:
+
+$$ \text{Pay}_i = `r beta0` + `r beta1` \times \text{School}_i + `r beta2` \times \text{Male}_i + u_i $$
+
+Our regression model that suffers from omitted-variable bias:
+
+$$ \text{Pay}_i = \hat{\beta}_0 + \hat{\beta}_1 \times \text{School}_i + e_i $$
+
+Finally, imagine that women, on average, receive more schooling than men.
+
+---
+layout: true
+# Omitted-variable bias
+**Example, continued:** $\text{Pay}_i = `r beta0` + `r beta1` \times \text{School}_i + `r beta2` \times \text{Male}_i + u_i$
+
+---
+
+The relationship between pay and schooling.
+
+```{R, plot ovb 1, echo = F, dev = "svg", fig.height = 5.5}
+ggplot(data = omit_df, aes(x = school, y = pay)) +
+geom_point(size = 2.5, color = "black", alpha = 0.4, shape = 16) +
+geom_hline(yintercept = 0) +
+geom_vline(xintercept = 0) +
+xlab("Schooling") +
+ylab("Pay") +
+theme_empty +
+theme(
+  axis.title = element_text(size = 14),
+  plot.margin = structure(c(0, 0, 0.1, 0), unit = "lines", valid.unit = 3L, class = "unit"),
+)
+```
+

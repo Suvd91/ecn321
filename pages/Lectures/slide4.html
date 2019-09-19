@@ -7,6 +7,7 @@
     <link href="slide4_files/remark-css/default.css" rel="stylesheet" />
     <link href="slide4_files/remark-css/metropolis.css" rel="stylesheet" />
     <link href="slide4_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-css.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
@@ -24,6 +25,9 @@ class: center, middle, inverse, title-slide
 ### 2019/09/18
 
 ---
+
+
+
 
 
 
@@ -76,7 +80,7 @@ Seasonal Component
  - *хуанлийн нөлөөг* оруулах боломжтой (баяр ёслолын өдөр, амралтын өдөр гэх мэт)
  
 Улиралын нөлөө бүxий цуваа
-`$$\color{red}{y_t=\sum_{i=1}^s\gamma_{i}D_{it}+\varepsilon_t,\quad t=1,\ldots,T}$$`
+`$$\color{#e64173}{y_t=\sum_{i=1}^s\gamma_{i}D_{it}+\varepsilon_t,\quad t=1,\ldots,T}$$`
 ---
 # Үнэлгээ болон таамаглал
 
@@ -86,9 +90,9 @@ Seasonal Component
  
 
 
-|                                                    &lt;font color="red"&gt;Цэгэн таамаглал&lt;/font&gt; 	|                                 &lt;font color="blue"&gt;Интервал таамаглал&lt;/font&gt; 	|                               Нягтын таамаглал 	|
+|                                                    &lt;font color="#e64173"&gt;Цэгэн таамаглал&lt;/font&gt; 	|                                 &lt;font color="blue"&gt;Интервал таамаглал&lt;/font&gt; 	|                               Нягтын таамаглал 	|
 |------------------------------------------------------------------:	|--------------------------------------------------:	|-----------------------------------------------:	|
-| `$$\color{red}{\hat{y}_{T+h,T} =\sum_{i=1}^s\hat\gamma_{i}D_{i,T+h}}$$` 	| `$$\color{blue}{\hat{y}_{T+h,T}\pm 1.96\hat\sigma_\varepsilon}$$` 	| `$$N(\hat{y}_{T+h,T}, \hat\sigma_\varepsilon)$$` 	|
+| `$$\color{#e64173}{\hat{y}_{T+h,T} =\sum_{i=1}^s\hat\gamma_{i}D_{i,T+h}}$$` 	| `$$\color{blue}{\hat{y}_{T+h,T}\pm 1.96\hat\sigma_\varepsilon}$$` 	| `$$N(\hat{y}_{T+h,T}, \hat\sigma_\varepsilon)$$` 	|
 |
  
 ---
@@ -107,14 +111,13 @@ Seasonal Component
 |1946-08-01 |      96|
 Table: Сар бүр шинээр баригдаж буй орон сууцын тоо: 1946-1994
 
-
 ---
+layout: false
+class: clear
 
-```r
-plot(housing$date, housing$hstarts, type = "l", ylab="Starts", xlab = "Time", lwd = 2)
-```
+Сар бүр шинээр баригдаж буй орон сууцын тоо: 1946-1994
+&lt;img src="slide4_files/figure-html/unnamed-chunk-1-1.svg" style="display: block; margin: auto;" /&gt;
 
-&lt;img src="slide4_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
 ---
 # Үнэлгээ
 
@@ -137,17 +140,19 @@ plot(housing$date, housing$hstarts, type = "l", ylab="Starts", xlab = "Time", lw
 ---
 # Улиралын фактор
 
-&lt;img src="slide4_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="slide4_files/figure-html/unnamed-chunk-3-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
-&lt;img src="slide4_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+layout: false
+class: clear
+.hi-slate[Housing starts]: Actual vs .pink[Fitted]
+&lt;img src="slide4_files/figure-html/unnamed-chunk-4-1.svg" style="display: block; margin: auto;" /&gt;
 ---
-# Forecasts
-&lt;img src="slide4_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+# Таамаглал
+&lt;img src="slide4_files/figure-html/unnamed-chunk-5-1.svg" style="display: block; margin: auto;" /&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
-<script src="macros.js"></script>
 <script>var slideshow = remark.create({
 "highlightStyle": "github",
 "highlightLines": true,
