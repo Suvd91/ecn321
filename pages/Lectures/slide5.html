@@ -31,189 +31,119 @@ class: center, middle, inverse, title-slide
 
 
 
-Changes to our model/framework.
+# Мөчлөгийг загварчлах
 
-- Our model now has `\(\color{#e64173}{t}\)` subscripts for .hi[time periods].
+.hi[Хугацаан цуваа]
+`$$y_t=Trend_t + {Seasonal}_t + \color{#e64173}{Ciclyc_t} + \varepsilon_t$$`
+&gt;.small[.hi-pink[Мөчлөг]: Динамик хамаарал нь тогтвортой байх хугацаан цуваа.]
 
-- .hi[Dynamic models] allow .hi[lags] of explanatory and/or outcome variables.
-
-- We changed our **exogeneity** assumption to .hi[contemporaneous exogeneity], _i.e._, `\(\mathop{\boldsymbol{E}}\left[ u_t \middle| X_t \right] = 0\)`
-
-- Including .hi-orange[lags of outcome variables] can lead to .hi[biased coefficient estimates] from OLS.
-
-- .hi-orange[Lagged explanatory variables] make .hi[OLS inefficient].
-
----
-# Улиралын нөлөөг загварчлах
-
-Хугацаан цуваа
-
----
-#White noise
-
-
-```r
-set.seed(1)
-plot(rnorm(100), type="l", ylab="Process", main="Realization of White Noise Process")
-```
-
-&lt;img src="slide5_files/figure-html/unnamed-chunk-1-1.svg" style="display: block; margin: auto;" /&gt;
-
----
-layout: false
-class: inverse, middle
-
-# Autocorrelation
----
-layout: false
-name: intro
-# Autocorrelation
-## What is it?
-
-.hi[Autocorrelation] occurs when our disturbances are correlated over time, _i.e._, `\(\mathop{\text{Cov}} \left( u_t,\, u_s \right) \neq 0\)` for `\(t\neq s\)`.
 
 --
 
-Another way to think about: If the *shock* from disturbance `\(t\)` correlates with "nearby" shocks in `\(t-1\)` and `\(t+1\)`.
+*Динамик хамаарал*: .hi-pink[Автокорреляц]
 
 --
 
-*Note:* **Serial correlation** and **autocorrelation** are the same thing.
+*Tогтвортой*: .hi-pink[стационарь]
+
+---
+# Нэршил, Тодорхойлолт
+ 
+.hi-pink[realization (илэрц)]: 
+ - Цаг хугацааны дагуу дугаарлагдсан цуваа `\(\{\ldots,y_{-1},y_0,y_1,\ldots\}\)`
+
+.hi-pink[sample path (түүвэр)]: 
+ - цувааны ажиглагдсан утгууд `\(y_1,\ldots,y_T\)`
+
+.hi-pink[lag(хоцрол)]: 
+ - Хугацаан цувааны өмнөх утгууд. `\(y_t\)`-ийн `\(j\)`-р хоцрол нь `\(y_{t-j}\)`. 
+
+.hi-pink[difference]:
+ - `\(\Delta y_t=y_t-y_{t-1}\)`
+ 
+
+---
+# Нэршил, Тодорхойлолт
+
+.hi-pink[Дундаж]: `$$\mathrm{E}(y_t)=\mu_t$$`
+
+.hi-pink[Автоковариацийн функц (Autocovariance)]: `$$\gamma(t, h)=\mathrm{Cov}(y_t, y_{t-h})$$`
+--
+
+ - Автоковариацийн функц `\(t\)`-с хамаарахгүй бол `\(\gamma(h)=\mathrm{Cov}(y_t, y_{t-h})\)`.
+ 
+--
+ 
+ - `\(\gamma(0)=\mathrm{Cov}(y_t, y_{t})=\mathrm{Var}(y_t)\)`
 
 --
 
-Why is autocorrelation prevalent in time-series analyses?
+.hi-pink[Автокорреляцийн функц (Autocorrelation)]: `$$\rho(h) \equiv \frac{\gamma(h)}{\gamma(0)}$$`
+ - `\(\rho(h)\neq 0\)` бол автокорреляц хамааралтай цуваа
+
 ---
 class: clear
 
-.hi-slate[Positive autocorrelation]: Disturbances `\(\left( u_t \right)\)` over time
+.hi-slate[Эерэг автокорреляц хамаарал] 
 &lt;img src="slide5_files/figure-html/positive auto u-1.svg" style="display: block; margin: auto;" /&gt;
 ---
 class: clear
 
-.hi-slate[Positive autocorrelation]: Outcomes `\(\left( y_t \right)\)` over time
-&lt;img src="slide5_files/figure-html/positive auto y-1.svg" style="display: block; margin: auto;" /&gt;
----
-class: clear
-
-.hi-slate[Negative autocorrelation]: Disturbances `\(\left( u_t \right)\)` over time
+.hi-slate[Сөрөг автокорреляц хамаарал]
 &lt;img src="slide5_files/figure-html/negative auto u-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# Стационарь цуваа
+
+&gt; Хугацаан цувааны эхний 2 момент нь `\(t\)`-ээс үл хамаарах бол .hi[стационар цуваа (covariance stationary)] гэнэ. Өөрөөр хэлбэл дараах 2 нөхцлийг хангана.
+ 1. `$$\mathrm{E}(y_t)=\mu$$`
+ 2. `$$\gamma(h)=\mathrm{Cov}(y_t, y_{t-h})&lt;\infty$$`
+
+---
+# White noise
+
+ - Дундаж нь 0 байх, авкорреляц хамааралгүй хугацаан цувааг .hi-pink[white noise] (.small[цагаан шуугиан]) гэдэг.
+
+ - `\(\varepsilon_t\sim WN(0,\sigma^2)\)`
+
+  - `\(\mathrm{E}(\varepsilon_t)=0\)`
+  - `\(\mathrm{Var}(\varepsilon_t)=\sigma^2\)`
+  - `\(\rho(h)=0,\quad h&gt;1\)`
+  
+--
+
+Нөхцөлт дундаж болон вариацын хувьд ( `\(\Omega_t=\{\varepsilon_t,\varepsilon_{t-1},\ldots \}\)`)
+
+ - `\(\mathrm{E}(\varepsilon_t|\Omega_{t−1})=0\)`
+ - `\(\mathrm{Var}(\varepsilon_t|\Omega_{t−1} )=\mathrm{E}\{(\varepsilon_t−\mathrm{E}(\varepsilon_t|\Omega_{t−1}))^2|\Omega_{t−1}\}=\sigma^2\)`
+
 ---
 class: clear
-
-.hi-slate[Negative autocorrelation]: Outcomes `\(\left( y_t \right)\)` over time
-&lt;img src="slide5_files/figure-html/negative auto y-1.svg" style="display: block; margin: auto;" /&gt;
----
-layout: true
-# Autocorrelation
-## In static time-series models
----
-name: static_models
-
-Let's start with a very common model: a static time-series model whose disturbances exhibit .hi[first-order autocorrelation], *a.k.a.* .pink[AR(1)]:
-
-$$
-`\begin{align}
-  \text{Births}_t &amp;= \beta_0 + \beta_1 \text{Income}_t + u_t
-\end{align}`
-$$
-where
-$$
-`\begin{align}
-  \color{#e64173}{u_t} = \color{#e64173}{\rho \, u_{t-1}} + \varepsilon_t
-\end{align}`
-$$
-and the `\(\varepsilon_t\)` are independently and identically distributed (*i.i.d.*).
-
---
-
-.hi-purple[Second-order autocorrelation], or .purple[AR(2)], would be
-
-$$
-`\begin{align}
-  \color{#6A5ACD}{u_t} = \color{#6A5ACD}{\rho_1 u_{t-1}} + \color{#6A5ACD}{\rho_2 u_{t-2}} + \varepsilon_t
-\end{align}`
-$$
----
-
-An .turquoise[AR(p)] model/process has a disturbance structure of
-
-$$
-`\begin{align}
-  u_t = \sum_{j=1}^\color{#20B2AA}{p} \rho_j u_{t-j} + \varepsilon_t
-\end{align}`
-$$
-
-allowing the current disturbance to correlated with up to `\(\color{#20B2AA}{p}\)` of its lags.
+.hi-slate[Realization of White Noise]
+&lt;img src="slide5_files/figure-html/wn-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
-layout: false
-name: ols_static
-# Autocorrelation
-## OLS
+# Wold theorem, General Linear Process
 
-For **static models** or **dynamic models with lagged explanatory variables**, in the presence of autocorrelation
-
-1. OLS provides .pink[**unbiased** estimates for the coefficients.]
-
-1. OLS creates .pink[**biased** estimates for the standard errors.]
-
-1. OLS is .pink[**inefficient**.]
-
-*Recall:* Same implications as heteroskedasticity.
-
-Autocorrelation get trickier with lagged outcome variables.
 ---
-layout: true
-# Autocorrelation
-## OLS and lagged outcome variables
+# Ухраах оператор Lag operator
+`$$L(y_t)=y_{t-1},\quad L(L(y_t))=L^2(y_t)=y_{t-2}, \quad L^m(y_t)=y_{t-m}$$`
+
+
+## Ухраах операторын олон гишүүнт
+
+`$$B(L)=b_0+b_1L+b_2L^2+\cdots+b_mL^m$$`
+
+
+`$$B(L)=b_0+b_1L+b_2L^2+\cdots+\cdots=\sum_{t=1}^\infty b_iL^i$$`
+
+`$$B(L)\varepsilon_t=b_0\varepsilon_t+b_1\varepsilon_{t-1}+b_2\varepsilon_{t-2}+\cdots=\sum_{t=1}^\infty b_i\varepsilon_{t-i}$$`
+
 ---
-name: ols_adl
-
-Consider a model with one lag of the outcome variable—ADL(1, 0)—model with AR(1) disturbances
-
-$$
-`\begin{align}
-  \text{Births}_t = \beta_0 + \beta_1 \text{Income}_t + \beta_2 \text{Births}_{t-1} + u_t
-\end{align}`
-$$
-where
-$$
-`\begin{align}
-  u_t = \rho u_{t-1} + \varepsilon_t
-\end{align}`
-$$
-
---
-
-**Problem:**
---
- Both `\(\text{Births}_{t-1}\)` (a regressor in the model for time `\(t\)`) and `\(u_{t}\)` (the disturbance for time `\(t\)`) depend upon `\(u_{t-1}\)`. *I.e.*, a regressor is correlated with its contemporaneous disturbance.
-
---
-
-**Q:** Why is this a problem?
---
-&lt;br&gt;
-**A:** It violates .pink[contemporaneous exogeneity]
---
-, *i.e.*, `\(\mathop{\text{Cov}} \left( x_t,\,u_t \right) \neq 0\)`.
+# Корреляцийн түүвэр дэх үнэлгээ
 ---
-
-To see this problem, first write out the model for `\(t\)` and `\(t-1\)`:
-$$
-`\begin{align}
-  \text{Births}_t &amp;= \beta_0 + \beta_1 \text{Income}_t + \beta_2 \text{Births}_{t-1} + u_t \\
-  \text{Births}_{t-1} &amp;= \beta_0 + \beta_1 \text{Income}_{t-1} + \beta_2 \text{Births}_{t-2} + u_{t-1}
-\end{align}`
-$$
-and now note that `\(u_t = \rho u_{t-1} + \varepsilon_t\)`. Substituting...
-$$
-`\begin{align}
-  \text{Births}_t &amp;= \beta_0 + \beta_1 \text{Income}_t + \beta_2 \color{#6A5ACD}{\text{Births}_{t-1}} + \overbrace{\left( \rho \color{#e64173}{u_{t-1}} + \varepsilon_t \right)}^{u_t} \tag{1} \\
-  \color{#6A5ACD}{\text{Births}_{t-1}} &amp;= \beta_0 + \beta_1 \text{Income}_{t-1} + \beta_2 \text{Births}_{t-2} + \color{#e64173}{u_{t-1}} \tag{2}
-\end{align}`
-$$
+# Application: 
+.hi[Characterizing Canadian Employment Dynamics]
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

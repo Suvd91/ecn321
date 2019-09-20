@@ -2,7 +2,7 @@
 /* Create a highlighted class called 'hi'  */
 .hi {
   font-weight: 600;
-  color: #e64173 !important;
+  color: #314f4f !important;
 }
 .hi-pink {
   font-weight: 600;
@@ -133,7 +133,7 @@
   font-size: 95%;
 }
 
-.smallest {
+.small {
   font-size: 85%;
 }
 

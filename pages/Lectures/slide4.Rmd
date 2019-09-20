@@ -271,7 +271,9 @@ p  + xlab("Time") +
   theme_pander(base_size = 20) 
 ```
 ---
-# Таамаглал
+layout: false
+class: clear
+.hi-slate[Housing starts]: History, .pink[Forecasts], Realization
 ```{r echo=FALSE, message=FALSE,fig.fullwidth=TRUE, fig.align='center'}
 plot_data <- ch6data %>% 
   select(date, hstarts, seasonal) %>% 
@@ -284,8 +286,8 @@ ggplot(data = plot_data, aes(x = date, y = hstarts)) +
   geom_line(color = "black", size = 1, alpha=0.3) +
   geom_point(color = "black", size = 1) +
   geom_line(aes(x = date, y = forecast), colour=red_pink) +
+  geom_point(aes(x = date, y = forecast), color = red_pink, size = 1) +
   geom_ribbon(aes(x = date, ymin = lo, ymax = up), fill = red_pink, alpha = 0.2) +
- # scale_fill_manual("", values="red") +
   ylab("Starts") +
   xlab("Time") +
   theme_pander(base_size = 20) 
