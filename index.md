@@ -10,35 +10,18 @@ description:
 
 ## Лекцүүд
 
-[Сэдэв 1: Хичээлийн судлах зүйлс, Шугаман регрессийн мэдлэгээ бататгах](pages/Lectures/slide.html) ([Нэмэлт унших материал](https://www.econometrics-with-r.org/4-lrwor.html))
-
-Сэдэв 2: Амжилттай таамаглал хийх үндсүүд (Diebold Chapter 3)
-
-[Сэдэв 3: График анализ](pages/Lectures/slide2.html)
-
-[Сэдэв 4: Тренд загварчлах, таамаглах](pages/Lectures/slide3.html) ([data](pages/Lectures/ch5data.Rdata), [R Notebook](pages/Lectures/Notebook1.html))
-
-[Сэдэв 5: Улиралын нөлөөг загварчлах, таамаглах](pages/Lectures/slide4.html) ([data](pages/Lectures/ch6data.Rdata), [R Notebook](pages/Lectures/Notebook2.html))
-
-[Сэдэв 6: Мөчлөгийг тодорхойлох](pages/Lectures/slide5.html)
-
-Сэдэв 7: Мөчлөгийг загварчлах: МА, AR, ARMA загварууд ((Diebold, Chapter 8)
-
-Сэдэв 8: Мөчлөгийг таамаглах (Diebold, Бүлэг 9)
-
-Сэдэв 9: Тренд, улирал, мөчлөг бүхий таамаглал хийх загвар (Д, Бүлэг 10)
-
-Сэдэв 10
-
-Сэдэв 11
-
-Сэдэв 13
-
-Сэдэв 14
-
-Сэдэв 15
-
-Сэдэв 16
+|   	| Сэдэв                                                                                       	| Бүлэг                 	| Нэмж унших материал                                                                                                      	| Өгөгдлийн файл                       	|
+|---	|---------------------------------------------------------------------------------------------	|-----------------------	|--------------------------------------------------------------------------------------------------------------------------	|--------------------------------------	|
+| 1 	| [Хичээлийн судлах зүйлс, Шугаман регрессийн мэдлэгээ бататгах ](pages/Lectures/slide.html ) 	| Diebold, Chapter 1, 2 	| [Linear Regression with One Regressor ](https://www.econometrics-with-r.org/3-1-estimation-of-the-population-mean.html ) 	|                                      	|
+| 2 	| Амжилттай таамаглал хийх үндсүүд                                                            	| Diebold Chapter 3     	|                                                                                                                          	|                                      	|
+| 3 	| [График анализ](pages/Lectures/slide2.html)                                                 	| Diebold Chapter 4     	| 0                                                                                                                        	|                                      	|
+| 4 	| [Тренд загварчлах, таамаглах](pages/Lectures/slide3.html)                                   	| Diebold Chapter 5     	| [R Notebook](pages/Lectures/Notebook1.html)                                                                              	| [data](pages/Lectures/ch5data.Rdata) 	|
+| 5 	| [Улиралын нөлөөг загварчлах, таамаглах](pages/Lectures/slide4.html)                         	| Diebold Chapter 6     	| [R Notebook](pages/Lectures/Notebook2.html)                                                                              	| [data](pages/Lectures/ch6data.Rdata) 	|
+| 6 	| [Мөчлөгийг тодорхойлох](pages/Lectures/slide5.html)                                         	| Diebold Chapter 7     	|                                                                                                                          	|                                      	|
+|   	|                                                                                             	|                       	|                                                                                                                          	|                                      	|
+|   	|                                                                                             	|                       	|                                                                                                                          	|                                      	|
+|   	|                                                                                             	|                       	|                                                                                                                          	|                                      	|
+|   	|                                                                                             	|                       	|                                                                                                                          	|                                      	|
 
 ## Сурах бичиг
 
