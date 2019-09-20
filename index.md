@@ -20,7 +20,7 @@ description:
 
 [Сэдэв 5: Улиралын нөлөөг загварчлах, таамаглах](pages/Lectures/slide4.html) ([data](pages/Lectures/ch6data.Rdata), [R Notebook](pages/Lectures/Notebook2.html))
 
-Сэдэв 6: Мөчлөгийг тодорхойлох (Diebold, Chapter 7)
+[Сэдэв 6: Мөчлөгийг тодорхойлох]((pages/Lectures/slide5.html))
 
 Сэдэв 7: Мөчлөгийг загварчлах: МА, AR, ARMA загварууд ((Diebold, Chapter 8)
 
