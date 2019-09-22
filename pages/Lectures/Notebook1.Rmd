@@ -1,5 +1,6 @@
 ---
 title: 'Diebold Chapter 5: R codes'
+author: "D. Khashbaatar"
 output:
   html_document:
     theme: united
