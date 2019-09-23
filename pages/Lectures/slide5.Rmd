@@ -387,7 +387,7 @@ class: clear
 plot(pacf(ch7data$caemp, lag.max = 12, plot = FALSE), main = "Partial Autocorrelations")
 ```
 ---
-# Autocorrelation Test
+# Autocorrelation Tests
 ```{r, fig.height = 7}
 lb <- rep(NA, 12)
 bp <- rep(NA, 12)
