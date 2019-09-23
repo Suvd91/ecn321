@@ -297,13 +297,13 @@ $$B(L)\varepsilon_t=b_0\varepsilon_t+b_1\varepsilon_{t-1}+b_2\varepsilon_{t-2}+\
 ---
 # Wold theorem 
 $\{y_t \}$ тэг дундажтай, стационарь цуваа бол 
-$$B(L)\varepsilon_t=b_0\varepsilon_t+b_1\varepsilon_{t-1}+b_2\varepsilon_{t-2}+\cdots=\sum_{t=0}^\infty b_i\varepsilon_{t-i}, \quad \varepsilon_t\sim WN(0,\sigma^2)$$
-хэлбэртэй бичиж болно. Энд $\sum_{t=0}^\infty b_i^2<\infty$.
+$$B(L)\varepsilon_t=b_0\varepsilon_t+b_1\varepsilon_{t-1}+b_2\varepsilon_{t-2}+\cdots=\sum_{i=0}^\infty b_i\varepsilon_{t-i}, \quad \varepsilon_t\sim WN(0,\sigma^2)$$
+хэлбэртэй бичиж болно. Энд $\sum_{i=0}^\infty b_i^2<\infty$.
 
 ---
 # General Linear Process
 Волдын теоремийн нөхцлийг хангах
-$$B(L)\varepsilon_t=b_0\varepsilon_t+b_1\varepsilon_{t-1}+b_2\varepsilon_{t-2}+\cdots=\sum_{t=0}^\infty b_i\varepsilon_{t-i}, \quad \varepsilon_t\sim WN(0,\sigma^2)$$ 
+$$B(L)\varepsilon_t=b_0\varepsilon_t+b_1\varepsilon_{t-1}+b_2\varepsilon_{t-2}+\cdots=\sum_{t=i}^\infty b_i\varepsilon_{t-i}, \quad \varepsilon_t\sim WN(0,\sigma^2)$$ 
  цувааг .hi-pink[ерөнхий шугаман процесс] гэдэг.
 
 Моментууд
@@ -312,7 +312,7 @@ $$B(L)\varepsilon_t=b_0\varepsilon_t+b_1\varepsilon_{t-1}+b_2\varepsilon_{t-2}+\
  
 Нөхцөлт дундаж болон вариацын хувьд ( $\Omega_t=\{\varepsilon_t,\varepsilon_{t-1},\ldots \}$)
 
- - $\mathrm{E}(y_t|\Omega_{t−1})=\sum_{t=1}^\infty b_i\varepsilon_{t-i}$
+ - $\mathrm{E}(y_t|\Omega_{t−1})=\sum_{i=1}^\infty b_i\varepsilon_{t-i}$
  - $\mathrm{Var}(y_t|\Omega_{t−1} )=\mathrm{E}\{(y_t−\mathrm{E}(y_t|\Omega_{t−1}))^2|\Omega_{t−1}\}=\sigma^2$
  
 ---
