@@ -303,7 +303,7 @@ $$B(L)\varepsilon_t=b_0\varepsilon_t+b_1\varepsilon_{t-1}+b_2\varepsilon_{t-2}+\
 ---
 # General Linear Process
 Волдын теоремийн нөхцлийг хангах
-$$B(L)\varepsilon_t=b_0\varepsilon_t+b_1\varepsilon_{t-1}+b_2\varepsilon_{t-2}+\cdots=\sum_{t=i}^\infty b_i\varepsilon_{t-i}, \quad \varepsilon_t\sim WN(0,\sigma^2)$$ 
+$$B(L)\varepsilon_t=b_0\varepsilon_t+b_1\varepsilon_{t-1}+b_2\varepsilon_{t-2}+\cdots=\sum_{i=0}^\infty b_i\varepsilon_{t-i}, \quad \varepsilon_t\sim WN(0,\sigma^2)$$ 
  цувааг .hi-pink[ерөнхий шугаман процесс] гэдэг.
 
 Моментууд
