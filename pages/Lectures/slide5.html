@@ -132,9 +132,9 @@ class: clear
 `$$B(L)=b_0+b_1L+b_2L^2+\cdots+b_mL^m$$`
 
 
-`$$B(L)=b_0+b_1L+b_2L^2+\cdots+\cdots=\sum_{t=1}^\infty b_iL^i$$`
+`$$B(L)=b_0+b_1L+b_2L^2+\cdots+\cdots=\sum_{i=0}^\infty b_iL^i$$`
 
-`$$B(L)\varepsilon_t=b_0\varepsilon_t+b_1\varepsilon_{t-1}+b_2\varepsilon_{t-2}+\cdots=\sum_{t=1}^\infty b_i\varepsilon_{t-i}$$`
+`$$B(L)\varepsilon_t=b_0\varepsilon_t+b_1\varepsilon_{t-1}+b_2\varepsilon_{t-2}+\cdots=\sum_{i=0}^\infty b_i\varepsilon_{t-i}$$`
 
 ---
 # Wold theorem 
@@ -162,7 +162,7 @@ class: clear
 
 .hi-pink[Дундаж] `\(\mu = \mathrm{E}{y_t}\)` түүвэр дэх аналог `$$\bar{y}=\frac{1}{T}\sum_{t=1}^Ty_t$$`
 
-.hi-pink[Автокорреляци] `\(\rho(h) = \frac{\mathrm{Cov}(y_t,y_{t-h)}}{\sqrt{\mathrm{Var}(y_t)\mathrm{Var}(y_{t-h})}}\)`
+.hi-pink[Автокорреляци] `\(\rho(h) = \frac{\mathrm{Cov}(y_t,y_{t-h})}{\sqrt{\mathrm{Var}(y_t)\mathrm{Var}(y_{t-h})}}\)`
 
 `$$\hat\rho(h)=\frac{\sum_{t=h+1}^T(y_t-\bar{y})(y_{t-h}-\bar{y})}{\sum_{t=1}^T(y_t-\bar{y})^2}$$`
 Түүврийн автокорреляцийн функц буюу .hi[коррелограм] гэдэг
@@ -172,7 +172,7 @@ class: clear
 
 `\(H_0: \rho(h)=0\)` 
 `$$\sqrt{T}\hat\rho(h) \to_d N(0, 1)$$`
-`\(H_0: \rho(1)=0,...,\rho(m)=0\)` ө.x `\(y_t\)` автокорреляцигүй (white noise)
+`\(H_0: \rho(1)=0,...,\rho(m)=0\)` өөрөөр хэлбэл `\(y_t\)` автокорреляцигүй (white noise)
 
 .hi-pink[Box-Pierce] `$$Q_{BP}=T\sum_{h=1}^m\hat\rho^2(h)\to_d \chi^2(m)$$`
 
@@ -189,6 +189,7 @@ class: clear
 layout: false
 class: clear
 .hi[Quarterly Canadian Employment Index]
+
 &lt;img src="slide5_files/figure-html/unnamed-chunk-1-1.svg" style="display: block; margin: auto;" /&gt;
 ---
 # Autocorrelations
