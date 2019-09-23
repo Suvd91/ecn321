@@ -218,8 +218,8 @@ housing <- ch6data %>%
 p <- ggplot(data = housing, aes(x = date, y = hstarts)) +
   geom_line(color = "black", size = 0.5, alpha=0.3) +
   geom_point(color = "black", size = 1, alpha=0.5) +
-  xlab("Starts") +
-  ylab("Time") +
+  xlab("Time") +
+  ylab("Starts") +
   theme_pander(base_size = 20) 
 p
 ```

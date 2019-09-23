@@ -344,23 +344,57 @@ $y_t$-г $\{y_{t-1},...,y_{t-h}\}$-д регрессдэхэд гарсан $h$-
 Асимптотик тархалт түүврийн автокорреляцитай адилхан.
 
 ---
-# Application: 
-.hi[Characterizing Canadian Employment Dynamics]
+layout: false
+class: clear
+.hi[Quarterly Canadian Employment Index]
 ```{r, echo=FALSE}
-fcst7input <- read.csv("~/Dropbox/SEZIS/Econometrics2/DataAndCode/ElementsOfForecasting/fcst_07/fcst7input.dat", sep="")
-caemp <- ts(fcst7input$CAEMP, start = c(1962,1), frequency = 12)
-plot(caemp)
+load("ch7data.Rdata")
+library(ggplot2)
+library(ggthemes)
+p <- ggplot(data = ch7data, aes(x = date, y = caemp)) +
+  geom_line(color = "black", size = 0.5, alpha=0.5) +
+  geom_point(color = "black", size = 1, alpha=0.5) +
+  xlab("Time") +
+  ylab("Канадийн ажил эрхлэлтийн индекс") +
+  theme_pander(base_size = 20) 
+p
 ```
 ---
-```{r echo = F, fig.height = 7}
-acf(fcst7input)
-```
----
-```{r echo = F, fig.height = 7}
-pacf(fcst7input)
-```
----
+# Autocorrelations
+
+12-ухралттай автокорреляциуд
 ```{r, fig.height = 7}
-Box.test(caemp, lag = 12, type = "Box-Pierce")
-Box.test(caemp, lag = 1, type = "Ljung-Box")
+acf <- acf(ch7data$caemp, lag.max = 12, plot = FALSE)
+print(acf)
 ```
+
+стандарт алдаа
+```{r}
+1/sqrt(nrow(ch7data))  # 1.96*1/√T
+```
+
+
+---
+layout: false
+class: clear
+```{r fig.height = 7}
+plot(acf, main = "Autocorrelations")
+```
+---
+layout: false
+class: clear
+```{r fig.height = 7}
+plot(pacf(ch7data$caemp, lag.max = 12, plot = FALSE), main = "Partial Autocorrelations")
+```
+---
+# Autocorrelation Test
+```{r, fig.height = 7}
+lb <- rep(NA, 12)
+bp <- rep(NA, 12)
+for(i in 1:12){
+  bp[i] <- Box.test(ch7data$caemp, lag = i, type = "Box-Pierce")$statistic
+  lb[i] <- Box.test(ch7data$caemp, lag = i, type = "Ljung-Box")$statistic
+}
+rbind(lb, bp)
+```
+

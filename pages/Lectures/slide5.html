@@ -186,37 +186,79 @@ class: clear
 Асимптотик тархалт түүврийн автокорреляцитай адилхан.
 
 ---
-# Application: 
-.hi[Characterizing Canadian Employment Dynamics]
+layout: false
+class: clear
+.hi[Quarterly Canadian Employment Index]
 &lt;img src="slide5_files/figure-html/unnamed-chunk-1-1.svg" style="display: block; margin: auto;" /&gt;
 ---
-&lt;img src="slide5_files/figure-html/unnamed-chunk-2-1.svg" style="display: block; margin: auto;" /&gt;
----
-&lt;img src="slide5_files/figure-html/unnamed-chunk-3-1.svg" style="display: block; margin: auto;" /&gt;
----
+# Autocorrelations
+
+12-ухралттай автокорреляциуд
 
 ```r
-Box.test(caemp, lag = 12, type = "Box-Pierce")
+acf &lt;- acf(ch7data$caemp, lag.max = 12, plot = FALSE)
+print(acf)
 ```
 
 ```
 #&gt; 
-#&gt; 	Box-Pierce test
+#&gt; Autocorrelations of series 'ch7data$caemp', by lag
 #&gt; 
-#&gt; data:  caemp
-#&gt; X-squared = 621.67, df = 12, p-value &lt; 2.2e-16
+#&gt;     0     1     2     3     4     5     6     7     8     9    10    11 
+#&gt; 1.000 0.959 0.897 0.829 0.754 0.678 0.602 0.527 0.452 0.374 0.292 0.211 
+#&gt;    12 
+#&gt; 0.137
 ```
+
+стандарт алдаа
 
 ```r
-Box.test(caemp, lag = 1, type = "Ljung-Box")
+1/sqrt(nrow(ch7data))  # 1.96*1/√T
 ```
 
 ```
-#&gt; 
-#&gt; 	Box-Ljung test
-#&gt; 
-#&gt; data:  caemp
-#&gt; X-squared = 127.73, df = 1, p-value &lt; 2.2e-16
+#&gt; [1] 0.08574929
+```
+
+
+---
+layout: false
+class: clear
+
+```r
+plot(acf, main = "Autocorrelations")
+```
+
+&lt;img src="slide5_files/figure-html/unnamed-chunk-4-1.svg" style="display: block; margin: auto;" /&gt;
+---
+layout: false
+class: clear
+
+```r
+plot(pacf(ch7data$caemp, lag.max = 12, plot = FALSE), main = "Partial Autocorrelations")
+```
+
+&lt;img src="slide5_files/figure-html/unnamed-chunk-5-1.svg" style="display: block; margin: auto;" /&gt;
+---
+# Autocorrelation Test
+
+```r
+lb &lt;- rep(NA, 12)
+bp &lt;- rep(NA, 12)
+for(i in 1:12){
+  bp[i] &lt;- Box.test(ch7data$caemp, lag = i, type = "Box-Pierce")$statistic
+  lb[i] &lt;- Box.test(ch7data$caemp, lag = i, type = "Ljung-Box")$statistic
+}
+rbind(lb, bp)
+```
+
+```
+#&gt;        [,1]     [,2]     [,3]     [,4]     [,5]     [,6]     [,7]     [,8]
+#&gt; lb 127.7312 240.4517 337.3193 418.2578 484.1585 536.4449 576.8441 606.7683
+#&gt; bp 124.9545 234.4077 327.7655 405.1850 467.7429 516.9982 554.7627 582.5185
+#&gt;        [,9]    [,10]    [,11]    [,12]
+#&gt; lb 627.3982 640.0584 646.7420 649.5790
+#&gt; bp 601.5039 613.0633 619.1172 621.6665
 ```
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
