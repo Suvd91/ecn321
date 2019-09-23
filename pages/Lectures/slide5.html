@@ -137,18 +137,21 @@ class: clear
 `$$B(L)\varepsilon_t=b_0\varepsilon_t+b_1\varepsilon_{t-1}+b_2\varepsilon_{t-2}+\cdots=\sum_{t=1}^\infty b_i\varepsilon_{t-i}$$`
 
 ---
-# Wold theorem, 
- Let `\(\{y_t \}\)` be any zero-mean covariance-stationary process. Then we can write it as
-`$$B(L)\varepsilon_t=b_0\varepsilon_t+b_1\varepsilon_{t-1}+b_2\varepsilon_{t-2}+\cdots=\sum_{t=0}^\infty b_i\varepsilon_{t-i}, \quad \varepsilon_t\sim WN(0,\sigma^2)$$`where `\(\sum b_i^2&lt;\infty\)`
+# Wold theorem 
+`\(\{y_t \}\)` тэг дундажтай, стационарь цуваа бол 
+`$$B(L)\varepsilon_t=b_0\varepsilon_t+b_1\varepsilon_{t-1}+b_2\varepsilon_{t-2}+\cdots=\sum_{t=0}^\infty b_i\varepsilon_{t-i}, \quad \varepsilon_t\sim WN(0,\sigma^2)$$`
+хэлбэртэй бичиж болно. Энд `\(\sum_{t=0}^\infty b_i^2&lt;\infty\)`.
 
 ---
 # General Linear Process
-`$$B(L)\varepsilon_t=b_0\varepsilon_t+b_1\varepsilon_{t-1}+b_2\varepsilon_{t-2}+\cdots=\sum_{t=0}^\infty b_i\varepsilon_{t-i}, \quad \varepsilon_t\sim WN(0,\sigma^2)$$` where `\(\sum b_i^2&lt;\infty\)`
-нөхцлийг хангах цувааг ерөнхий шугаман процесс гэдэг.
+Волдын теоремийн нөхцлийг хангах
+`$$B(L)\varepsilon_t=b_0\varepsilon_t+b_1\varepsilon_{t-1}+b_2\varepsilon_{t-2}+\cdots=\sum_{t=0}^\infty b_i\varepsilon_{t-i}, \quad \varepsilon_t\sim WN(0,\sigma^2)$$` 
+ цувааг .hi-pink[ерөнхий шугаман процесс] гэдэг.
 
 Моментууд
  - `\(\mathrm{E}(y_t)=0\)`
  - `\(\mathrm{Var}(y_t)=\sigma^2\sum b_i^2\)`
+ 
 Нөхцөлт дундаж болон вариацын хувьд ( `\(\Omega_t=\{\varepsilon_t,\varepsilon_{t-1},\ldots \}\)`)
 
  - `\(\mathrm{E}(y_t|\Omega_{t−1})=\sum_{t=1}^\infty b_i\varepsilon_{t-i}\)`
@@ -165,21 +168,22 @@ class: clear
 Түүврийн автокорреляцийн функц буюу .hi[коррелограм] гэдэг
 
 ---
-#Testing
+# Автокоррелляцийн тест
 
-`\(H_0: \rho(h)=0\)` white noise 
+`\(H_0: \rho(h)=0\)` 
 `$$\sqrt{T}\hat\rho(h) \to_d N(0, 1)$$`
-`\(H_0: \rho(1)=0,...,\rho(m)\)` ө.x `\(y_t\)` автокорреляцигүй 
+`\(H_0: \rho(1)=0,...,\rho(m)=0\)` ө.x `\(y_t\)` автокорреляцигүй (white noise)
 
 .hi-pink[Box-Pierce] `$$Q_{BP}=T\sum_{h=1}^m\hat\rho^2(h)\to_d \chi^2(m)$$`
 
 .hi-pink[Ljung-Box] `$$Q_{LB}=T(T+2)\sum_{h=1}^m\frac{1}{T-h}\hat\rho^2(h)\to_d \chi^2(m)$$`
 ---
-# тухайн автокорреляц (partial autocorrelation)
+# Тухайн автокорреляц 
+.hi[partial autocorrelation]
 
 `\(y_t\)`-г `\(\{y_{t-1},...,y_{t-h}\}\)`-д регрессдэхэд гарсан `\(h\)`-р коэффициент `\(\hat{p}(h)\)`
  `$$\hat{y}_t=\hat{c}+\hat p(1)\hat{y}_{t-1}+\ldots+\hat p(h)\hat{y}_{t-h}$$`
-Асимптотик тархалт адилхан
+Асимптотик тархалт түүврийн автокорреляцитай адилхан.
 
 ---
 # Application: 
