@@ -49,17 +49,126 @@ class: clear
 `\(\color{#009E73}{y_t=\varepsilon_t + 0.90\varepsilon_{t-1}}\)` vs `\(\color{#CC79A7}{y_t=\varepsilon_t + 0.45\varepsilon_{t-1}}\)`
 &lt;img src="slide6_files/figure-html/ma1-1.svg" style="display: block; margin: auto;" /&gt;
 
+---
+# Автокорреляц
+
+Автоковариац
+`$$\gamma(h)=\mathrm{E}(y_ty_{t-h})=\begin{cases}\theta \sigma^2,&amp; h=1\\
+0, &amp; \text{otherwise}\end{cases}$$`
+
+--
+Автокорреляц
+`$$\rho(h)=\begin{cases}\frac{\theta}{(1+\theta^2) \sigma^2},&amp; h=1\\
+0, &amp; \text{otherwise}\end{cases}$$`
+
+--
+`\(\theta=0.9\)` бол
+
+
+```r
+θ &lt;- 0.9
+θ /(1 + θ^2)
+```
+
+```
+#&gt; [1] 0.4972376
+```
 
 ---
 class: clear
 &lt;img src="acf.png" width=800 height=600&gt;
 ---
-class: clear
-`\(\color{#009E73}{y_t= 0.90y_{t-1}+\varepsilon_t}\)` vs `\(\color{#CC79A7}{y_t=0.45y_{t-1}+\varepsilon_t }\)`
+#MA(q)
+
+`$$y_t=\varepsilon_t + \theta_1\varepsilon_{t-1}+\cdots+\theta_q\varepsilon_{t-q}=\Theta(L)\varepsilon_t ,\quad WN(0,\sigma^2)$$`
+
+--
+
+ - Шинж чанар `\(MA(1)\)` процесстэй адил 
+ - Шугаман процессийн ойролцоолол илүү
 
 
-&lt;img src="slide6_files/figure-html/ar1-1.svg" style="display: block; margin: auto;" /&gt;
 ---
+# AR(1)
+
+.hi-pink[Autoregression]
+`$$y_t=\phi y_{t-1} + \varepsilon_{t},\quad WN(0,\sigma^2)$$`
+Ухралтын операторын хэлбэр
+
+`$$(1-\phi L)y_t=\varepsilon_t$$`
+
+--
+
+Буцаан орлуулах аргаар
+
+`$$y_t=\varepsilon_t+\phi\varepsilon_{t-1}+\phi^2\varepsilon_{t-2}+\cdots=(1-\phi L)^{-1}\varepsilon_{t}$$`
+--
+Дээрх илэрхийлэл `\(|\phi|&lt;1\)` үед л нийлэх(convergent) учир, `\(|\phi|&lt;1\)` үед л `\(y_t\)` цуваа стационар байна
+
+---
+# Моментууд
+
+## Дундаж болон вариац
+`$$\mathrm{E}(y_t)=\mathrm{E}(\varepsilon_t)+\phi\mathrm{E}(\varepsilon_{t-1})+\phi^2\mathrm{E}(\varepsilon_{t-2})+\cdots=0$$`
+
+`$$\mathrm{Var}(y_t)=\frac{\sigma^2}{1-\phi^2}$$`
+
+--
+
+## Нөхцөлт дундаж болон вариац
+`$$\mathrm{E}(y_t|y_{t-1})=\mathrm{E}(\phi y_{t-1}+\varepsilon_t|y_{t-1})=\phi y_{t-1}$$`
+`$$\mathrm{Var}(y_t|y_{t-1})=\sigma^2$$`
+
+---
+class: clear
+`\(\color{#009E73}{y_t= 0.9y_{t-1}+\varepsilon_t}\)` vs `\(\color{#CC79A7}{y_t=0.45y_{t-1}+\varepsilon_t }\)`
+&lt;img src="slide6_files/figure-html/ar1-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+#  Автоковариац болон Автокорреляц
+Автоковариацийг олохдоо `\(y_t=\phi y_{t-1} + \varepsilon_{t}\)`-г `\(y_{t-h}\)` -р үржүүлэн хүлээгдсэн утгыг тооцвол дараах рекуррент тэгшитгэл гарна:
+`$$\mathrm{E}(y_ty_{t-h})=\phi \mathrm{E}(y_{t-1}y_{t-h}) +\mathrm{E}( y_{t-h}\varepsilon_{t})$$`
+`$$\gamma(h)=\phi\gamma(h-1)$$`
+Үүнийг .hi[Yule-Walker]-ийн тэгшитгэл гэдэг.
+
+`$$\gamma(h)=\phi^h\frac{\sigma^2}{1-\phi^2}$$`
+Автокорреляц
+`$$\rho(h)=\phi^h$$`
+---
+class: clear
+&lt;img src="acf2.png" width=800 height=600&gt;
+---
+# AR(p)
+`$$y_t= \phi_1y_{t-1}+\cdots+\phi_py_{t-p}+\varepsilon_t ,\quad WN(0,\sigma^2)$$`
+`$$(1-\phi_1 L-\phi_2L^2-\cdots-\phi_pL^p)y_t=\Phi(L)y_t$$`
+
+--
+
+`\(\Phi(L)\)` урвуутай байхын тулд `\(|1-\phi_1 x-\phi_2x^2-\cdots-\phi_px^p|=0\)` тэгшитгэлийн шийд бүгд нэгж тойрог дотор оршино.
+
+--
+
+`\(\Phi(L)\)` урвуутай бол `$$y_t=\Phi^{-1}(L)\epsilon_t$$`
+
+---
+# ARMA(p,q)
+
+--
+## ARMA(p,q) process
+
+`$$y_t=\phi_1y_{t-1}+\cdots+\phi_py_{t-p}+\varepsilon_t + \theta_1\varepsilon_{t-1}+\cdots+\theta_q\varepsilon_{t-q},\quad WN(0,\sigma^2)$$`
+
+--
+
+`$$\Phi(L)y_t=\Theta(L)\varepsilon_t$$`
+
+--
+
+ - .hi[Давуу тал]:  ARMA(2,1) загвар AR(5)-тай адилхан ойролцоололтой байг. ARMA(2,1)-ийн параметрийн тоо бага.(parsimonity)
+ 
+---
+
+# Хэрэглээ
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

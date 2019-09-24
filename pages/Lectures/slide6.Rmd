@@ -130,50 +130,152 @@ class: clear
 
 $\color{#009E73}{y_t=\varepsilon_t + 0.90\varepsilon_{t-1}}$ vs $\color{#CC79A7}{y_t=\varepsilon_t + 0.45\varepsilon_{t-1}}$
 ```{R, ma1, echo = F}
-set.seed(1246)
+set.seed(1)
 T <- 150
 e <- rnorm(T)
-ma1 <- tibble(y = arima.sim(list(order=c(0, 0, 1), ma = 0.90), n=150, innov = e, n.start = 1, start.innov = 0),
+ma1 <- tibble(y = arima.sim(list(order=c(0, 0, 1), ma = 0.90), n=T, innov = e, n.start = 1, start.innov = 0),
               t = 1:T, ma = "0.90")
-ma2 <- tibble(y = arima.sim(list(order=c(0, 0, 1), ma = 0.45), n=150, innov = e, n.start = 1, start.innov = 0), 
+ma2 <- tibble(y = arima.sim(list(order=c(0, 0, 1), ma = 0.45), n=T, innov = e, n.start = 1, start.innov = 0), 
               t = 1:T, ma = "0.45")
 ggplot(data = bind_rows(ma1, ma2), aes(x = t, y = y, color = ma)) +
   geom_hline(yintercept = 0, color = "grey85", size = 1.25) +
   geom_point() +
   geom_path() +
-  scale_color_manual(values = c("#009E73", "#CC79A7")) +
+  scale_color_manual(values = c("#CC79A7", "#009E73")) +
   #scale_color_viridis(option = "magma", discrete = T, begin = 0.15, end = 0.85) +
   theme_simple
 
 ```
 
+---
+# Автокорреляц
+
+Автоковариац
+$$\gamma(h)=\mathrm{E}(y_ty_{t-h})=\begin{cases}\theta \sigma^2,& h=1\\
+0, & \text{otherwise}\end{cases}$$
+
+--
+Автокорреляц
+$$\rho(h)=\begin{cases}\frac{\theta}{(1+\theta^2) \sigma^2},& h=1\\
+0, & \text{otherwise}\end{cases}$$
+
+--
+$\theta=0.9$ бол
+
+```{r}
+θ <- 0.9
+θ /(1 + θ^2)
+```
 
 ---
 class: clear
 <img src="acf.png" width=800 height=600>
 ---
+#MA(q)
+
+$$y_t=\varepsilon_t + \theta_1\varepsilon_{t-1}+\cdots+\theta_q\varepsilon_{t-q}=\Theta(L)\varepsilon_t ,\quad WN(0,\sigma^2)$$
+
+--
+
+ - Шинж чанар $MA(1)$ процесстэй адил 
+ - Шугаман процессийн ойролцоолол илүү
+
+
+---
+# AR(1)
+
+.hi-pink[Autoregression]
+$$y_t=\phi y_{t-1} + \varepsilon_{t},\quad WN(0,\sigma^2)$$
+Ухралтын операторын хэлбэр
+
+$$(1-\phi L)y_t=\varepsilon_t$$
+
+--
+
+Буцаан орлуулах аргаар
+
+$$y_t=\varepsilon_t+\phi\varepsilon_{t-1}+\phi^2\varepsilon_{t-2}+\cdots=(1-\phi L)^{-1}\varepsilon_{t}$$
+--
+Дээрх илэрхийлэл $|\phi|<1$ үед л нийлэх(convergent) учир, $|\phi|<1$ үед л $y_t$ цуваа стационар байна
+
+---
+# Моментууд
+
+## Дундаж болон вариац
+$$\mathrm{E}(y_t)=\mathrm{E}(\varepsilon_t)+\phi\mathrm{E}(\varepsilon_{t-1})+\phi^2\mathrm{E}(\varepsilon_{t-2})+\cdots=0$$
+
+$$\mathrm{Var}(y_t)=\frac{\sigma^2}{1-\phi^2}$$
+
+--
+
+## Нөхцөлт дундаж болон вариац
+$$\mathrm{E}(y_t|y_{t-1})=\mathrm{E}(\phi y_{t-1}+\varepsilon_t|y_{t-1})=\phi y_{t-1}$$
+$$\mathrm{Var}(y_t|y_{t-1})=\sigma^2$$
+
+---
 class: clear
-$\color{#009E73}{y_t= 0.90y_{t-1}+\varepsilon_t}$ vs $\color{#CC79A7}{y_t=0.45y_{t-1}+\varepsilon_t }$
-
-
+$\color{#009E73}{y_t= 0.9y_{t-1}+\varepsilon_t}$ vs $\color{#CC79A7}{y_t=0.45y_{t-1}+\varepsilon_t }$
 ```{R, ar1, echo = F}
 set.seed(1246)
 T <- 150
 e <- rnorm(T)
-ar1 <- tibble(y = arima.sim(list(order=c(1, 0, 0), ar = 0.90), n=150, innov = e, n.start = 1, start.innov = 0),
+ar1 <- tibble(y = arima.sim(list(order=c(1, 0, 0), ar = 0.9), n=T, innov = e, n.start = 1, start.innov = 0),
               t = 1:T, ar = "0.90")
-ar2 <- tibble(y = arima.sim(list(order=c(1, 0, 0), ar = 0.45), n=150, innov = e, n.start = 1, start.innov = 0), 
+ar2 <- tibble(y = arima.sim(list(order=c(1, 0, 0), ar = 0.45), n=T, innov = e, n.start = 1, start.innov = 0), 
               t = 1:T, ar = "0.45")
 ar <- bind_rows(ar1, ar2)
 ggplot(data = ar, aes(x = t, y = y, color = ar)) +
   geom_hline(yintercept = 0, color = "grey85", size = 1.25) +
   geom_point() +
   geom_path() +
-  scale_color_manual(values = c("#009E73", "#CC79A7")) +
+  scale_color_manual(values = c("#CC79A7", "#009E73")) +
   #scale_color_viridis(option = "magma", discrete = T, begin = 0.15, end = 0.85) +
   theme_simple
 
 ```
+
+---
+#  Автоковариац болон Автокорреляц
+Автоковариацийг олохдоо $y_t=\phi y_{t-1} + \varepsilon_{t}$-г $y_{t-h}$ -р үржүүлэн хүлээгдсэн утгыг тооцвол дараах рекуррент тэгшитгэл гарна:
+$$\mathrm{E}(y_ty_{t-h})=\phi \mathrm{E}(y_{t-1}y_{t-h}) +\mathrm{E}( y_{t-h}\varepsilon_{t})$$
+$$\gamma(h)=\phi\gamma(h-1)$$
+Үүнийг .hi[Yule-Walker]-ийн тэгшитгэл гэдэг.
+
+$$\gamma(h)=\phi^h\frac{\sigma^2}{1-\phi^2}$$
+Автокорреляц
+$$\rho(h)=\phi^h$$
+---
+class: clear
+<img src="acf2.png" width=800 height=600>
+---
+# AR(p)
+$$y_t= \phi_1y_{t-1}+\cdots+\phi_py_{t-p}+\varepsilon_t ,\quad WN(0,\sigma^2)$$
+$$(1-\phi_1 L-\phi_2L^2-\cdots-\phi_pL^p)y_t=\Phi(L)y_t$$
+
+--
+
+$\Phi(L)$ урвуутай байхын тулд $|1-\phi_1 x-\phi_2x^2-\cdots-\phi_px^p|=0$ тэгшитгэлийн шийд бүгд нэгж тойрог дотор оршино.
+
+--
+
+$\Phi(L)$ урвуутай бол $$y_t=\Phi^{-1}(L)\epsilon_t$$
+
+---
+# ARMA(p,q)
+
+--
+## ARMA(p,q) process
+
+$$y_t=\phi_1y_{t-1}+\cdots+\phi_py_{t-p}+\varepsilon_t + \theta_1\varepsilon_{t-1}+\cdots+\theta_q\varepsilon_{t-q},\quad WN(0,\sigma^2)$$
+
+--
+
+$$\Phi(L)y_t=\Theta(L)\varepsilon_t$$
+
+--
+
+ - .hi[Давуу тал]:  ARMA(2,1) загвар AR(5)-тай адилхан ойролцоололтой байг. ARMA(2,1)-ийн параметрийн тоо бага.(parsimonity)
+ 
 ---
 
-
+# Хэрэглээ
