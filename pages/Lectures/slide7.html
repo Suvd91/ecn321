@@ -4,9 +4,9 @@
     <title>Эконометрикс II</title>
     <meta charset="utf-8" />
     <meta name="author" content="багш: Д. Хашбаатар" />
-    <link href="slide6_files/remark-css/default.css" rel="stylesheet" />
-    <link href="slide6_files/remark-css/metropolis.css" rel="stylesheet" />
-    <link href="slide6_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link href="slide7_files/remark-css/default.css" rel="stylesheet" />
+    <link href="slide7_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="slide7_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
     <link rel="stylesheet" href="my-css.css" type="text/css" />
   </head>
   <body>
@@ -14,7 +14,7 @@
 class: center, middle, inverse, title-slide
 
 # Эконометрикс II
-## Лекц 7: Мөчлөгийн загварууд: AR, MA, ARMA
+## Лекц 6: Мөчлөгийг тодорхойлох
 <html>
 <div style="float:left">
 
@@ -22,7 +22,7 @@ class: center, middle, inverse, title-slide
 <hr color='#EB811B' size=1px width=796px>
 </html>
 ### багш: Д. Хашбаатар
-### 2019/09/25
+### 2019/09/23
 
 ---
 
@@ -34,31 +34,16 @@ class: center, middle, inverse, title-slide
 .hi-pink[Moving Average Process]
 `$$y_t=\varepsilon_t + \theta\varepsilon_{t-1}=(1+\theta L)\varepsilon_t ,\quad WN(0,\sigma^2)$$`
 
-Моментууд
- - `\(\mathrm{E}(y_t)=0\)`
- - `\(\mathrm{Var}(y_t)=\sigma^2(1+\theta^2)\)`
- 
-Нөхцөлт дундаж болон вариацын хувьд ( `\(\Omega_t=\{\varepsilon_t,\varepsilon_{t-1},\ldots \}\)`)
-
- - `\(\mathrm{E}(y_t|\Omega_{t−1})=\theta\varepsilon_{t-1}\)`
- - `\(\mathrm{Var}(y_t|\Omega_{t−1} )=\mathrm{E}\{(y_t−\mathrm{E}(y_t|\Omega_{t−1}))^2|\Omega_{t−1}\}=\sigma^2\)`
-
 ---
 class: clear
 
 `\(\color{#009E73}{y_t=\varepsilon_t + 0.90\varepsilon_{t-1}}\)` vs `\(\color{#CC79A7}{y_t=\varepsilon_t + 0.45\varepsilon_{t-1}}\)`
-&lt;img src="slide6_files/figure-html/ma1-1.svg" style="display: block; margin: auto;" /&gt;
-
-
----
-class: clear
-&lt;img src="acf.png" width=800 height=600&gt;
+&lt;img src="slide7_files/figure-html/ma1-1.svg" style="display: block; margin: auto;" /&gt;
 ---
 class: clear
 `\(\color{#009E73}{y_t= 0.90y_{t-1}+\varepsilon_t}\)` vs `\(\color{#CC79A7}{y_t=0.45y_{t-1}+\varepsilon_t }\)`
 
-
-&lt;img src="slide6_files/figure-html/ar1-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="slide7_files/figure-html/ar1-1.svg" style="display: block; margin: auto;" /&gt;
 ---
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>

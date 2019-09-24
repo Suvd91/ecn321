@@ -1,8 +1,8 @@
 ---
 title: "Эконометрикс II"
-subtitle: "Лекц 7: Мөчлөгийн загварууд: AR, MA, ARMA<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>"
+subtitle: "Лекц 6: Мөчлөгийг тодорхойлох<html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>"
 author: "багш: Д. Хашбаатар"
-date: "2019/09/25"
+date: "2019/09/23"
 output:
   xaringan::moon_reader:
     css: ['default', 'metropolis', 'metropolis-fonts', 'my-css.css']
@@ -116,15 +116,6 @@ theme_set(theme_gray(base_size = 20))
 .hi-pink[Moving Average Process]
 $$y_t=\varepsilon_t + \theta\varepsilon_{t-1}=(1+\theta L)\varepsilon_t ,\quad WN(0,\sigma^2)$$
 
-Моментууд
- - $\mathrm{E}(y_t)=0$
- - $\mathrm{Var}(y_t)=\sigma^2(1+\theta^2)$
- 
-Нөхцөлт дундаж болон вариацын хувьд ( $\Omega_t=\{\varepsilon_t,\varepsilon_{t-1},\ldots \}$)
-
- - $\mathrm{E}(y_t|\Omega_{t−1})=\theta\varepsilon_{t-1}$
- - $\mathrm{Var}(y_t|\Omega_{t−1} )=\mathrm{E}\{(y_t−\mathrm{E}(y_t|\Omega_{t−1}))^2|\Omega_{t−1}\}=\sigma^2$
-
 ---
 class: clear
 
@@ -146,15 +137,9 @@ ggplot(data = bind_rows(ma1, ma2), aes(x = t, y = y, color = ma)) +
   theme_simple
 
 ```
-
-
----
-class: clear
-<img src="acf.png" width=800 height=600>
 ---
 class: clear
 $\color{#009E73}{y_t= 0.90y_{t-1}+\varepsilon_t}$ vs $\color{#CC79A7}{y_t=0.45y_{t-1}+\varepsilon_t }$
-
 
 ```{R, ar1, echo = F}
 set.seed(1246)
@@ -164,8 +149,7 @@ ar1 <- tibble(y = arima.sim(list(order=c(1, 0, 0), ar = 0.90), n=150, innov = e,
               t = 1:T, ar = "0.90")
 ar2 <- tibble(y = arima.sim(list(order=c(1, 0, 0), ar = 0.45), n=150, innov = e, n.start = 1, start.innov = 0), 
               t = 1:T, ar = "0.45")
-ar <- bind_rows(ar1, ar2)
-ggplot(data = ar, aes(x = t, y = y, color = ar)) +
+ggplot(data = bind_rows(ar1, ar2), aes(x = t, y = y, color = ar)) +
   geom_hline(yintercept = 0, color = "grey85", size = 1.25) +
   geom_point() +
   geom_path() +
