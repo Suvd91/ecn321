@@ -1,15 +1,29 @@
 ---
-title: "Diebold Ch6 R codes"
+title: "Diebold Chapter 6 Codes"
+author: "Д. Хашбаатар"
 output:
   html_document:
-    theme: united
+    fig_caption: yes
+    fig_height: 6
+    fig_width: 7
     highlight: tango
+    number_sections: yes
+    theme: "united"
+    toc: yes
+    toc_depth: 2
+    toc_float: yes
+  pdf_document:
+    toc: yes
+    toc_depth: '2'
+  word_document:
+    toc: yes
+    toc_depth: '2'
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
+# Data
 ```{r, message=FALSE}
 load("ch6data.Rdata")
 library(dplyr)
@@ -128,14 +142,14 @@ hist(residuals(res1), probability = TRUE, breaks = 20,
      xlab = "Residuals")
 ```
 
-## Estimated Seasonal Factors
+# Estimated Seasonal Factors
 ```{r}
 bar <- barplot(res1$coefficients, names.arg = paste0("s", 1:12), border=FALSE)
 text(bar, res1$coefficients , signif(res1$coefficients, 3) , cex=0.7)
 ```
 
 
-## Forecasts
+# Forecasts
 ```{r}
 plot_data <- ch6data %>% 
   select(date, hstarts, seasonal) %>% 

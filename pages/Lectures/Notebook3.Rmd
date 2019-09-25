@@ -1,0 +1,177 @@
+---
+title: "Diebold Chapter 7, 8 Codes"
+author: "Д. Хашбаатар"
+output:
+  html_document:
+    fig_caption: yes
+    fig_height: 6
+    fig_width: 7
+    highlight: tango
+    number_sections: yes
+    theme: "united"
+    toc: yes
+    toc_depth: 2
+    toc_float: yes
+  pdf_document:
+    toc: yes
+    toc_depth: '2'
+  word_document:
+    toc: yes
+    toc_depth: '2'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Chapter 7
+## White noise
+
+```{r}
+e <- rnorm(150)
+plot(e, type = "l", xlab = "Time")
+```
+
+### Autocorrelations
+
+```{r}
+acf <- acf(e, lag.max = 12, plot = FALSE)
+print(acf)
+```
+```{r}
+plot(acf, main = "Autocorrelations of White Noise")
+```
+```{r}
+plot(pacf(e, lag.max = 12, plot = FALSE), main = "Partial Autocorrelations")
+```
+
+
+## Application
+
+### Data 
+
+Канадийн ажил эрхлэлтийн индекс
+```{r, message=FALSE}
+library(dplyr)
+load("ch7data.Rdata")
+str(ch7data)
+estimation_data <- ch7data %>% 
+  filter(date < as.Date("1994-01-01") & date > as.Date("1961-12-01"))
+
+```
+
+Figure 7.9 (Сурах бичгийн хуудас 130)
+```{r}
+plot(estimation_data$date, estimation_data$caemp, 
+     type = "l", 
+     xlab = "Time", 
+     ylab = "Canadian Employment", 
+     lwd = 2)
+```
+
+## Correlogram
+
+```{r}
+acf <- acf(estimation_data$caemp, lag.max = 12, plot = FALSE)
+print(acf)
+```
+
+```{r}
+plot(acf, main = "Autocorrelations")
+```
+
+
+```{r}
+plot(pacf(estimation_data$caemp, lag.max = 12, plot = FALSE), main = "Partial Autocorrelations")
+```
+ 
+
+# Chapter 8
+
+## MA(4)
+
+```{r}
+y <- estimation_data$caemp
+ma4 <- arima(y, order=c(0, 0 , 4))
+ma4
+```
+
+```{r}
+plot(estimation_data$date, estimation_data$caemp, 
+     type = "l", 
+     xlab = "Time", 
+     ylab = "Canadian Employment", 
+     lwd = 2)
+fit_ma4 <- y - residuals(ma4)
+lines(estimation_data$date, fit_ma4, col = "red", lty = 2)
+```
+```{r}
+acf(residuals(ma4))
+```
+
+
+moving average processes don't provide good approximations to employment dynamics.
+
+## AR(2)
+
+```{r}
+ar2 <- arima(y, order=c(2, 0 , 0))
+ar2
+```
+```{r}
+plot(estimation_data$date, estimation_data$caemp, 
+     type = "l", 
+     xlab = "Time", 
+     ylab = "Canadian Employment", 
+     lwd = 2)
+fit_ar2 <- y - residuals(ar2)
+lines(estimation_data$date, fit_ar2, col = "red", lty = 2)
+```
+
+## ARMA(3, 1)
+
+```{r}
+arma31 <- arima(y, order=c(3, 0 , 1))
+arma31
+```
+```{r}
+plot(estimation_data$date, estimation_data$caemp, 
+     type = "l", 
+     xlab = "Time", 
+     ylab = "Canadian Employment", 
+     lwd = 2)
+fit_arma31 <- y - residuals(arma31)
+lines(estimation_data$date, fit_arma31, col = "red", lty = 2)
+```
+
+## Ямар модел хэрхэн сонгох вэ?
+
+$ARMA(p, q)$ -ийн $p,q$ зэргийг хэрхэн сонгох вэ?
+
+$p=0,1,2,3,4$, $q=0,1,2,3,4$-ийн утга болгоны хувьд ARMA(p,q) загварыг үнэлэн АIC, BIC-г харьцуулан сонгоно. Нийт үнэлэгдэх загварын тоо $5\times 5=25$.
+```{r, warning=FALSE}
+pq <- as.matrix(expand.grid(p=0:4, q=0:4))     # p,q iin buh hosloliig matrix helbert hadgalna
+models <- vector(mode = "list", length = 25)   # zagvaryn ur dung hadgalah list uusgene
+for(i in 1:25){
+  p <- pq[i, 1]
+  q <- pq[i, 2]
+  models[[i]] <- arima(y, order = c(p, 0, q))
+}
+AICs <- sapply(models, function(x)AIC(x))
+BICs <- sapply(models, function(x)BIC(x))
+
+which.min(AICs)       # AIC shalguuraar ali zagvar songogdsong olno
+which.min(BICs)       # BIC shalguuraar ali zagvar songogdsong olno  
+pq[3, ]  # songogdson zagvar
+```
+
+AIC шинжүүрээр AR(2) загвар сонгогдоно
+
+## Built-in Method
+
+
+```{r, message=FALSE}
+library(forecast)
+auto.arima(y, d=0, max.p = 4, max.q = 4)
+```
+
