@@ -1,0 +1,100 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+  pdf_document: default
+  word_document: default
+---
+```{r}
+plot(cumsum(rnorm(100)), type="l", ylab="", xlab="Time", main="Random Walk")
+```
+
+```{r}
+set.seed(1)
+e <- rnorm(150)
+y = arima.sim(list(order=c(1, 0, 0), ar = 0.9), n=150, innov = e, n.start = 1, start.innov = 0)
+```
+
+```{r}
+ar1 <- arima(y, order = c(1, 0 , 0))
+```
+
+```{r}
+ar1
+```
+
+```{r}
+str(ar1)
+```
+
+```{r}
+res <- residuals(ar1)
+```
+
+```{r}
+par(mfrow = c(1, 2))
+plot(res, type = "l")
+hist(res, prob = TRUE)
+```
+
+```{r}
+plot(y, type="l")
+lines(y-res, lty=2, col="red")
+```
+```{r}
+library(stargazer)
+stargazer(ar1, type = "text")
+```
+
+```{r}
+library(dplyr)
+library(lubridate)
+load("~/ecn321/pages/Lectures/ch10data.Rdata")
+estimation_data <- ch10data %>% 
+  filter(date > as.Date("1967-12-01") & date < as.Date("1994-01-01"))
+estimation_data$lsales <- log(estimation_data$liquor)
+estimation_data
+
+```
+
+
+```{r}
+y <- estimation_data$lsales
+time <- 1:length(y)
+seasonal <- as.factor(month(estimation_data$date))
+X <- cbind(time, time2 = time^2, model.matrix(~seasonal - 1))
+reg <- arima(y, order = c(3, 0, 0), xreg = X, include.mean = FALSE)
+summary(reg)
+```
+
+
+```{r}
+plot(estimation_data$date, y, type = "l", lwd = 2, xlab = "Time")
+lines(estimation_data$date, y - residuals(reg), lty = 2, col = "red")
+```
+```{r}
+
+par(mfrow = c(1, 2))
+plot(residuals(reg), type = "l")
+hist(residuals(reg), prob = TRUE)
+```
+```{r}
+acf(residuals(reg))
+```
+
+
+```{r echo=FALSE, message=FALSE}
+library(dygraphs)
+y1 <- ts(y, start = c(1968, 1), frequency = 12)
+fit <- ts(y - residuals(reg),start = c(1968, 1), frequency = 12)
+model <- cbind(y1, fit)
+dygraph(model) %>% 
+  dySeries("y1", label = "Log of Liquor sales") %>%
+  dySeries("fit", strokePattern = "dashed", label = "Model Fit") %>% 
+  dyOptions(colors = c("#CC79A7", "#009E73")) %>% 
+  dyHighlight(highlightSeriesOpts = list(strokeWidth = 2)) %>% 
+  dyRangeSelector()
+```
+

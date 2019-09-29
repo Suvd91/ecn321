@@ -1,0 +1,449 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\providecommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{}
+    \pretitle{\vspace{\droptitle}}
+  \posttitle{}
+    \author{}
+    \preauthor{}\postauthor{}
+    \date{}
+    \predate{}\postdate{}
+  
+
+\begin{document}
+
+output: pdf\_document: default html\_document: default
+
+\hypertarget{ma1}{%
+\section{MA(1)}\label{ma1}}
+
+time - \(T\) information set by \(\Omega_T\)
+
+\begin{itemize}
+\tightlist
+\item
+  \(\Omega_T = \{y_T , y_{T −1} , y_{T −2} , ..\},\)
+\item
+  \(\Omega _T = \{\varepsilon_T , \varepsilon_{T −1} , \varepsilon_{T −2} , \cdots\}.\)
+\end{itemize}
+
+Assembling the discussion thus far, we can view the time-T information
+set as containing the current and past values of either (or both) \(y\)
+and \(\varepsilon,\)
+\[\Omega_T =\{ y_{T} , y_{T −1} , y_{T −2}, \cdots, \varepsilon _{T } , \varepsilon_{T −1} , \varepsilon _{T −2} , \cdots.\}\]
+
+\hypertarget{optimal}{%
+\section{Optimal}\label{optimal}}
+
+optimal forecast of \(y\) at some future time \(T + h\).
+
+The optimal forecast is the one with the smallest loss on average, that
+is, the forecast that minimizes expected loss.
+
+optimal forecast is the conditional mean,
+\[\mathrm{E}(y_{T +h} |\Omega_T ),\] In general, the conditional mean
+need not be a linear function of the elements of the information set.
+Because linear functions are particularly tractable, we prefer to work
+with linear forecasts -- forecasts that are linear in the elements of
+the information set -- by finding the best linear approximation to the
+conditional mean, called the linear projection, denoted
+\[P(y_{T +h} |\Omega_T ).\] This explains the common term ``linear least
+squares forecast.'' The linear projection is often very useful and
+accurate, because the conditional mean is often close to linear. In
+fact, in the Gaussian case the conditional expectation is exactly
+linear, so that
+\[\mathrm{E}(y_{T +h} |\Omega_T ) = P (y_{T +h} |\Omega_T ).\]
+
+Our forecasting method is always the same: we write out the process for
+the future time period of interest, \(T + h\), and project it on what's
+known at time \(T\) , when the forecast is made. This process is best
+learned by example.
+
+\hypertarget{d}{%
+\section{d}\label{d}}
+
+Consider an MA(2) process,
+\[y_t = \varepsilon_t + \theta_1 \varepsilon_{t−1} + \theta_2 \varepsilon_{t−2},\quad \varepsilon_t ∼ W N (0, \sigma ^2 ).\]
+Suppose we're standing at time \(T\) and we want to forecast
+\(y_{T +1}\) . First we write out the process for \(T + 1\),
+\[y_{T +1} = \varepsilon_{T +1} + \theta_1 \varepsilon _T + \theta_2 \varepsilon_{T −1} .\]
+
+Then we project on the time-T information set, which simply means that
+all future innovations are replaced by zeros. Thus
+\[y_{ T +1,T} = P (y_{T +1} |\Omega_T ) = \theta_1 \varepsilon_T + \theta_2 \varepsilon_{T −1} .\]
+
+To forecast 2 steps ahead, we note that
+\[y_{T +2} = \varepsilon_{T +2} + \theta_1 \varepsilon_{T +1} + \theta _2 \varepsilon_T ,\]
+and we project on the time-T information set to get
+\[y_{T +2,T} = \theta_2 \varepsilon_T .\] Continuing in this fashion, we
+see that \[y_{ T +h,T} = 0,\] for all \(h>2\).
+
+Now let's compute the corresponding forecast errors. We have:
+\[e_{T +1,T} = \varepsilon_{T +1} W N\]
+\[e_{T +2,T} = \varepsilon _{T +2} + \theta_1 \varepsilon _{T +1}  (M A(1))\]
+\[e_{ T +h,T} = \varepsilon_{T +h}  + \theta _1 \varepsilon_{T +h−1} + \theta_2 \varepsilon
+_{T +h−2} (M A(2)),\] for all \(h>2\).
+
+Finally, the forecast error variances are: \[\sigma_1^2 = \sigma^2\]
+\[\sigma_2^2 = \sigma_2 (1 + \theta_1^2 )\]
+\[\sigma_h^2  = \sigma_2 (1 + \theta_1^2 + \theta_2^2 ),\] or all h
+\textgreater{} 2. Moreover, the forecast error variance for \(h>2\) is
+just the unconditional variance of \(y_t\).
+
+Now consider the general M A(q) case. The model is
+\[y_t = \varepsilon_ t + \theta_ 1 \varepsilon_{t-1} + \cdots +\theta_ q \varepsilon_{t−q}.\]
+First, consider the forecasts. If \(h\leq\), the forecast has the form
+\[y_{ T +h,T} = 0 + \text{"adjustment"}\] whereas if \(h>q\) the
+forecast is \[y_{ T +h,T} = 0.\]
+
+Thus, an M A(q) process is not forecastable (apart from the
+unconditional mean) more than \(q\) steps ahead. All the dynamics in the
+M A(q) process, which we exploit for forecasting, ``wash out'' by the
+time we get to horizon q, which reflects the autocorrelation structure
+of the M A(q) process. (Recallthat, as we showed earlier, it cuts off at
+displacement q.) Second, consider the corresponding forecast errors.
+They are \[e_{ T +h,T} = M A(h − 1)\] for \(h \leq q\) and
+\[e_{ T +h,T} = M A(q)\] for h \textgreater{} q. The h-step-ahead
+forecast error for \(h > q\) is just the process itself, minus its mean.
+
+Finally, consider the forecast error variances. For h \leq q,
+\[\sigma_h^2  \leq var(y t ),\] whereas for \(h > q\),
+\[\sigma_h^2  = var(y t ).\] In summary, we've thus far studied the M
+A(2), and then the general M A(q), process, computing the optimal
+h-step-ahead forecast, the corresponding forecast error, and the
+forecast error variance. As we'll now see, the emerging patterns that we
+cataloged turn out to be quite general.
+
+\hypertarget{optimal-point-forecasts-for-infinite-order-moving-averages}{%
+\section{Optimal Point Forecasts for Infinite-Order Moving
+Averages}\label{optimal-point-forecasts-for-infinite-order-moving-averages}}
+
+By now you're getting the hang of it, so let's consider the general case
+of an infinite-order M A process. The infinite-order moving average
+process may seem like a theoretical curiosity, but precisely the
+opposite is true. Any covariance stationary process can be written as a
+(potentially infinite-order) moving average process, and moving average
+processes are easy to understand and manipulate, because they are
+written in terms of white noise shocks, which have very simple
+statistical properties. Thus, if you take the time to understand the
+mechanics of constructing optimal forecasts for infinite moving-average
+processes, you'll understand everything, and you'll have some powerful
+technical tools and intuition at your command. Recall that the general
+linear process is Recall that the general linear process is
+\[y_t=\sum_{i=0}^\infty b_i\varepsilon_{t-i}, \quad \varepsilon_t\sim WN(0,\sigma^2)\]
+\[y_{T +h} = \varepsilon_{T +h} + b_1 \varepsilon_{T +h−1} + \cdots + b_h \varepsilon_T + b_{h+1} \varepsilon_{T −1} + \cdots\]
+
+Then we project \(y_{T +h}\) on the time-\(T\) information set. The
+projection yields zeros for all of the future \(\varepsilon\)'s (because
+they are white noise and hence unforecastable), leaving
+\[y_{ T +h,T} = b_h \varepsilon_T + b_{h+1} \varepsilon _{T −1} + \cdots\]
+It follows that the \(h\)-step ahead forecast error is serially
+correlated; it follows an MA(h − 1) process,
+\[e_{ T +h,T} = (y_{T +h} − y_{ T +h,T} ) =\sum_{i=0}^\infty b_i\varepsilon_{t-i}, \quad \varepsilon_t\]
+
+with mean 0 and variance
+\[\sigma _h^2=\sigma ^ 2\sum_{i=0}^{h-1} b_i^2.\]
+
+A number of remarks are in order concerning the optimal forecasts of the
+general linear process, and the corresponding forecast errors and
+forecast error variances. First, the 1-step-ahead forecast error is
+simply \(\varepsilon T +1\) . \(\varepsilon T +1\) is that part of
+\(y T +1\) that can't be linearly forecast on the basis of \(\Omega_t\)
+(which, again, is why it is called the innovation). Second, although it
+might at first seem strange that an optimal forecast error would be
+serially correlated, as is the case when h \textgreater{} 1, nothing is
+awry. The serial correlation can't be used to improve forecasting
+performance, because the autocorrelations of the M A(h−1) process cut
+off just before the beginning of the time-T information set \$
+\varepsilon T , \varepsilon T −1 , \cdots. \$This is a general and
+tremendously important property of the errors associated with optimal
+forecasts: errors from optimal forecasts can't be forecast using
+information available when the forecast was made.
+
+If you can forecast the forecast error, then you can improve the
+forecast, which means that it couldn't have been optimal. Finally, note
+that as h approaches infinity \(y_{ T +h,T}\) approaches zero, the
+unconditional mean of the rocess, and \(a\), the unconditional variance
+of the process, which reflects the fact that as h approaches infinity
+the conditioning information on which the forecast is based becomes
+progressively less useful. In other words, the distant future is harder
+to forecast than the near future!
+
+Now we construct interval and density forecasts. Regardless of whether
+the moving average is finite or infinite, we proceed in the same way, as
+follows. The definition of the h-step-ahead forecast error is
+\[e_{ T +h,T} = y_{T +h} − y_{ T +h,T} .\] Equivalently, the
+h-step-ahead realized value, \(y_{T +h} ,\) equals the forecast plus the
+error, \[y_{T +h} = y_{ T +h,T} + e_{ T +h,T} .\] If the innovations are
+normally distributed, then the future value of the series of interest is
+also normally distributed, conditional upon the information set
+available at the time the forecast was made, and so we have the 95\%
+h-step- ahead interval forecast \(y_{ T +h,T} \pm 1.96\sigma_h\) . In
+similar fashion, we construct the h-step-ahead density forecast as
+\[N (y_{ T +h,T} , \sigma_h^2  )\]. The mean of the conditional
+distribution of \(y_{T +h}\) is \(y_{ T +h,T}\) , which of course must
+be the case because we constructed the point forecast as the conditional
+mean, and the variance of the conditional distribution is \(\sigma_h^2\)
+, the variance of
+
+As an example of interval and density forecasting, consider again the M
+A(2) process,
+\[y_t = \varepsilon_t + \theta_1 \varepsilon_{t-1} + \theta_2 \varepsilon_{t−2}
+\varepsilon_t ∼ W N (0, \sigma_2 ).\] Assuming normality, the
+1-step-ahead 95\% interval forecast is
+\[y_{T +1,T} = (\theta_1 \varepsilon_T + \theta_2 \varepsilon_{T −1} ) \pm 1.96\sigma ,\]
+and the 1-step-ahead density forecast is
+\[N (\theta_1 \varepsilon_T + \theta_2 \varepsilon_{T −1} , \sigma_2 ).\]
+
+\hypertarget{making-the-forecasts-operational}{%
+\section{Making the Forecasts
+Operational}\label{making-the-forecasts-operational}}
+
+So far we've assumed that the parameters of the process being forecast
+are known. In practice, of course, they must be estimated. To make our
+forecasting procedures operational, we simply replace the unknown
+parameters in our formulas with estimates, and the unobservable
+innovations with residuals. Consider, for example, the M A(2) process,
+\[y_t = \varepsilon_t + \theta_1 \varepsilon_{t-1} + \theta_2 \varepsilon_{t−2} .\]
+
+As you can readily verify using the methods we've introduced, the 2-step
+ahead optimal forecast, assuming known parameters, is
+\[y_{T +2,T} = \theta_2 \varepsilon _T ,\] with corresponding forecast
+error
+\[e_{T +2,T} = \varepsilon_{T +2} + \theta_ 1 \varepsilon _{T +1} ,\]
+and forecast-error variance
+\[\sigma _2^2 = \sigma_2 (1 + \theta_1^2 ).\]
+
+To make the forecast operational, we replace unknown parameters with
+estimates and the time-T innovation with the time-T residual, yielding
+\[\hat y_{T +2,T} = \hat\theta_2 \hat\varepsilon_T\] and forecast error
+variance \[\hat\sigma_2^2 = \hat\sigma^2 (1 + \hat\theta_1^2 ).\] Then,
+if desired, we can construct operational 2-step-ahead interval and den-
+sity forecasts, as
+\[\hat y_{T +2,T} \pm \frac{z_\alpha}{2 \hat\sigma^2}\] and
+\[N (\hat y_{T +2,T} ,\hat\sigma^2 ).\]
+
+The strategy of taking a forecast formula derived under the assumption
+of known parameters, and replacing unknown parameters with estimates, is
+a natural way to operationalize the construction of point forecasts.
+However, using the same strategy to produce operational interval or
+density forecasts involves a subtlety that merits additional discussion.
+The forecast error variance estimate so obtained can be interpreted as
+one that ignores parameter estimation uncertainty, as follows.
+
+Recall once again that the actual future value of the series is
+\[y_{T+2} = \varepsilon_{T+2} + \theta_1 \varepsilon_{ T +1} + \theta_2 \varepsilon_ T ,\]
+and that the operational forecast is
+\[\hat y_{T +2,T} = \hat \theta_2 \varepsilon_T .\] Thus the exact
+forecast error is
+\[\hat e_{T +2,T} = y_{T+2} − \hat y_{T +2,T} = \varepsilon_{T+2} + \theta_1 \varepsilon_{T +1} + (\theta_2 -\hat \theta_2 )\varepsilon_ T ,\]
+the variance of which is very difficult to evaluate.
+
+So we make a convenient approximation: we ignore parameter estimation
+uncertainty by assuming that estimated parameters equal true parameters.
+We therefore set \((\theta_2 -\hat \theta_2 ))\) to zero, which yields
+\[\hat e_{T +2,T}= \varepsilon_{T+2} + \theta_ 1 \varepsilon_{T +1} ,\]
+with variance \[\sigma _2^2 = \sigma_2 (1 + \theta_1^2 ),\] which we
+make operational as
+\(\hat\sigma _2^2 = \hat\sigma ^2 (1 + \hat \theta^2).\)
+
+\hypertarget{forecasting-cycles-from-an-ar-wolds-chain-rule}{%
+\section{Forecasting Cycles From an AR: Wold's Chain
+Rule}\label{forecasting-cycles-from-an-ar-wolds-chain-rule}}
+
+\#\#Point Forecasts of Autoregressive Processes
+
+Because any covariance stationary AR(p) process can be written as an
+infinite moving average, there's no need for specialized forecasting
+techniques for autoregressions. Instead, we can simply transform the
+autoregression into a moving average, and then use the techniques we
+developed for forecasting moving averages. It turns out, however, that a
+very simple recursive method for computing the optimal forecast is
+available in the autoregressive case. The recursive method, called the
+chain rule of forecasting, is best learned by example.
+
+Consider the AR(1) process,
+\[y_ t = \phi y_{t−1} + \varepsilon_ t,\quad \varepsilon_ t ∼ W N (0, \sigma_2 ).\]First
+we construct the optimal 1-step-ahead forecast, and then we construct
+the optimal 2-step-ahead forecast, which depends on the optimal
+1-step-ahead forecast, which we've already constructed. Then we
+construct the optimal 3-step-ahead forecast, which depends on the
+already-computed 2-step-ahead forecast, which we've already constructed,
+and so on.
+
+To construct the 1-step-ahead forecast, we write out the process for
+time \(T + 1\), \[y T +1 = \phi y T + \varepsilon T +1 .\] Then,
+projecting the right-hand side on the time-T information set, we obtain
+\[y_{T +1,T} = \phi y T .\] Now let's construct the 2-step-ahead
+forecast. Write out the process for time T + 2,
+\[y_{T+2} = \phi y T +1 + \varepsilon_{T+2} .\] Then project directly on
+the time-T information set to get \[y{T +2,T} = \phi y_{T +1,T} .\]
+
+Note that the future innovation is replaced by 0, as always, and that we
+have directly replaced the time T +1 value of y with its
+earlier-constructed optimal forecast. Now let's construct the
+3-step-ahead forecast. Write out the process for time T + 3,
+\[y T +3 = \phi y_{T+2} + \varepsilon T +3 .\] Then project directly on
+the time-T information set, \[y T +3,T = \phi y{T +2,T} .\]
+
+The required 2-step-ahead forecast was already constructed. Continuing
+in this way, we can recursively build up forecasts for any and all
+future periods. Hence the name ``chain rule of forecasting.'' Note that,
+for the AR(1) process, only the most recent value of y is needed to
+construct optimal forecasts, for any horizon, and for the general AR(p)
+process only the p most recent values of y are needed.
+
+\hypertarget{point-forecasts-of-arma-processes}{%
+\subsection{Point Forecasts of ARMA
+processes}\label{point-forecasts-of-arma-processes}}
+
+Now we consider forecasting covariance stationary ARMA processes. Just
+as with autoregressive processes, we could always convert an ARMA
+process to an infinite moving average, and then use our
+earlier-developed methods for forecasting moving averages. But also as
+with autoregressive processes, a simpler method is available for
+forecasting ARMA processes directly, by combining our earlier approaches
+to moving average and autoregressive fore- casting.
+
+As always, we write out the ARM A(p, q) process for the future period of
+interest,
+\[y_{T +h} = \phi_ 1 y_{T +h−1} + \cdots + \phi_ p y_{T +h−p} + \varepsilon_{T +h} + \theta_ 1 \varepsilon_{T +h−1} + \cdots + \theta_ q \varepsilon_ {T +h−q} .\]
+On the right side we have various future values of y and
+\(\varepsilon\), and perhaps also past values, depending on the forecast
+horizon. We replace everything on the right-hand side with its
+projection on the time-T information set.
+
+That is, we replace all future values of y with optimal forecasts (built
+up recursively using the chain rule) and all future values of
+\(\varepsilon\) with optimal forecasts (0), yielding
+\[y_{ T +h,T} = \phi _1 y_{T +h−1,T} + \cdots + \phi_p y_{T+h−p,T} + \varepsilon_{ T +h,T} + \theta_1 \varepsilon_{T +h−1,T }+ \cdots + \theta_q \varepsilon_{T +h−q,T} .\]
+When evaluating this formula, note that the optimal time-T ``forecast''
+of any value of y or \(\varepsilon\) dated time T or earlier is just y
+or \(\varepsilon\) itself. As an example, consider forecasting the ARM
+A(1, 1) process,
+\[y t = \phi y t−1 + \varepsilon t + \theta\varepsilon_{t-1}
+\varepsilon t ∼ W N (0, \sigma_2 ).\]
+
+Let's find \(y_{T +1,T}\) . The process at time T + 1 is
+\[y T +1 = \phi y T + \varepsilon T +1 + \theta\varepsilon T .\]
+Projecting the right-hand side on \(\Omega_T\) yields
+\[y_{T +1,T} = \phi y _T + \theta\varepsilon _T .\] Now let's find
+\(y{T +2,T}\) . The process at time \(T + 2\) is
+\[y_{T+2} = \phi y _{T +1} + \varepsilon_{T+2} + \theta\varepsilon _{T +1 }.\]
+Projecting the right-hand side on \(\Omega_T\) yields
+\[y{T +2,T} = \phi y_{T +1,T} .\] Substituting our earlier-computed
+1-step-ahead forecast yields
+\[y_{T +2,T} = \phi (\phi y_ T + \theta\varepsilon_ T ) 
+= \phi^2 y _T + \phi\theta\varepsilon _T .\] Continuing, it is clear
+that \[y_{T +h,T} = \phi y_{T +h−1,T },\] for all \(h > 1\).
+
+\hypertarget{interval-and-density-forecasts}{%
+\section{Interval and Density
+Forecasts}\label{interval-and-density-forecasts}}
+
+The chain rule, whether applied to pure autoregressive models or to ARMA
+models, is a device for simplifying the computation of point forecasts.
+Interval and density forecasts require the h-step-ahead forecast error
+variance, which we get from the moving average representation, as
+discussed earlier. It is \[\sigma_h^2 
+= \sigma_2\sum_{i=0}^\infty b_i^2\] which we operationalize as
+\[\hat\sigma_h^2
+= \hat\sigma^2
+\sum_{i=0}^\infty \hat b_i^2\]
+
+Note that we don't actually estimate the moving average representation;
+rather, we solve backward for as many b's as we need, in terms of the
+original model parameters, which we then replace with estimates.
+
+Let's illustrate by constructing a 2-step-ahead 95\% interval forecast
+for the ARM A(1, 1) process. We already constructed the 2-step-ahead
+point forecast, \(y_{T +2,T}\); we need only compute the 2-step-ahead
+forecast error variance. The process is
+\[y_t = \phi y_{t−1} + \varepsilon_t + \theta\varepsilon_{t-1}\]
+
+Substitute backward for y t−1 to get
+\[y_t = \phi(\phi y_{t−2} + \varepsilon_{t-1} + \theta\varepsilon_{t−2 }) + \varepsilon_t + \theta\varepsilon_{t-1}= \varepsilon_t + (\phi + \theta)\varepsilon_{t-1} + \cdots\]
+We need not substitute back any farther, because the 2-step-ahead
+forecast error variance is \[\sigma _2^2 = \sigma^2 (1+b^2_1 ),\] where
+\(b_1\) is the coefficient on \(\varepsilon_{t-1}\) in the moving
+average representation of the ARMA(1,1) process, which we just
+calculated to be \(( \phi + \theta )\).
+
+Thus the 2-step-pahead interval forecast is
+\(y_{T +2,T} \pm 1.96\sigma_2\) , or
+\((\phi^2 y_T + \phi\theta\varepsilon_T ) \pm 1.96\sigma\sqrt{ 1 + (\phi + \theta)^2}\)
+. We make this operational as
+
+
+\end{document}
