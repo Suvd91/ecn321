@@ -298,6 +298,9 @@ $$\color{#e64173}{e_{T +2,T}} = \varepsilon_{T +2} + \theta_ 1 \varepsilon _{T +
 $$\color{#e64173}{\sigma _2^2} = \sigma^2 (1 + \theta_1^2 ).$$
 
 ]
+
+--
+
 .pull-right[
  - 2 алхамын дараахи таамаглал
 $$\color{red}{\hat{y}_{T +2,T}} = \hat{\theta}_2 \hat{\varepsilon} _T ,$$
