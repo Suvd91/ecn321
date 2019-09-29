@@ -391,7 +391,8 @@ ch9data[eval==TRUE, f:=fcst$mean,]
 library(dygraphs)
 a <- as.xts.data.table(as.data.table(ch9data))
 
-dygraph(a, main = "Canadian Employment Index: MA(4) forecasts") %>% 
+dygraph(a, main = "Canadian Employment Index: AR(2) forecasts") %>% 
+  dyAxis("y", label = "", valueRange = c(60, 130)) %>%  
   dyRangeSelector() %>%
   dySeries(name = "caemp", label = "Actual") %>%
   dySeries(c("hi","f", "lo"), label = "Predicted") %>%
@@ -399,6 +400,7 @@ dygraph(a, main = "Canadian Employment Index: MA(4) forecasts") %>%
   dyHighlight(highlightCircleSize = 5,
               highlightSeriesOpts = list(strokeWidth = 2)) %>%
   dyOptions(axisLineColor = "navy", gridLineColor = "grey")
+
 
 ```
 
@@ -416,6 +418,7 @@ ch9data[eval==TRUE, f:=fcst$mean,]
 a <- as.xts.data.table(as.data.table(ch9data))
 
 dygraph(a, main = "Canadian Employment Index: AR(2) forecasts") %>% 
+  dyAxis("y", label = "", valueRange = c(60, 130)) %>%  
   dyRangeSelector() %>%
   dySeries(name = "caemp", label = "Actual") %>%
   dySeries(c("hi","f", "lo"), label = "Predicted") %>%
