@@ -13,6 +13,8 @@
     \usepackage{fontspec}
   \fi
   \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+    \usepackage{xeCJK}
+    \setCJKmainfont[]{Noto Sans CJK JP}
 \fi
 % use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
@@ -24,6 +26,8 @@
 \usepackage[margin=1in]{geometry}
 \usepackage{hyperref}
 \hypersetup{unicode=true,
+            pdftitle={にほんご},
+            pdfauthor={Yufree},
             pdfborder={0 0 0},
             breaklinks=true}
 \urlstyle{same}  % don't use monospace font for urls
@@ -72,378 +76,400 @@
 
 \setlength{\droptitle}{-2em}
 
-  \title{}
-    \pretitle{\vspace{\droptitle}}
-  \posttitle{}
-    \author{}
-    \preauthor{}\postauthor{}
-    \date{}
-    \predate{}\postdate{}
-  
+  \title{にほんご}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{Yufree}
+    \preauthor{\centering\large\emph}
+  \postauthor{\par}
+      \predate{\centering\large\emph}
+  \postdate{\par}
+    \date{2016-09-19}
+
 
 \begin{document}
+\maketitle
 
-output: pdf\_document: default html\_document: default
+\subsection{にほんご}
 
-\hypertarget{ma1}{%
-\section{MA(1)}\label{ma1}}
+これは日本で はじめに
+先日、知人が社労士の試験を受けていたのですが、アプリで問題を色々と解けるものがあるらしく、少しの課金で通勤電車などでの勉強が捗るそうです。統計検定に関してもそのようなものがあればいいなとは思いますが、そんなものを作る気力はないので、よくある分布とその平均と分散に関する導出についてひたすら記していきます。これで少なくとも自分の通勤時の学習が捗ると思われます。なによりも、歳をとっても最低限の数式を扱うスキルがあれば思い出せるレベルで残すことも意識したいですね。
 
-time - \(T\) information set by \(\Omega_T\)
+※PC版でないと数式が切れてしまうので、SP版での閲覧はおすすめしません。
 
-\begin{itemize}
-\tightlist
-\item
-  \(\Omega_T = \{y_T , y_{T −1} , y_{T −2} , ..\},\)
-\item
-  \(\Omega _T = \{\varepsilon_T , \varepsilon_{T −1} , \varepsilon_{T −2} , \cdots\}.\)
-\end{itemize}
+今回登場する離散分布
+『数理統計学―基礎から学ぶデータ解析』という本に登場するものを式を補いながら紹介します。
 
-Assembling the discussion thus far, we can view the time-T information
-set as containing the current and past values of either (or both) \(y\)
-and \(\varepsilon,\)
-\[\Omega_T =\{ y_{T} , y_{T −1} , y_{T −2}, \cdots, \varepsilon _{T } , \varepsilon_{T −1} , \varepsilon _{T −2} , \cdots.\}\]
+1.一様分布 2.ベルヌーイ分布 3.二項分布 4.ポアソン分布 5.超幾何分布
+6.幾何分布 7.負の二項分布 1.一様分布
+確率変数が有限個の値をとり、それぞれの確率が\[\frac{1}{n}\]である分布。
 
-\hypertarget{optimal}{%
-\section{Optimal}\label{optimal}}
+一様分布の平均 \[E(X)=\frac{1}{n}\sum_{i=1}^{n}X_{i}\]
 
-optimal forecast of \(y\) at some future time \(T + h\).
+一様分布の分散 \[V(X)=\frac{1}{n}\sum_{i=1}^{n}(X_{i}-\bar X)^2\]
 
-The optimal forecast is the one with the smallest loss on average, that
-is, the forecast that minimizes expected loss.
+2.ベルヌーイ分布
+等確率の原理に従うとして、あるトラックの中にある「ちくわぶ」を取り出していった場合、確率θで「ちくわぶ」は穴が空いておらず、確率(1-θ)で穴が空いているとする。穴の空いていない「ちくわぶ」の割合はベルヌーイ分布に従う。
 
-optimal forecast is the conditional mean,
-\[\mathrm{E}(y_{T +h} |\Omega_T ),\] In general, the conditional mean
-need not be a linear function of the elements of the information set.
-Because linear functions are particularly tractable, we prefer to work
-with linear forecasts -- forecasts that are linear in the elements of
-the information set -- by finding the best linear approximation to the
-conditional mean, called the linear projection, denoted
-\[P(y_{T +h} |\Omega_T ).\] This explains the common term ``linear least
-squares forecast.'' The linear projection is often very useful and
-accurate, because the conditional mean is often close to linear. In
-fact, in the Gaussian case the conditional expectation is exactly
-linear, so that
-\[\mathrm{E}(y_{T +h} |\Omega_T ) = P (y_{T +h} |\Omega_T ).\]
+ベルヌーイ分布の平均 \[E(X)=1 \times \theta + 0 \times (1-\theta ) \ \]
+\[ = \theta \]
 
-Our forecasting method is always the same: we write out the process for
-the future time period of interest, \(T + h\), and project it on what's
-known at time \(T\) , when the forecast is made. This process is best
-learned by example.
+ベルヌーイ分布の分散
+\[V(X)=(1-\theta)^2 \times \theta + (0 – \theta)^2 \times (1-\theta ) \ \]
+\[ = \left[ (1-\theta) \times \theta + \theta^2 \right] \times (1-\theta) \]
+\[ = \theta(1-\theta) \]
 
-\hypertarget{d}{%
-\section{d}\label{d}}
+3.二項分布
+一つの事象（「ちくわぶ」に穴が空いているかどうか）に関する、確率θからなるベルヌーイ分布に従う確率変数列を
+\[X_1 , X_2, \dots ,X_n\]
+として、それらの和（n回試行した際の「ちくわぶ」に穴が空いていない個数）を
+\[X = X_1 + X_2 + \dots + X_n\]
+とする。その和の従う確率分布は二項分布と呼ばれ、
+\[P(X=x):= {}_n C_x \theta^x(1-\theta)^{n-x}\] と表される。
 
-Consider an MA(2) process,
-\[y_t = \varepsilon_t + \theta_1 \varepsilon_{t−1} + \theta_2 \varepsilon_{t−2},\quad \varepsilon_t ∼ W N (0, \sigma ^2 ).\]
-Suppose we're standing at time \(T\) and we want to forecast
-\(y_{T +1}\) . First we write out the process for \(T + 1\),
-\[y_{T +1} = \varepsilon_{T +1} + \theta_1 \varepsilon _T + \theta_2 \varepsilon_{T −1} .\]
+二項分布の平均
+\[E(X)=\sum_{x=0}^{n}x \times {}_n C_x \theta^x(1-\theta)^{n-x} \]
 
-Then we project on the time-T information set, which simply means that
-all future innovations are replaced by zeros. Thus
-\[y_{ T +1,T} = P (y_{T +1} |\Omega_T ) = \theta_1 \varepsilon_T + \theta_2 \varepsilon_{T −1} .\]
+x=0のときは0なので、
 
-To forecast 2 steps ahead, we note that
-\[y_{T +2} = \varepsilon_{T +2} + \theta_1 \varepsilon_{T +1} + \theta _2 \varepsilon_T ,\]
-and we project on the time-T information set to get
-\[y_{T +2,T} = \theta_2 \varepsilon_T .\] Continuing in this fashion, we
-see that \[y_{ T +h,T} = 0,\] for all \(h>2\).
+\[ = \sum_{x=1}^{n} \frac{n!}{(n-x)!(x-1)!}\theta^x(1-\theta)^{n-x}\]
+\[ = n \theta \sum_{x=1}^{n} \frac{(n-1)!}{(n-x)!(x-1)!}\theta^{x-1}(1-\theta)^{n-x}\]
+\[ = n \theta \sum_{x=1}^{n} \frac{(n-1)!}{\left[ (n-1) – (x-1) \right]!(x-1)!}\]
+\[ \times \theta^{x-1}(1-\theta)^{ (n-1) – (x-1) } \] ここで \[y = x-1\]
+とおくと、
 
-Now let's compute the corresponding forecast errors. We have:
-\[e_{T +1,T} = \varepsilon_{T +1} W N\]
-\[e_{T +2,T} = \varepsilon _{T +2} + \theta_1 \varepsilon _{T +1}  (M A(1))\]
-\[e_{ T +h,T} = \varepsilon_{T +h}  + \theta _1 \varepsilon_{T +h−1} + \theta_2 \varepsilon
-_{T +h−2} (M A(2)),\] for all \(h>2\).
+\[ = n \theta \sum_{y=0}^{n-1} {}_{n-1} C_y \theta^y(1-\theta)^{n-1-y}\]
+二項分布の和は1であるという性質を使えば、 \[ = n \theta \]
 
-Finally, the forecast error variances are: \[\sigma_1^2 = \sigma^2\]
-\[\sigma_2^2 = \sigma_2 (1 + \theta_1^2 )\]
-\[\sigma_h^2  = \sigma_2 (1 + \theta_1^2 + \theta_2^2 ),\] or all h
-\textgreater{} 2. Moreover, the forecast error variance for \(h>2\) is
-just the unconditional variance of \(y_t\).
+二項分布の分散
+\[E[X(X-1)] = \sum_{x=0}^{n} x(x-1) {}_n C_x \theta^x(1-\theta)^{n-x} \]
 
-Now consider the general M A(q) case. The model is
-\[y_t = \varepsilon_ t + \theta_ 1 \varepsilon_{t-1} + \cdots +\theta_ q \varepsilon_{t−q}.\]
-First, consider the forecasts. If \(h\leq\), the forecast has the form
-\[y_{ T +h,T} = 0 + \text{"adjustment"}\] whereas if \(h>q\) the
-forecast is \[y_{ T +h,T} = 0.\]
+x = 1, 2のときは0なので、
 
-Thus, an M A(q) process is not forecastable (apart from the
-unconditional mean) more than \(q\) steps ahead. All the dynamics in the
-M A(q) process, which we exploit for forecasting, ``wash out'' by the
-time we get to horizon q, which reflects the autocorrelation structure
-of the M A(q) process. (Recallthat, as we showed earlier, it cuts off at
-displacement q.) Second, consider the corresponding forecast errors.
-They are \[e_{ T +h,T} = M A(h − 1)\] for \(h \leq q\) and
-\[e_{ T +h,T} = M A(q)\] for h \textgreater{} q. The h-step-ahead
-forecast error for \(h > q\) is just the process itself, minus its mean.
+\[= \sum_{x=2}^{n} \frac{n!}{(n-x)!(x-2)!} \theta^x(1-\theta)^{n-x} \]
+\[= \sum_{x=2}^{n} \frac{n!}{\left[ (n-2) – (x-2) \right]!(x-2)!} \theta^x(1-\theta)^{(n-2) – (x-2) } \]
+\[= n(n-1)\theta^2 \sum_{x=2}^{n} \frac{n!}{\left[ (n-2) – (x-2) \right]!(x-2)!} \theta^{x-2}(1-\theta)^{(n-2) – (x-2) } \]
+ここで \[y = x -2\] とおくと、
+\[= n(n-1)\theta^2 \sum_{y=0}^{n-2} {}_{n-2} C_y \theta^y(1-\theta)^{(n-2) – y } \]
+となり、二項分布の和が1であることから、 \[= n(n-1)\theta^2\] となる。
 
-Finally, consider the forecast error variances. For h \leq q,
-\[\sigma_h^2  \leq var(y t ),\] whereas for \(h > q\),
-\[\sigma_h^2  = var(y t ).\] In summary, we've thus far studied the M
-A(2), and then the general M A(q), process, computing the optimal
-h-step-ahead forecast, the corresponding forecast error, and the
-forecast error variance. As we'll now see, the emerging patterns that we
-cataloged turn out to be quite general.
+\[V(X)=E(X^2)-[ E(X) ]^2\] \[ =E[X(X-1)] + E(X) -[ E(X) ]^2\]
+\[ =n(n-1)\theta^2 + n \theta -[ n \theta ]^2\] \[ =n\theta(1-\theta)\]
 
-\hypertarget{optimal-point-forecasts-for-infinite-order-moving-averages}{%
-\section{Optimal Point Forecasts for Infinite-Order Moving
-Averages}\label{optimal-point-forecasts-for-infinite-order-moving-averages}}
+また、この式より、二項分布に関してはθの絶対値が1よりも小さいことから、平均よりも分散の方が小さくなることがわかる。
 
-By now you're getting the hang of it, so let's consider the general case
-of an infinite-order M A process. The infinite-order moving average
-process may seem like a theoretical curiosity, but precisely the
-opposite is true. Any covariance stationary process can be written as a
-(potentially infinite-order) moving average process, and moving average
-processes are easy to understand and manipulate, because they are
-written in terms of white noise shocks, which have very simple
-statistical properties. Thus, if you take the time to understand the
-mechanics of constructing optimal forecasts for infinite moving-average
-processes, you'll understand everything, and you'll have some powerful
-technical tools and intuition at your command. Recall that the general
-linear process is Recall that the general linear process is
-\[y_t=\sum_{i=0}^\infty b_i\varepsilon_{t-i}, \quad \varepsilon_t\sim WN(0,\sigma^2)\]
-\[y_{T +h} = \varepsilon_{T +h} + b_1 \varepsilon_{T +h−1} + \cdots + b_h \varepsilon_T + b_{h+1} \varepsilon_{T −1} + \cdots\]
+4.ポアソン分布 二項分布において、平均値がλとおく。つまり、
+\[n\theta = \lambda\]
+λが一定でnが非常に大きいケースにおいて、その確率分布はポアソン分布に従う。λが一定でnが非常に大きいケースというのは、θが非常に小さいということになり、その事象が滅多に起きないような対象に対して扱われることが多い。
 
-Then we project \(y_{T +h}\) on the time-\(T\) information set. The
-projection yields zeros for all of the future \(\varepsilon\)'s (because
-they are white noise and hence unforecastable), leaving
-\[y_{ T +h,T} = b_h \varepsilon_T + b_{h+1} \varepsilon _{T −1} + \cdots\]
-It follows that the \(h\)-step ahead forecast error is serially
-correlated; it follows an MA(h − 1) process,
-\[e_{ T +h,T} = (y_{T +h} − y_{ T +h,T} ) =\sum_{i=0}^\infty b_i\varepsilon_{t-i}, \quad \varepsilon_t\]
+ポアソン分布の導出は二項分布からネイピア数を用いて導出する方法や、微分方程式を用いた方法などがある。
 
-with mean 0 and variance
-\[\sigma _h^2=\sigma ^ 2\sum_{i=0}^{h-1} b_i^2.\]
+ポアソン分布の導出（二項分布からver）
+\[{}_{n} C_x \theta^x(1-\theta)^{n-x}\]
+\[ = \frac{n(n-1) \dots (n-x+1)}{x!} \theta^x(1-\theta)^{n-x}\]
 
-A number of remarks are in order concerning the optimal forecasts of the
-general linear process, and the corresponding forecast errors and
-forecast error variances. First, the 1-step-ahead forecast error is
-simply \(\varepsilon T +1\) . \(\varepsilon T +1\) is that part of
-\(y T +1\) that can't be linearly forecast on the basis of \(\Omega_t\)
-(which, again, is why it is called the innovation). Second, although it
-might at first seem strange that an optimal forecast error would be
-serially correlated, as is the case when h \textgreater{} 1, nothing is
-awry. The serial correlation can't be used to improve forecasting
-performance, because the autocorrelations of the M A(h−1) process cut
-off just before the beginning of the time-T information set \$
-\varepsilon T , \varepsilon T −1 , \cdots. \$This is a general and
-tremendously important property of the errors associated with optimal
-forecasts: errors from optimal forecasts can't be forecast using
-information available when the forecast was made.
+ここで、 \[\theta = \frac{\lambda}{n}\] とすると
+\[ = \frac{1\left(1-\frac{1}{n}\right) \dots \left(1-\frac{x-1}{n}\right)}{x!} \left(\frac{\lambda}{n}\right)^x\left(1-\frac{\lambda}{n}\right)^{n-x}n^x\]
+\[ = \frac{1\left(1-\frac{1}{n}\right) \dots \left(1-\frac{x-1}{n}\right)}{x!} \lambda^x\left(\left(1-\frac{\lambda}{n}\right)^{-\frac{n}{\lambda}}\right)^{-\lambda} \left(1-\frac{\lambda}{n}\right)^{-x}\]
 
-If you can forecast the forecast error, then you can improve the
-forecast, which means that it couldn't have been optimal. Finally, note
-that as h approaches infinity \(y_{ T +h,T}\) approaches zero, the
-unconditional mean of the rocess, and \(a\), the unconditional variance
-of the process, which reflects the fact that as h approaches infinity
-the conditioning information on which the forecast is based becomes
-progressively less useful. In other words, the distant future is harder
-to forecast than the near future!
+nを無限大にすると、分母にのみnがある項は0になり、また、ネイピア数の定義から
+\[ \lim_{n\to\infty}{}_{n} C_x \theta^x(1-\theta)^{n-x} = \frac{\lambda^x e^{-\lambda}}{x!}\]
+となる。 \[P(X=x):= \frac{\lambda^x e^{-\lambda}}{x!}\]
+この確率分布がポアソン分布と呼ばれる。（x=0,1,2,\ldots{}）
 
-Now we construct interval and density forecasts. Regardless of whether
-the moving average is finite or infinite, we proceed in the same way, as
-follows. The definition of the h-step-ahead forecast error is
-\[e_{ T +h,T} = y_{T +h} − y_{ T +h,T} .\] Equivalently, the
-h-step-ahead realized value, \(y_{T +h} ,\) equals the forecast plus the
-error, \[y_{T +h} = y_{ T +h,T} + e_{ T +h,T} .\] If the innovations are
-normally distributed, then the future value of the series of interest is
-also normally distributed, conditional upon the information set
-available at the time the forecast was made, and so we have the 95\%
-h-step- ahead interval forecast \(y_{ T +h,T} \pm 1.96\sigma_h\) . In
-similar fashion, we construct the h-step-ahead density forecast as
-\[N (y_{ T +h,T} , \sigma_h^2  )\]. The mean of the conditional
-distribution of \(y_{T +h}\) is \(y_{ T +h,T}\) , which of course must
-be the case because we constructed the point forecast as the conditional
-mean, and the variance of the conditional distribution is \(\sigma_h^2\)
-, the variance of
+実際に、確率分布の性質を確かめると、
 
-As an example of interval and density forecasting, consider again the M
-A(2) process,
-\[y_t = \varepsilon_t + \theta_1 \varepsilon_{t-1} + \theta_2 \varepsilon_{t−2}
-\varepsilon_t ∼ W N (0, \sigma_2 ).\] Assuming normality, the
-1-step-ahead 95\% interval forecast is
-\[y_{T +1,T} = (\theta_1 \varepsilon_T + \theta_2 \varepsilon_{T −1} ) \pm 1.96\sigma ,\]
-and the 1-step-ahead density forecast is
-\[N (\theta_1 \varepsilon_T + \theta_2 \varepsilon_{T −1} , \sigma_2 ).\]
+\[ \sum_{x=0}^{\infty} P(X=x) = \sum_{x=0}^{\infty} \frac{\lambda^x e^{-\lambda}}{x!} \]
+\[ = e^{-\lambda} \sum_{x=0}^{\infty} \frac{\lambda^x}{x!} \]
+指数の和の公式より、 \[ = e^{-\lambda} e^{\lambda} = 1 \]
+よって、確率分布であることがわかる。
 
-\hypertarget{making-the-forecasts-operational}{%
-\section{Making the Forecasts
-Operational}\label{making-the-forecasts-operational}}
+ポアソン分布の導出（微分方程式ver）
+abrahamcowさんのブログにまさにそれが書かれていました。図も載っていて詳しくて良いです。
+他にも、英語の文献だとA Quick Way to See that the Poisson Distribution
+is the Appropriate Mathematical Formulation for a Counting Process with
+Constant Rate and Intensityなどがあります。
 
-So far we've assumed that the parameters of the process being forecast
-are known. In practice, of course, they must be estimated. To make our
-forecasting procedures operational, we simply replace the unknown
-parameters in our formulas with estimates, and the unobservable
-innovations with residuals. Consider, for example, the M A(2) process,
-\[y_t = \varepsilon_t + \theta_1 \varepsilon_{t-1} + \theta_2 \varepsilon_{t−2} .\]
+これらの文献を見ていただければ導出について理解できると思います。
 
-As you can readily verify using the methods we've introduced, the 2-step
-ahead optimal forecast, assuming known parameters, is
-\[y_{T +2,T} = \theta_2 \varepsilon _T ,\] with corresponding forecast
-error
-\[e_{T +2,T} = \varepsilon_{T +2} + \theta_ 1 \varepsilon _{T +1} ,\]
-and forecast-error variance
-\[\sigma _2^2 = \sigma_2 (1 + \theta_1^2 ).\]
+以下、これらの文献を参考にして式展開したものを記しておきます。
 
-To make the forecast operational, we replace unknown parameters with
-estimates and the time-T innovation with the time-T residual, yielding
-\[\hat y_{T +2,T} = \hat\theta_2 \hat\varepsilon_T\] and forecast error
-variance \[\hat\sigma_2^2 = \hat\sigma^2 (1 + \hat\theta_1^2 ).\] Then,
-if desired, we can construct operational 2-step-ahead interval and den-
-sity forecasts, as
-\[\hat y_{T +2,T} \pm \frac{z_\alpha}{2 \hat\sigma^2}\] and
-\[N (\hat y_{T +2,T} ,\hat\sigma^2 ).\]
+まず、3つの仮定をおきます。
 
-The strategy of taking a forecast formula derived under the assumption
-of known parameters, and replacing unknown parameters with estimates, is
-a natural way to operationalize the construction of point forecasts.
-However, using the same strategy to produce operational interval or
-density forecasts involves a subtlety that merits additional discussion.
-The forecast error variance estimate so obtained can be interpreted as
-one that ignores parameter estimation uncertainty, as follows.
+1.互いに背反する期間では現象が起こる確率は独立。
+つまり、X(t)とX(t+h)-X(t)は独立。
+2.非常に小さい区間で現象が起こる確率はその区間の長さに比例する。
+\[P\{X(t+h) – X(t) = 1 \} = \lambda h + o(h)\] ここでo(h)は
+\[\lim_{n\to 0} \frac{o(h)}{h}=0\] となる関数とする。また、λ
+\textgreater{} 0とする。
+3.非常に小さい区間で現象が2回以上起こる確率はその区間で現象が1回起こる確率に比べて、無視できるほど小さい。
+\[P\{X(t+h) – X(t) = k\} = o(h) \] ただし、k \textgreater{} 1とする。
+ここで、X(t)がrになる確率を以下の表現で表す。
+\[P_r (t) = P\{ X(t) = r \} \]
 
-Recall once again that the actual future value of the series is
-\[y_{T+2} = \varepsilon_{T+2} + \theta_1 \varepsilon_{ T +1} + \theta_2 \varepsilon_ T ,\]
-and that the operational forecast is
-\[\hat y_{T +2,T} = \hat \theta_2 \varepsilon_T .\] Thus the exact
-forecast error is
-\[\hat e_{T +2,T} = y_{T+2} − \hat y_{T +2,T} = \varepsilon_{T+2} + \theta_1 \varepsilon_{T +1} + (\theta_2 -\hat \theta_2 )\varepsilon_ T ,\]
-the variance of which is very difficult to evaluate.
+事象 \[X(t+h)=r\] は以下の3つに場合分けできる。
 
-So we make a convenient approximation: we ignore parameter estimation
-uncertainty by assuming that estimated parameters equal true parameters.
-We therefore set \((\theta_2 -\hat \theta_2 ))\) to zero, which yields
-\[\hat e_{T +2,T}= \varepsilon_{T+2} + \theta_ 1 \varepsilon_{T +1} ,\]
-with variance \[\sigma _2^2 = \sigma_2 (1 + \theta_1^2 ),\] which we
-make operational as
-\(\hat\sigma _2^2 = \hat\sigma ^2 (1 + \hat \theta^2).\)
+1.\[ \{ X(t) = r,X(t+h) – X(t) = 0 \}\] この \[X(t+h) – X(t) = 0\]
+は仮定2と仮定3の式を1から差っ引いたものによって確率を計算できる。また、仮定1から互いに背反する期間では現象が起こる確率は独立のため、同時確率は各々の積で表される。
+\[P\{ X(t) = r \} (1 – \lambda h – o(h) – o(h) )\]
 
-\hypertarget{forecasting-cycles-from-an-ar-wolds-chain-rule}{%
-\section{Forecasting Cycles From an AR: Wold's Chain
-Rule}\label{forecasting-cycles-from-an-ar-wolds-chain-rule}}
+2.\[ \{ X(t) = r-1,X(t+h) – X(t) = 1 \}\] 仮定2より、
+\[P\{ X(t) = r-1 \} (\lambda h + o(h))\] によって表される。
+3.\[ \{ X(t+h) = r-k,X(t+h) – X(t) = k \} , k > 1 \] 仮定3より、
+\[P\{ X(t+h) = r-k \} o(h)\] によって表される。
 
-\#\#Point Forecasts of Autoregressive Processes
+これらは期間が違うため、仮定より互いに背反であることから、3つに場合分けの確率の和で表現する。
+\[P_r(t+h) = P\{ X(t) = r \} \]
+\[= P\{ X(t) = r \} (1 – \lambda h – o(h) – o(h) ) \]
+\[+ P\{ X(t) = r-1 \} (\lambda h + o(h)) + P\{ X(t+h) = r-k \} o(h)\]
 
-Because any covariance stationary AR(p) process can be written as an
-infinite moving average, there's no need for specialized forecasting
-techniques for autoregressions. Instead, we can simply transform the
-autoregression into a moving average, and then use the techniques we
-developed for forecasting moving averages. It turns out, however, that a
-very simple recursive method for computing the optimal forecast is
-available in the autoregressive case. The recursive method, called the
-chain rule of forecasting, is best learned by example.
+\[= P_r(t)(1-\lambda h) + P_{r-1}(t)\lambda h + o(h) \]
 
-Consider the AR(1) process,
-\[y_ t = \phi y_{t−1} + \varepsilon_ t,\quad \varepsilon_ t ∼ W N (0, \sigma_2 ).\]First
-we construct the optimal 1-step-ahead forecast, and then we construct
-the optimal 2-step-ahead forecast, which depends on the optimal
-1-step-ahead forecast, which we've already constructed. Then we
-construct the optimal 3-step-ahead forecast, which depends on the
-already-computed 2-step-ahead forecast, which we've already constructed,
-and so on.
+\[P_r(t+h) – P_r(t) = -\lambda h P_r(t) + P_{r-1}(t)\lambda h + o(h) \]
 
-To construct the 1-step-ahead forecast, we write out the process for
-time \(T + 1\), \[y T +1 = \phi y T + \varepsilon T +1 .\] Then,
-projecting the right-hand side on the time-T information set, we obtain
-\[y_{T +1,T} = \phi y T .\] Now let's construct the 2-step-ahead
-forecast. Write out the process for time T + 2,
-\[y_{T+2} = \phi y T +1 + \varepsilon_{T+2} .\] Then project directly on
-the time-T information set to get \[y{T +2,T} = \phi y_{T +1,T} .\]
+\[\frac{P_r(t+h) – P_r(t)}{h} = -\lambda P_r(t) + \lambda P_{r-1}(t) + \frac{o(h)}{h} \]
+hの極限をとると、
+\[\lim_{h\to 0} \frac{P_r(t+h) – P_r(t)}{h} = -\lambda P_r(t) + \lambda P_{r-1}(t) \]
+となる。
 
-Note that the future innovation is replaced by 0, as always, and that we
-have directly replaced the time T +1 value of y with its
-earlier-constructed optimal forecast. Now let's construct the
-3-step-ahead forecast. Write out the process for time T + 3,
-\[y T +3 = \phi y_{T+2} + \varepsilon T +3 .\] Then project directly on
-the time-T information set, \[y T +3,T = \phi y{T +2,T} .\]
+これらは r = 0のとき \[\frac{P_0(t)}{dt} = – \lambda P_0(t)\]
 
-The required 2-step-ahead forecast was already constructed. Continuing
-in this way, we can recursively build up forecasts for any and all
-future periods. Hence the name ``chain rule of forecasting.'' Note that,
-for the AR(1) process, only the most recent value of y is needed to
-construct optimal forecasts, for any horizon, and for the general AR(p)
-process only the p most recent values of y are needed.
+r ≠ 0のとき
+\[\frac{P_r(t)}{dt} = -\lambda P_r(t) + \lambda P_{t-1}(t), r = 1,2,\dots\]
 
-\hypertarget{point-forecasts-of-arma-processes}{%
-\subsection{Point Forecasts of ARMA
-processes}\label{point-forecasts-of-arma-processes}}
+となる微分方程式として表される。
 
-Now we consider forecasting covariance stationary ARMA processes. Just
-as with autoregressive processes, we could always convert an ARMA
-process to an infinite moving average, and then use our
-earlier-developed methods for forecasting moving averages. But also as
-with autoregressive processes, a simpler method is available for
-forecasting ARMA processes directly, by combining our earlier approaches
-to moving average and autoregressive fore- casting.
+まず、r=0の場合の微分方程式を解くと、
 
-As always, we write out the ARM A(p, q) process for the future period of
-interest,
-\[y_{T +h} = \phi_ 1 y_{T +h−1} + \cdots + \phi_ p y_{T +h−p} + \varepsilon_{T +h} + \theta_ 1 \varepsilon_{T +h−1} + \cdots + \theta_ q \varepsilon_ {T +h−q} .\]
-On the right side we have various future values of y and
-\(\varepsilon\), and perhaps also past values, depending on the forecast
-horizon. We replace everything on the right-hand side with its
-projection on the time-T information set.
+\[\frac{P_0(t)}{dt} = – \lambda P_0(t) \Rightarrow \frac{d P_0(t)}{P_0(t)} = -\lambda dt \]
+両辺積分すると、 \[ \int \frac{d P_0(t)}{P_0(t)} = -\lambda \int dt \]
 
-That is, we replace all future values of y with optimal forecasts (built
-up recursively using the chain rule) and all future values of
-\(\varepsilon\) with optimal forecasts (0), yielding
-\[y_{ T +h,T} = \phi _1 y_{T +h−1,T} + \cdots + \phi_p y_{T+h−p,T} + \varepsilon_{ T +h,T} + \theta_1 \varepsilon_{T +h−1,T }+ \cdots + \theta_q \varepsilon_{T +h−q,T} .\]
-When evaluating this formula, note that the optimal time-T ``forecast''
-of any value of y or \(\varepsilon\) dated time T or earlier is just y
-or \(\varepsilon\) itself. As an example, consider forecasting the ARM
-A(1, 1) process,
-\[y t = \phi y t−1 + \varepsilon t + \theta\varepsilon_{t-1}
-\varepsilon t ∼ W N (0, \sigma_2 ).\]
+\[ \log P_0(t) = -\lambda t + C\] （Cは積分定数）
 
-Let's find \(y_{T +1,T}\) . The process at time T + 1 is
-\[y T +1 = \phi y T + \varepsilon T +1 + \theta\varepsilon T .\]
-Projecting the right-hand side on \(\Omega_T\) yields
-\[y_{T +1,T} = \phi y _T + \theta\varepsilon _T .\] Now let's find
-\(y{T +2,T}\) . The process at time \(T + 2\) is
-\[y_{T+2} = \phi y _{T +1} + \varepsilon_{T+2} + \theta\varepsilon _{T +1 }.\]
-Projecting the right-hand side on \(\Omega_T\) yields
-\[y{T +2,T} = \phi y_{T +1,T} .\] Substituting our earlier-computed
-1-step-ahead forecast yields
-\[y_{T +2,T} = \phi (\phi y_ T + \theta\varepsilon_ T ) 
-= \phi^2 y _T + \phi\theta\varepsilon _T .\] Continuing, it is clear
-that \[y_{T +h,T} = \phi y_{T +h−1,T },\] for all \(h > 1\).
+\[P_0(t) = e^{-\lambda t +C}\] Cは任意なので、 \[e^C=C\] として、
+\[P_0(t) = Ce^{-\lambda t}\] となる。 t =
+0で1件も発生しない確率は1なので、 \[P_0(0)=C=1\] から、C =
+1であることがわかり、 \[P_0(t) = e^{-\lambda t}\] となる。
 
-\hypertarget{interval-and-density-forecasts}{%
-\section{Interval and Density
-Forecasts}\label{interval-and-density-forecasts}}
+ここで、定数係数の1階線形微分方程式の解の公式は、
+\[y^{\prime} + p(x)y = q(x)\] に対して、
+\[y = e^{-p(x)x}\left[ \int q(x) e^{p(x)x}dx + C \right]\] で表される。
+この解の公式を今回のr=1の場合の微分方程式に当てはめると、
+\[y^{\prime} = P_1(t) , p(x) = -\lambda , q(x) = \lambda P_0(t) \]
+であるから、
+\[P_1(t) = e^{-\lambda t}\left[ \int \lambda P_0(t) e^{\lambda t} dt + C \right] \]
+となる。ここに、𝑃0(𝑡)を代入すると、
+\[ = e^{-\lambda t}\left[ \int \lambda e^{-\lambda t} e^{\lambda t} dt \right] \]
+\[ = e^{-\lambda t}\left[ \int \lambda dt + C \right] \]
+\[ = e^{-\lambda t} \lambda t + e^{-\lambda t}C \] となる。
+t=0においてX(0)=1の確率は0なので、C=0となり、
+\[P_1(t) = e^{-\lambda t} \lambda t \]
 
-The chain rule, whether applied to pure autoregressive models or to ARMA
-models, is a device for simplifying the computation of point forecasts.
-Interval and density forecasts require the h-step-ahead forecast error
-variance, which we get from the moving average representation, as
-discussed earlier. It is \[\sigma_h^2 
-= \sigma_2\sum_{i=0}^\infty b_i^2\] which we operationalize as
-\[\hat\sigma_h^2
-= \hat\sigma^2
-\sum_{i=0}^\infty \hat b_i^2\]
+同様にしてr=2の場合、
+\[P_2(t) = \frac{e^{-\lambda t \left( \lambda t \right)^2}}{2} \]
+r=3の場合、
+\[P_3(t) = \frac{e^{-\lambda t \left( \lambda t \right)^3}}{2 \times 3} \]
+となる。
 
-Note that we don't actually estimate the moving average representation;
-rather, we solve backward for as many b's as we need, in terms of the
-original model parameters, which we then replace with estimates.
+ここで、任意の整数r=kにおいて、
+\[P_k(t) = \frac{e^{\lambda t} \left( \lambda t \right)^k }{k!}\]
+が成り立つとする。
 
-Let's illustrate by constructing a 2-step-ahead 95\% interval forecast
-for the ARM A(1, 1) process. We already constructed the 2-step-ahead
-point forecast, \(y_{T +2,T}\); we need only compute the 2-step-ahead
-forecast error variance. The process is
-\[y_t = \phi y_{t−1} + \varepsilon_t + \theta\varepsilon_{t-1}\]
+r=k+1のとき、
+\[P_{k+1}(t) = \frac{e^{\lambda t} \left( \lambda t \right)^{k+1} }{(k+1)!}\]
+である。
+これはポアソン分布であり、定数係数の1階線形微分方程式よりポアソン分布が導出できることが示された。
 
-Substitute backward for y t−1 to get
-\[y_t = \phi(\phi y_{t−2} + \varepsilon_{t-1} + \theta\varepsilon_{t−2 }) + \varepsilon_t + \theta\varepsilon_{t-1}= \varepsilon_t + (\phi + \theta)\varepsilon_{t-1} + \cdots\]
-We need not substitute back any farther, because the 2-step-ahead
-forecast error variance is \[\sigma _2^2 = \sigma^2 (1+b^2_1 ),\] where
-\(b_1\) is the coefficient on \(\varepsilon_{t-1}\) in the moving
-average representation of the ARMA(1,1) process, which we just
-calculated to be \(( \phi + \theta )\).
+ポアソン分布の平均
+\[E(X)=\sum_{x=0}^{\infty}x \frac{e^{-\lambda}\lambda^x}{x!}\]
+\[ =\sum_{x=0}^{\infty} \frac{e^{-\lambda}\lambda^x}{(x-1)!}\]
+\[ =\lambda \sum_{x=1}^{\infty} \frac{e^{-\lambda}\lambda^{x-1}}{(x-1)!} = \lambda \]
 
-Thus the 2-step-pahead interval forecast is
-\(y_{T +2,T} \pm 1.96\sigma_2\) , or
-\((\phi^2 y_T + \phi\theta\varepsilon_T ) \pm 1.96\sigma\sqrt{ 1 + (\phi + \theta)^2}\)
-. We make this operational as
+ポアソン分布の分散
+\[E(X(X-1)) = \sum_{x=0}^{\infty}x(x-1) \frac{e^{-\lambda}\lambda^x}{x!}\]
+\[ = \sum_{x=0}^{\infty} \frac{e^{-\lambda}\lambda^x}{(x-2)!}\]
+\[ = \lambda^2 \sum_{x=2}^{\infty} \frac{e^{-\lambda}\lambda^{x-2}}{(x-2)!} =\lambda^2 \]
+
+\[V(X)=E(X^2)-[ E(X) ]^2\] \[ =E[X(X-1)] + E(X) -[ E(X) ]^2\]
+\[ = \lambda^2 + \lambda – \lambda^2 = \lambda \]
+
+ポアソン分布の再生性
+XとYは独立にそれぞれポアソン分布λ1とλ2に従うとする。
+\[P(Z=z) = \sum_{x=0}^{z} P(X=x, Y=z-x) \]
+\[ = \sum_{x=0}^{z} P(X=x)P(Y=z-x) \]
+\[ = \sum_{x=0}^{z} \frac{e^{-\lambda_1} \lambda_1^x }{x!} \frac{e^{-\lambda_2} \lambda_2^{z-x} }{(z-x)!} \]
+\[ = \frac{e^{-(\lambda_1 + \lambda_2 )}(\lambda_1 + \lambda_2)^z}{z!} \sum_{x=0}^{z}\frac{z!}{x!(z-x)!}\left( \frac{\lambda_1}{\lambda_1+\lambda_2} \right)^x \left( \frac{\lambda_2}{\lambda_1+\lambda_2} \right)^{z-x} \]
+二項分布の和は1になるので以下のように表される。
+\[ = \frac{e^{-(\lambda_1 + \lambda_2 )}(\lambda_1 + \lambda_2)^z}{z!} \]
+このように表されることを再生性があると呼ぶ。
+
+5.超幾何分布 N個の製品からなる仕切りのなかで、M個の不良品があるとする。
+非復元抽出でn個を抽出した際の、不良品の数をXとした際の確率分布は以下のように表される。
+
+\[P(X=x)=\frac{{}_M \mathrm{C} _x \times {}_{N-M} \mathrm{C} _{n-x}}{{}_N \mathrm{C} _n} \]
+
+xは非負の整数で \[max \{ 0, n -(N-M) \} \leq x \leq min \{ n, M \}\]
+に従うものとする。
+
+ここで製品の数Nが標本nに比べて十分に大きい場合を考える。
+\[\frac{{}_M \mathrm{C} _x \times {}_{N-M} \mathrm{C} _{n-x}}{{}_N \mathrm{C} _n} \]
+\[ = \frac{M!}{x!\left( M-x \right)!} \times \frac{\left( N – M \right)! }{\left( n-x\right)! \left[ N-M -\left( n-x\right) \right]!} \times \frac{n! \left(N-n\right)!}{N!} \]
+\[ = \frac{\left[ M(M-1)\dots (M-x+1)\right] }{x!(n-x)! \times \left[ N(N-1)\dots (N-n+1) \right]}\]
+\[ \times \left[ (N-M)(N-M-1)\dots (N-M-n+x+1)\right]\times n! \]
+組み合わせを使ってまとめると、分母と分子の数はn個であるから、分母分子にn個だけ1/Nを掛けると以下のようになる。
+\[ = \frac{{}_n \mathrm{C} _x \times \frac{M}{N} \left( \frac{M}{N} – \frac{1}{N} \right) \dots \left( \frac{M}{N} – \frac{x-1}{N} \right) }{1 \left( 1 – \frac{1}{N} \right) \dots \left( 1 – \frac{n-1}{N} \right) } \]
+\[ \times \left( \frac{N-M}{N} \right) \times \left( \frac{N-M}{N} – \frac{1}{N} \right) \dots \left( \frac{N-M}{N} – \frac{n-x-1}{N} \right) \]
+
+ここで \[ \theta = \frac{M}{N}\] から、 \[ M = N\theta\]
+として代入すると、
+
+\[ = \frac{{}_n \mathrm{C} _x \times \theta \left( \theta – \frac{1}{N} \right) \dots \left( \theta – \frac{x-1}{N} \right) }{1 \left( 1 – \frac{1}{N} \right) \dots \left( 1 – \frac{n-1}{N} \right) } \]
+
+\[ \times \left( 1-\theta \right) \times \left( (1-\theta) – \frac{1}{N} \right) \dots \left( (1-\theta) – \frac{n-x-1}{N} \right) \]
+
+となる。
+ここで、Nの極限を取ると以下のように、分母が全て1になり、以下のように表される。
+\[ \lim_{N\to\infty}\frac{{}_M \mathrm{C} _x \times {}_{N-M} \mathrm{C} _{n-x}}{{}_N \mathrm{C} _n} = {}_n \mathrm{C} _x \theta^x \left( 1 – \theta \right)^{n-x} \]
+これは二項分布と同じ形となる。
+つまり、超幾何分布において、製品の数が十分に大きいと二項分布と同じになる。
+
+超幾何分布の平均
+\[ E(X) = \sum_{x=0}^{n} x \frac{ {}_M \mathrm{C} _x \times {}_{N-M} \mathrm{C} _{n-x}}{{}_N \mathrm{C} _n} \]
+
+\[ = \frac{1}{ {}_N \mathrm{C} _n } \sum_{x=0}^{n} x \frac{M!}{(M-x)!x!} \times \frac{(N-M)!}{ \left[ N-M-(n-x) \right]! (n-x)!}\]
+
+\[ = \frac{M}{ {}_N \mathrm{C} _n} \sum_{x=0}^{n} \frac{(M-1)!}{\left[ (M-1)-(x-1) \right]!(x-1)!} \]
+
+\[ \times \frac{\left[ (N-1)-(M-1) \right]!}{\left[ (N-1)-(M-1)-\left[(n-1)-(x-1)\right] \right]! \left[ (n-1)-(x-1) \right]!}\]
+
+\[ = \frac{M}{ {}_N \mathrm{C} _n} \sum_{x=0}^{n} {}_{M-1} \mathrm{C} _{x-1} \times {}_{(N-1) – (M-1)} \mathrm{C} _{(n-1)-(x-1)} \]
+
+\[ = \frac{M}{ \frac{N!}{(N-n)!n!} } \sum_{x=0}^{n} {}_{M-1} \mathrm{C} _{x-1} \times {}_{(N-1) – (M-1)} \mathrm{C} _{(n-1)-(x-1)} \]
+
+\[ = \frac{nM}{ \frac{(N-1)!N}{\left[ (N-1)-(n-1)\right]!(n-1)!} } \sum_{x=0}^{n} {}_{M-1} \mathrm{C} _{x-1} \times {}_{(N-1) – (M-1)} \mathrm{C} _{(n-1)-(x-1)} \]
+
+\[ = \frac{nM}{N} \sum_{x=0}^{n} \frac{ {}_{M-1} \mathrm{C} _{x-1} \times {}_{(N-1) – (M-1)} \mathrm{C} _{(n-1)-(x-1)} }{ {}_{N-1} \mathrm{C} _{n-1} } \]
+
+超幾何分布の和は確率分布のため、1になることから、 \[ = \frac{nM}{N}\]
+となる。これは二項分布の平均と同じとなる。
+
+いちいち計算するのが面倒なので、二項係数の公式をここに載せておきます。
+
+\[ {}_n \mathrm{C} _r = {}_n \mathrm{C} _{n-r} \]
+\[r {}_n \mathrm{C} _r = n {}_{n-1} \mathrm{C} _{r-1}\]
+\[ {}_n \mathrm{C} _r = {}_{n-1} \mathrm{C} _{r} + {}_{n-1} \mathrm{C} _{r-1}\]
+
+超幾何分布の分散
+\[E(X(X-1))= \sum_{x=0}^{n} x(x-1) \frac{ {}_M \mathrm{C} _x \times {}_{N-M} \mathrm{C} _{n-x}}{{}_N \mathrm{C} _n}\]
+
+二項係数の公式より、
+
+\[ = \sum_{x=0}^{n} (x-1) \frac{ M \times {}_{M-1} \mathrm{C} _{x-1} \times {}_{N-M} \mathrm{C} _{n-x} \times n }{ N \times {}_{N-1} \mathrm{C} _{n-1} } \]
+\[ = \sum_{x=0}^{n} \frac{ M(M-1) \times {}_{M-2} \mathrm{C} _{x-2} \times {}_{(N-2)-(M-2)} \mathrm{C} _{(n-2)-(x-2)} \times n(n-1) }{ N(N-1) \times {}_{N-2} \mathrm{C} _{n-2}} \]
+超幾何分布の和が1であることから、 \[ n(n-1) \frac{M(M-1)}{N(N-1)} \]
+
+\[V(X)=E(X^2)-[ E(X) ]^2\] \[ =E[X(X-1)] + E(X) -[ E(X) ]^2\]
+\[ = n(n-1) \frac{M(M-1)}{N(N-1)}+ \frac{nM}{N} – \frac{n^2M^2}{N^2} \]
+\[ = \frac{nM}{N} \left[ (n-1) \frac{M-1}{N-1} + 1 – \frac{nM}{N} \right] \]
+\[ = \frac{nM}{N} \left( 1 – \frac{M}{N} \right) \left( \frac{N-n}{N-1} \right) \]
+
+超幾何分布の平均は二項分布と同じであったが、分散に関しては、
+\[ \left( \frac{N-n}{N-1} \right) \] だけ異なる。
+
+6.幾何分布
+復元抽出で、不良品が出るまで検査した際の観測された良品の数Xの確率分布は以下の幾何分布に従う。
+
+\[P(X=x)=\theta ( 1-\theta)^x \]
+
+幾何分布は無記憶性という性質を持っており、それは幾何分布のみが持つとされている。無記憶性はある時点から先に時点を進めた際に、過去の時点の影響が残らないことを指している。
+
+\[P(X=x+h | X \geq x) = \frac{P(X=x+h)}{ \sum_{y=x}^{\infty} P(X=y) }\]
+\[ = \frac{ \theta ( 1-\theta)^{x+h} }{ \sum_{y=x}^{\infty} \theta ( 1-\theta)^y } \]
+\[ = \frac{ \theta ( 1-\theta)^{h} }{ \sum_{y=x+1}^{\infty} \theta ( 1-\theta)^y } \]
+超幾何分布の和は1であるから、 \[ = \theta ( 1-\theta)^h \]
+\[ = P(X=h) \]
+
+幾何分布の平均 \[ E(X) = \sum_{x=0}^{\infty} x \theta ( 1-\theta)^x \]
+\[ = \sum_{x=1}^{\infty} x \theta ( 1-\theta)^x \]
+\[ = \theta \sum_{x=1}^{\infty} x ( 1-\theta)^x \]
+\[ = \theta \frac{d \sum_{x=1}^{\infty} (1-\theta)^x}{d(1-\theta)}\times (1-\theta) \]
+無限等比級数の和の公式より、
+\[ = \theta \frac{d \left( \frac{1-\theta}{1-(1-\theta)} \right) }{d(1-\theta)}\times (1-\theta) \]
+\[ = \theta \frac{d \frac{1-\theta}{\theta}}{d \theta} \times \frac{d \theta}{d(1-\theta)}\times (1-\theta)\]
+\[ = \theta \frac{-\theta – (1 – \theta)}{\theta^2} \times \frac{1}{-1}\times (1-\theta)\]
+\[ = \frac{1-\theta}{\theta}\]
+
+幾何分布に関しては、べき級数の和を使うことが多いので、毎回書くのも大変なためここで紹介しておく。
+
+\[ 1 + r + r^2 + r^3 + \dots = \sum_{k=0}^{\infty} r^k = \frac{1}{1-r}\]
+両辺をrで微分すると、
+\[ 1 + 2r + 3\times r^2 + \dots = \sum_{k=1}^{\infty} kr^{k-1} = \frac{1}{(1-r)^2}\]
+さらに両辺をrで微分すると、
+\[ 2 + 3\times2 r + 4\times 3 r^2 + \dots = \sum_{k=2}^{\infty} (k-1)kr^{k-2} = \frac{2}{(1-r)^3}\]
+となる。
+
+幾何分布の分散
+\[ E(X(X-1)) = \sum_{x=0}^{\infty} x(x-1) \theta ( 1-\theta)^x \]
+\[ = \theta (1-\theta)^2 \sum_{x=2}^{\infty} x(x-1) ( 1-\theta)^x \]
+べき級数の和を用いると、
+\[ = \theta (1-\theta)^2 \frac{2}{\left[ 1 – (1-\theta) \right]^3 }\]
+\[ = \frac{2(1-\theta)^2}{\theta^2} \]
+
+\[V(X)=E(X^2)-[ E(X) ]^2 =E[X(X-1)] + E(X) -[ E(X) ]^2 \]
+\[ = \frac{2(1-\theta)^2}{\theta^2} + \frac{1-\theta}{\theta} – \frac{(1-\theta)^2}{\theta^2} = \frac{(1-\theta)^2 + \theta(1-\theta)}{\theta^2} \]
+\[ = \frac{1-\theta}{\theta^2}\]
+
+θの絶対値は1以下なので、幾何分布においては、分散が平均よりも大きくなることがわかる。
+
+7.負の二項分布
+r個の不良品が見つかるまでに観測した良品の数Xが従う確率分布で、以下のように表される。
+
+\[P(X=x)={}_{r+x-1} \mathrm{C} _x \theta^r (1-\theta)^x , x=0,1,2,\dots\]
+負と呼ばれる所以は、以下のように組み合わせを負で表現できるところにある。
+
+以下では実際に負で表現できるかを示す。
+\[P(X=x)={}_{-r} \mathrm{C} _x \theta^r(\theta – 1)^x\]
+
+\[ {}_{r+x-1} \mathrm{C} _x = \frac{(r+x-1)(r+x-2)\dots(r+1)r}{x!} \]
+分子の数はx個あるので、おのおの-1を掛けると
+\[ = (-1)^x \frac{(-r)(-r-1)\dots(-r-(x-2))(-r-(x-1))}{x!}\]
+\[ = (-1)^x \frac{(-r)!}{(-r-x)!x!}\]
+\[ = (-1)^x {}_{-r} \mathrm{C} _x \] よって、
+\[P(X=x)=(-1)^x {}_{-r} \mathrm{C} _x \theta^r (1-\theta)^x \]
+\[ =(-1)^x {}_{-r} \mathrm{C} _x \theta^r (\theta-1)^x \]
+
+負の二項分布の平均
+\[E(X) = \sum_{x=0}^{\infty} x \times {}_{r+x-1} \mathrm{C} _x \theta^r (1-\theta)^x \]
+
+\[ =\sum_{x=1}^{\infty} \frac{(r+x-1)!\theta^r (1-\theta)^x}{(x-1)!(r-1)!} \]
+ここでx = y + 1 として
+\[ =\sum_{y=0}^{\infty} \frac{(r+y)!\theta^r (1-\theta)^{y+1}}{(y+1-1)!(r-1)!} \]
+\[ = \frac{r(1-\theta)}{\theta} \sum_{y=0}^{\infty} \frac{(r+y)! \theta^{r+1} (1-\theta)^{y}}{y!r!} \]
+\[ = \frac{r(1-\theta)}{\theta} \sum_{y=0}^{\infty} \frac{(r+y)(r+y-1)\dots (r+1) \theta^{r+1} (1-\theta)^{y}}{y!} \]
+\[ = \frac{r(1-\theta)}{\theta} \sum_{y=0}^{\infty} {}_{r+y} \mathrm{C} _{y} \theta^{r+1} (1-\theta)^y \]
+ここで負の二項分布の和は1であることから、
+\[ = \frac{r(1-\theta)}{\theta} \] となる。
+
+負の二項分布の分散
+\[ E(X(X-1)) = \sum_{x=0}^{\infty} x(x-1) \times {}_{r+x-1} \mathrm{C} _x \theta^r (1-\theta)^x \]
+
+\[ = \sum_{x=2}^{\infty} \frac{(x+r-1)(x+r-2)\dots r}{(x-2)!} \theta^r (1-\theta)^x \]
+
+ここでx = y + 2 として
+
+\[ = \sum_{y=0}^{\infty} \frac{(y+r+1)(y+r)\dots r}{y!} \theta^r (1-\theta)^{y+2} \]
+\[ = \frac{r(r+1)(1-\theta)^2}{\theta^2} \sum_{y=0}^{\infty} \frac{(y+r+1)(y+r)\dots (r+2)}{y!} \theta^{r+2} (1-\theta)^{y} \]
+\[ = \frac{r(r+1)(1-\theta)^2}{\theta^2} \sum_{y=0}^{\infty} {}_{r+y+1} \mathrm{C} _{y} \theta^{r+2} (1-\theta)^y \]
+ここで負の二項分布の和は1であることから、
+\[ = \frac{r(r+1)(1-\theta)^2}{\theta^2} \]
+
+\[V(X)=E(X^2)-[ E(X) ]^2 =E[X(X-1)] + E(X) -[ E(X) ]^2 \]
+\[ = \frac{r(r+1)(1-\theta)^2}{\theta^2} + \frac{r(1-\theta)}{\theta} – \frac{r^2(1-\theta)^2}{\theta^2} \]
+\[ = \frac{(1-\theta)^2r + (1-\theta)\theta r}{\theta^2} \]
+\[ = \frac{(1-\theta)\left[ (1-\theta)r + \theta r \right]}{\theta^2} \]
+\[ = \frac{r(1-\theta)}{\theta^2} \]
+
+θの絶対値は1以下なので、負の二項分布においては、分散が平均よりも大きくなることがわかる。
 
 
 \end{document}

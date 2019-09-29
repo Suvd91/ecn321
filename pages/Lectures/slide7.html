@@ -7,6 +7,15 @@
     <link href="slide7_files/remark-css/default.css" rel="stylesheet" />
     <link href="slide7_files/remark-css/metropolis.css" rel="stylesheet" />
     <link href="slide7_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <script src="slide7_files/htmlwidgets/htmlwidgets.js"></script>
+    <script src="slide7_files/jquery/jquery.min.js"></script>
+    <link href="slide7_files/dygraphs/dygraph.css" rel="stylesheet" />
+    <script src="slide7_files/dygraphs/dygraph-combined.js"></script>
+    <script src="slide7_files/dygraphs/shapes.js"></script>
+    <script src="slide7_files/moment/moment.js"></script>
+    <script src="slide7_files/moment-timezone/moment-timezone-with-data.js"></script>
+    <script src="slide7_files/moment-fquarter/moment-fquarter.min.js"></script>
+    <script src="slide7_files/dygraphs-binding/dygraphs.js"></script>
     <link rel="stylesheet" href="my-css.css" type="text/css" />
   </head>
   <body>
@@ -22,320 +31,278 @@ class: center, middle, inverse, title-slide
 <hr color='#EB811B' size=1px width=796px>
 </html>
 ### багш: Д. Хашбаатар
-### 2019/09/23
+### 2019/09/30
 
 ---
 
 
 
 
-# MA(1)
+# Оновчтой таамаглал
 
-time - `\(T\)` information set by `\(\Omega_T\)` 
+.hi-pink[Таамаглал]: `\(T\)`-хугацааны мэдээллийн олонлог `\(\Omega_T\)`-д үндэслэн `\(\{y_t\}\)` хугацаан цувааны ирээдүйн утга `\(\color{red}{\hat{y}_{T,T+h}}\)`-г үнэлэх.
 
- - `\(\Omega_T = \{y_T , y_{T −1} , y_{T −2} , ..\},\)`
- - `\(\Omega _T = \{\varepsilon_T , \varepsilon_{T −1} , \varepsilon_{T −2} , \cdots\}.\)`
+Таамаглал оновчтой эсэхийг хэрхэн мэдэх вэ?
 
-Assembling the discussion thus far, we can view the time-T information
-set as containing the current and past values of either (or both) `\(y\)` and `\(\varepsilon,\)`
-`$$\Omega_T =\{ y_{T} , y_{T −1} , y_{T −2}, \cdots, \varepsilon _{T } , \varepsilon_{T −1} , \varepsilon _{T −2} , \cdots.\}$$`
----
-# Optimal
-
- optimal forecastof `\(y\)` at some future time `\(T + h\)`. 
-
-The optimal forecast is the one with the smallest loss on average, that is, the forecast that minimizes expected loss.
-
-optimal forecast is the conditional mean,
-`$$\mathrm{E}(y_{T +h} |\Omega_T ),$$` 
-In general, the conditional mean need not be a linear function of the elements of the information set. Because linear functions are particularly tractable, we prefer to work with linear forecasts – forecasts that are linear in the elements of the information set – by  finding the best linear approximation
-to the conditional mean, called the linear projection, denoted
-`$$P(y_{T +h} |\Omega_T ).$$`
-
----
-This explains the common term “linear least squares forecast.” The linear projection is often very useful and accurate, because the conditional mean is often close to linear. In fact, in the Gaussian case the conditional expectation is exactly linear, so that 
-`$$\mathrm{E}(y_{T +h} |\Omega_T ) = P (y_{T +h} |\Omega_T ).$$`
-
----
-
- Our forecasting method is always the same: we write out the process for the future time period of interest, `\(T + h\)`, and project it on what’s known at time `\(T\)` , when the forecast is made. This process is best learned by example. 
+ - дунджаар алдаа хамгийн бага байх таамаглагч
  
----
-# d
+--
+ 
+ `$$\min_{f}\mathrm{E}(f - y_{T+h})^2$$`
+ 
+--
 
-Consider an MA(2) process, 
-`$$y_t = \varepsilon_t + \theta_1 \varepsilon_{t−1} + \theta_2 \varepsilon_{t−2},\quad \varepsilon_t ∼ W N (0, \sigma ^2 ).$$`
-Suppose we’re standing at time `\(T\)` and we want to forecast `\(y_{T +1}\)` . First we write out the process for `\(T + 1\)`, 
-`$$y_{T +1} = \varepsilon_{T +1} + \theta_1 \varepsilon _T + \theta_2 \varepsilon_{T −1} .$$`
+ - .hi-slate[оновчтой таамаглал (optimal forecast)]
+ 
+ `$$\color{#e64173}{y_{T,T+h}=\mathrm{E}(y_{T+h}|\Omega_T)}$$` 
+
+ - Гауссийн &lt;sup&gt;.pink[†]&lt;/sup&gt; хувьсагчийн хувьд шугаман проекцтэй адил байна
+
+.footnote[.pink[†] Нормаль тархалттай санамсаргүй хувьсагчийг Гауссийн хувьсагч гэдэг]
 ---
-Then we project on the time-T information set, which simply means that all future innovations are replaced by zeros. Thus 
-`$$y_{ T +1,T} = P (y_{T +1} |\Omega_T ) = \theta_1 \varepsilon_T + \theta_2 \varepsilon_{T −1} .$$`
+# Мэдээллийн олонлог
+
+`\(T\)`-хугацааны мэдээллийн олонлог `\(\Omega_T\)`:
+
+--
+
+ - хугацаан цувааны түүх `$$\Omega_{T} = \{y_T , y_{T -1} , y_{T -2} , ..\},$$`
+
+--
+ - Стационарь хугацаан цувааны хувьд  `\(y\)`-г `\(\varepsilon\)` руу 1 утгатайгаар хөрвүүлж болох учир мэдээллийн агуулгын хувьд одоогийн болон өнгөрсөн шокуудтай адил `$$\Omega_{T} = \{\varepsilon_T , \varepsilon_{T -1} , \varepsilon_{T -2} , \cdots\}.$$`
+
+--
+
+.hi-pink[Мэдээллийн олонлог]
+
+`$$\Omega_T =\{ y_{T} , y_{T -1} , y_{T -2}, \cdots, \varepsilon _{T } , \varepsilon_{T -1} , \varepsilon _{T -2} , \cdots.\}$$`
+
 
 ---
-To forecast 2 steps ahead, we note that
+class: inverse, middle
+
+# MA процессийн оновчтой таамаглал
+
+---
+
+# Жишээ: MA(2)
+
+Дараахи MA(2) процессийг авч үзье, 
+`$$y_t = \varepsilon_t + \theta_1 \varepsilon_{t-1} + \theta_2 \varepsilon_{t-2},\quad \varepsilon_t \sim  W N (0, \sigma ^2 ).$$`
+`\(T\)` хугацаанаас 1 алхамын дараахи утга `\(y_{T +1}\)`-г таамаглана, 
+`$$y_{T +1} = \varepsilon_{T +1} + \theta_1 \varepsilon _T + \theta_2 \varepsilon_{T -1} .$$`
+--
+
+`\(\Omega_T\)`  дээрхи нөхцөлт хүлээгдсэн утга нь
+`$$\color{#e64173}{y_{T +1,T} = \mathrm{E} (y_{T +1} |\Omega_T )} = \theta_1 \varepsilon_T + \theta_2 \varepsilon_{T -1} .$$`
+
+---
+# MA(2) h-step-ahead forecast
+
+ - 2 алхмын дараахи утга
 `$$y_{T +2} = \varepsilon_{T +2} + \theta_1 \varepsilon_{T +1} + \theta _2 \varepsilon_T ,$$`
-and we project on the time-T information set to get
-`$$y_{T +2,T} = \theta_2 \varepsilon_T .$$`
-Continuing in this fashion, we see that
-`$$y_{ T +h,T} = 0,$$`
-for all `\(h&gt;2\)`.
----
-Now let’s compute the corresponding forecast errors. We have:
-`$$e_{T +1,T} = \varepsilon_{T +1} W N$$`
-`$$e_{T +2,T} = \varepsilon _{T +2} + \theta_1 \varepsilon _{T +1}  (M A(1))$$`
-`$$e_{ T +h,T} = \varepsilon_{T +h}  + \theta _1 \varepsilon_{T +h−1} + \theta_2 \varepsilon
-_{T +h−2} (M A(2)),$$`
-for all `\(h&gt;2\)`.
----
-Finally, the forecast error variances are:
-`$$\sigma_1^2 = \sigma^2$$`
-`$$\sigma_2^2 = \sigma_2 (1 + \theta_1^2 )$$`
-`$$\sigma_h^2  = \sigma_2 (1 + \theta_1^2 + \theta_2^2 ),$$`
-or all h &gt; 2. Moreover, the forecast error variance for `\(h&gt;2\)` is just the
-unconditional variance of `\(y_t\)`.
+
+--
+ - `\(\Omega_T\)`  дээрхи нөхцөлт хүлээгдсэн утга нь
+`$$\color{#e64173}{y_{T +2,T}} = \theta_2 \varepsilon_T .$$`
+
+--
+
+ - `\(h&gt;2\)` алхмын дараахи
+
+`$$\color{#e64173}{y_{T +h,T}} = 0,$$`
 
 ---
-Now consider the general M A(q) case. The model is
-`$$y_t = \varepsilon_ t + \theta_ 1 \varepsilon_{t-1} + \cdots +\theta_ q \varepsilon_{t−q}.$$`
-First, consider the forecasts. If `\(h\leq\)`, the forecast has the form
-`$$y_{ T +h,T} = 0 + \text{"adjustment"}$$`
-whereas if `\(h&gt;q\)` the forecast is
-`$$y_{ T +h,T} = 0.$$`
----
+# MA(2): Таамаглалын алдаа
 
-Thus, an M A(q) process is not forecastable (apart from the unconditional mean) more than `\(q\)` steps ahead. All the dynamics in the M A(q) process, which we exploit for forecasting, “wash out” by the time we get to horizon
-q, which reflects the autocorrelation  structure of the M A(q) process. (Recallthat, as we showed earlier, it cuts off at displacement q.) Second, consider the corresponding forecast errors. They are
-`$$e_{ T +h,T} = M A(h − 1)$$`  for `\(h\leq q\)` and
-`$$e_{ T +h,T} = M A(q)$$`
-for `\(h &gt; q\)`. The h-step-ahead forecast error for `\(h &gt; q\)` is just the process itself,
-minus its mean.
+Алхам бүрийн таамаглалын алдааг тооцвол
 
----
-Finally, consider the forecast error variances. For `\(h\leq q\)`,
-`$$\sigma_h^2  \leq \mathrm{Var}(y_t ),$$`
-whereas for `\(h &gt; q\)`,
-`$$\sigma_h^2  = \mathrm{Var}(y_t ).$$`
-In summary, we’ve thus far studied the M A(2), and then the general M A(q), process, computing the optimal h-step-ahead forecast, the corresponding forecast error, and the forecast error variance. As we’ll now see, the emerging patterns that we cataloged turn out to be quite general.
+`$$\begin{align} 
+\color{#e64173}{e_{T +1,T}}&amp;=  \varepsilon_{T +1}                                 &amp;\sim &amp;WN    \\ 
+\color{#e64173}{e_{T +2,T}}&amp;=  \varepsilon _{T +2} + \theta_1 \varepsilon _{T +1} &amp;\sim &amp;MA(1)\\
+\color{#e64173}{e_{T +h,T}}&amp;=  \varepsilon_{T +h}  + \theta _1 \varepsilon_{T +h-1} + \theta_2 \varepsilon
+_{T +h-2}&amp;\sim &amp;MA(2)
+\end{align}$$`
+
+--
+
+Алдааны вариацууд :
+`$$\begin{align} 
+\color{#e64173}{\sigma_1^2} &amp;=  \sigma^2    \\ 
+\color{#e64173}{\sigma_2^2}&amp;=  \sigma^2 (1 + \theta_1^2 )\\
+\color{#e64173}{\sigma_h^2}&amp;=  \sigma^2 (1 + \theta_1^2+\theta_2^2 )
+\end{align}$$`
 
 ---
-# Optimal Point Forecasts for Infinite-Order Moving Averages
+#MA(q)  
 
-By now you’re getting the hang of it, so let’s consider the general case of an infinite-order M A process. The infinite-order moving average process may seem like a theoretical curiosity, but precisely the opposite is true. Any covariance stationary process can be written as a (potentially infinite-order) moving average process, and moving average processes are easy to understand and manipulate, because they are written in terms of white noise shocks, which have very simple statistical properties. Thus, if you take the time to understand the mechanics of constructing optimal forecasts for infinite moving-average processes, you’ll understand everything, and you’ll have some powerful technical tools and intuition at your command.
-Recall that the general linear process is Recall that the general linear process is
+`$$y_t = \varepsilon_ t + \theta_ 1 \varepsilon_{t-1} + \cdots +\theta_ q \varepsilon_{t-q}.$$`
+
+Хэрэв `\(h&gt;q\)` бол 
+`$$\color{#e64173}{y_{ T +h,T}} = 0.$$`
+
+ - `\(q\)`-ээс цаашхи алхамыг таамаглах боломжгүй
+ 
+`\(h\leq q\)` үед `$$\color{#e64173}{y_{ T +h,T}} = 0 + \text{"adjustment"}$$`
+
+---
+# MA(q)
+
+Таамаглалын алдаа
+
+ - `\(h\leq q\)`,
+`$$\color{#e64173}{e_{ T +h,T}} = MA(h - 1)$$`   
+
+ - `\(h &gt; q\)`, `$$\color{#e64173}{e_{ T +h,T}} = MA(q)$$`
+--
+
+Алдааны вариацууд : 
+
+- `\(h\leq q\)`,
+`$$\color{#e64173}{\sigma_h^2 } \leq \mathrm{Var}(y_t ),$$`
+
+- `\(h &gt; q\)`,
+`$$\color{#e64173}{\sigma_h^2}  = \mathrm{Var}(y_t ).$$`
+
+
+---
+# `\(MA(\infty)\)` оновчтой таамаглал
+
+General linear process is
 `$$y_t=\sum_{i=0}^\infty b_i\varepsilon_{t-i}, \quad \varepsilon_t\sim WN(0,\sigma^2)$$`
-`$$y_{T +h} = \varepsilon_{T +h} + b_1 \varepsilon_{T +h−1} + \cdots + b_h \varepsilon_T + b_{h+1} \varepsilon_{T −1} + \cdots$$`
 
+ - `\(h\)` алхмын дараахи утга
+
+`$$y_{T +h} = \varepsilon_{T +h} + b_1 \varepsilon_{T +h-1} + \cdots + b_h \varepsilon_T + b_{h+1} \varepsilon_{T -1} + \cdots$$`
+
+--
+`\(\Omega_T\)`  дээрхи нөхцөлт хүлээгдсэн утга нь
+`$$\color{#e64173}{y_{T +h,T}} = b_h \varepsilon_T + b_{h+1} \varepsilon_{T-1} + \cdots$$`
+--
+Таамаглалын таамаглалын алдаа
+
+`$$\color{#e64173}{e_{ T +h,T}} = (y_{T +h} - \color{#e64173}{y_{ T +h,T} }) =\sum_{i=0}^{h-1} b_i\varepsilon_{T+h-i}\sim MA(h-1)$$`
 ---
+# Интервал болон нягтын таамаглал
 
-Then we project `\(y_{T +h}\)` on the time- `\(T\)` information set. The projection yields
-zeros for all of the future `\(\varepsilon\)`’s (because they are white noise and hence unforecastable), leaving
-`$$y_{T +h,T} = b_h \varepsilon_T + b_{h+1} \varepsilon_{T−1} + \cdots$$`
-It follows that the `\(h\)` -step ahead forecast error is serially correlated; it follows
-an MA(h − 1) process,
+`\(h\)` алхмын дараахи утга `\(y_{T +h},\)`  forecast plus the error,
+`$$y_{T +h} = \color{#e64173}{y_{ T +h,T} + e_{ T +h,T}} .$$`
+## 95% h-step- ahead interval forecast
+`$$y_{ T +h,T} \pm 1.96\sigma_h.$$` 
+## 95% h-step- ahead density forecast
 
-`$$e_{ T +h,T} = (y_{T +h} − y_{ T +h,T} ) =\sum_{i=0}^\infty b_i\varepsilon_{t-i}, \quad \varepsilon_t$$`
-
-with mean 0 and variance `$$\sigma _h^2=\sigma ^ 2\sum_{i=0}^{h-1} b_i^2.$$`
-
----
-
-A number of remarks are in order concerning the optimal forecasts of the general linear process, and the corresponding forecast errors and forecast error variances. First, the 1-step-ahead forecast error is simply `\(\varepsilon T +1\)` . `\(\varepsilon T +1\)` is that part of `\(y T +1\)` that can’t be linearly forecast on the basis of `\(\Omega_t\)` (which, again, is why it is called the innovation). Second, although it might at first seem strange that an optimal forecast error would be serially correlated, as is the case when h &gt; 1, nothing is awry. The serial correlation can’t be used to improve forecasting performance, because the autocorrelations of the M A(h−1) process cut off just before the beginning of the time-T information set `\(\varepsilon T , \varepsilon T −1 , \cdots.\)` This is a general and tremendously important property of the errors associated with optimal forecasts: errors from optimal forecasts can’t be forecast using information available when the forecast was made. 
----
-If
-you can forecast the forecast error, then you can improve the forecast, which means that it couldn’t have been optimal. Finally, note that as h approaches infinity `\(y_{ T +h,T}\)` approaches zero, the unconditional mean of the  rocess, and `\(a\)`, the unconditional variance of the process, which reflects the fact that as h approaches infinity the conditioning information on which the forecast is based becomes progressively less useful. In other words,
-the distant future is harder to forecast than the near future! 
-
----
-Now we construct interval and density forecasts. Regardless of whether the moving average is finite or infinite, we proceed in the same way, as follows. The definition of the h-step-ahead forecast error is
-`$$e_{ T +h,T} = y_{T +h} − y_{ T +h,T} .$$`
-Equivalently, the h-step-ahead realized value, `\(y_{T +h} ,\)` equals the forecast plus the error,
-`$$y_{T +h} = y_{ T +h,T} + e_{ T +h,T} .$$`
-If the innovations are normally distributed, then the future value of the series of interest is also normally distributed, conditional upon the information set available at the time the forecast was made, and so we have the 95% h-step- ahead interval forecast$y_{ T +h,T} \pm 1.96\sigma_h$ . In similar fashion, we construct the h-step-ahead density forecast as
 `$$N (y_{ T +h,T} , \sigma_h^2  )$$`.
-The mean of the conditional distribution of `\(y_{T +h}\)` is `\(y_{ T +h,T}\)` , which of course
-must be the case because we constructed the point forecast as the conditional
-mean, and the variance of the conditional distribution is `\(\sigma_h^2\)` , the variance of
+
 
 ---
+# Жишээ: MA(2)
 
-As an example of interval and density forecasting, consider again the
-M A(2) process,
-`$$y_t = \varepsilon_t + \theta_1 \varepsilon_{t-1} + \theta_2 \varepsilon_{t−2}
-\varepsilon_t ∼ W N (0, \sigma_2 ).$$`
-Assuming normality, the 1-step-ahead 95% interval forecast is
-`$$y_{T +1,T} = (\theta_1 \varepsilon_T + \theta_2 \varepsilon_{T −1} ) \pm 1.96\sigma ,$$`
-and the 1-step-ahead density forecast is
-`$$N (\theta_1 \varepsilon_T + \theta_2 \varepsilon_{T −1} , \sigma_2 ).$$`
+`$$y_t = \varepsilon_t + \theta_1 \varepsilon_{t-1} + \theta_2 \varepsilon_{t-2}
+\varepsilon_t \sim  W N (0, \sigma_2 ).$$`
+
+1-step-ahead 95% interval forecast 
+`$$y_{T +1,T} = (\theta_1 \varepsilon_T + \theta_2 \varepsilon_{T -1} ) \pm 1.96\sigma ,$$`
+1-step-ahead density forecast 
+`$$N (\theta_1 \varepsilon_T + \theta_2 \varepsilon_{T -1} , \sigma_2 ).$$`
  
 ---
-# Making the Forecasts Operational
+# Үнэлгээ
 
-So far we’ve assumed that the parameters of the process being forecast are known. In practice, of course, they must be estimated. To make our forecasting procedures operational, we simply replace the unknown parameters in our formulas with estimates, and the unobservable innovations with residuals. 
-Consider, for example, the M A(2) process,
-`$$y_t = \varepsilon_t + \theta_1 \varepsilon_{t-1} + \theta_2 \varepsilon_{t−2} .$$`
----
-As you can readily verify using the methods we’ve introduced, the 2-step
-ahead optimal forecast, assuming known parameters, is
-`$$y_{T +2,T} = \theta_2 \varepsilon _T ,$$`
-with corresponding forecast error
-`$$e_{T +2,T} = \varepsilon_{T +2} + \theta_ 1 \varepsilon _{T +1} ,$$`
-and forecast-error variance
-`$$\sigma _2^2 = \sigma_2 (1 + \theta_1^2 ).$$`
----
-To make the forecast operational, we replace unknown parameters with estimates and the time-T innovation with the time-T residual, yielding `$$\hat y_{T +2,T} = \hat\theta_2 \hat\varepsilon_T$$`
-and forecast error variance
-`$$\hat\sigma_2^2 = \hat\sigma^2 (1 + \hat\theta_1^2 ).$$`
-Then, if desired, we can construct operational 2-step-ahead interval and den-
-sity forecasts, as `$$\hat y_{T +2,T} \pm \frac{z_\alpha}{2 \hat\sigma^2}$$`
-and `$$N (\hat y_{T +2,T} ,\hat\sigma^2 ).$$`
+Параметрийн утгуудийг үнэлэн, үл ажиглагдах инновациудыг( `\(\varepsilon\)`) регрессийн үлдэгдлээр орлуулна
 
----
-The strategy of taking a forecast formula derived under the assumption of known parameters, and replacing unknown parameters with estimates, is a natural way to operationalize the construction of point forecasts. However, using the same strategy to produce operational interval or density forecasts involves a subtlety that merits additional discussion. The forecast error variance estimate so obtained can be interpreted as one that ignores parameter  estimation uncertainty, as follows.
----
-Recall once again that the actual future value of the series is
-`$$y_{T+2} = \varepsilon_{T+2} + \theta_1 \varepsilon_{ T +1} + \theta_2 \varepsilon_ T ,$$`
-and that the operational forecast is
-`$$\hat y_{T +2,T} = \hat \theta_2 \varepsilon_T .$$`
-Thus the exact forecast error is
-`$$\hat e_{T +2,T} = y_{T+2} − \hat y_{T +2,T} = \varepsilon_{T+2} + \theta_1 \varepsilon_{T +1} + (\theta_2 -\hat \theta_2 )\varepsilon_ T ,$$`
-the variance of which is very difficult to evaluate. 
----
-So we make a convenient
-approximation: we ignore parameter estimation uncertainty by assuming that
-estimated parameters equal true parameters. We therefore set `\((\theta_2 -\hat \theta_2 ))\)`
-to zero, which yields
-`$$\hat e_{T +2,T}= \varepsilon_{T+2} + \theta_ 1 \varepsilon_{T +1} ,$$`
-with variance
-`$$\sigma _2^2 = \sigma_2 (1 + \theta_1^2 ),$$`
-which we make operational as `\(\hat\sigma _2^2 = \hat\sigma ^2 (1 + \hat \theta^2).\)`
+--
+
+Жишээ нь MA(2) процессийн хувьд
+
+.pull-left[
+ - 2 алхамын дараахи таамаглал
+`$$\color{#e64173}{y_{T +2,T}} = \theta_2 \varepsilon _T ,$$`
+
+ - таамаглалын алдаа
+`$$\color{#e64173}{e_{T +2,T}} = \varepsilon_{T +2} + \theta_ 1 \varepsilon _{T +1} ,$$`
+ 
+ - алдааны вариац
+`$$\color{#e64173}{\sigma _2^2} = \sigma^2 (1 + \theta_1^2 ).$$`
+
+]
+.pull-right[
+ - 2 алхамын дараахи таамаглал
+`$$\color{red}{\hat{y}_{T +2,T}} = \hat{\theta}_2 \hat{\varepsilon} _T ,$$`
+
+ - таамаглалын алдаа
+`$$\color{red}{e_{T +2,T}} = "unforecastable"$$`
+ 
+ - алдааны вариац
+`$$\color{red}{\sigma _2^2} = \hat\sigma^2 (1 + \hat\theta_1^2 ).$$`
+]
 
 ---
+# AR процессийн цэгэн таамаглал
 
-# Forecasting Cycles From an AR: Wold’s Chain Rule
-
-##Point Forecasts of Autoregressive Processes
-
-Because any covariance stationary AR(p) process can be written as an infinite
-moving average, there’s no need for specialized forecasting techniques for
-autoregressions. Instead, we can simply transform the autoregression into a
-moving average, and then use the techniques we developed for forecasting moving averages. It turns out, however, that a very simple recursive method
-for computing the optimal forecast is available in the autoregressive case.
-The recursive method, called the chain rule of forecasting, is best
-learned by example. 
----
-Consider the AR(1) process,
-`$$y_ t = \phi y_{t−1} + \varepsilon_ t,\quad \varepsilon_ t ∼ W N (0, \sigma_2 ).$$`First we construct the optimal 1-step-ahead forecast, and then we construct
-the optimal 2-step-ahead forecast, which depends on the optimal 1-step-ahead
-forecast, which we’ve already constructed. Then we construct the optimal
-3-step-ahead forecast, which depends on the already-computed 2-step-ahead
-forecast, which we’ve already constructed, and so on.
+ - Стационар AR(p)процессийг руу хувиргаж болох учир тусгай арга шаардлагагүй мэт. 
+ - Chain Rule гэж нэрлэгдэх рекурсив арга тооцоог ихээр хялбарчилдаг
 
 ---
-To construct the 1-step-ahead forecast, we write out the process for time `\(T + 1\)`,
-`$$y T +1 = \phi y T + \varepsilon T +1 .$$`
-Then, projecting the right-hand side on the time-T information set, we obtain
-`$$y_{T +1,T} = \phi y T .$$`
-Now let’s construct the 2-step-ahead forecast. Write out the process for time
-T + 2,
-`$$y_{T+2} = \phi y T +1 + \varepsilon_{T+2} .$$`
-Then project directly on the time-T information set to get$$y{T +2,T} = \phi y_{T +1,T} .$$`
+# AR процессийн цэгэн таамаглал
+
+`$$y_ t = \phi y_{t-1} + \varepsilon_ t,\quad \varepsilon_ t \sim  W N(0, \sigma_2 ).$$`
+
+--
+
+`\(T + 1\)` хугацаанд `\(y\)` цувааны утга,
+`$$y_{T +1} = \phi y_T + \varepsilon_{T +1 }.$$`
+`\(\Omega_T\)` -руу проекцолбол
+`$$\color{#e64173}{y_{T +1,T}} = \phi y_T .$$`
+`\(T + 2\)` хугацаанд `\(y\)` цувааны утга,
+`$$y_{T+2} = \phi y_{T +1} + \varepsilon_{T+2} .$$`
+
+`\(\Omega_T\)`-руу проекцолбол `$$\color{#e64173}{y_{T +2,T}} = \phi \color{#e64173}{y_{T +1,T}} .$$`
 
 ---
-Note that the future innovation is replaced by 0, as always, and that we have
-directly replaced the time T +1 value of y with its earlier-constructed optimal
-forecast. Now let’s construct the 3-step-ahead forecast. Write out the process for time T + 3,
-`$$y T +3 = \phi y_{T+2} + \varepsilon T +3 .$$`
-Then project directly on the time-T information set,
-`$$y T +3,T = \phi y{T +2,T} .$$`
----
-The required 2-step-ahead forecast was already constructed.
-Continuing in this way, we can recursively build up forecasts for any and
-all future periods. Hence the name “chain rule of forecasting.” Note that,
-for the AR(1) process, only the most recent value of y is needed to construct
-optimal forecasts, for any horizon, and for the general AR(p) process only
-the p most recent values of y are needed.
----
-## Point Forecasts of ARMA processes
+class: inverse, middle
 
-Now we consider forecasting covariance stationary ARMA processes. Just
-as with autoregressive processes, we could always convert an ARMA process
-to an infinite moving average, and then use our earlier-developed methods
-for forecasting moving averages. But also as with autoregressive processes,
-a simpler method is available for forecasting ARMA processes directly, by
-combining our earlier approaches to moving average and autoregressive fore-
-casting.
+# ARMA процессийн оновчтой таамаглал
 
 ---
-As always, we write out the ARM A(p, q) process for the future period of
-interest,
-`$$y_{T +h} = \phi_ 1 y_{T +h−1} + \cdots + \phi_ p y_{T +h−p} + \varepsilon_{T +h} + \theta_ 1 \varepsilon_{T +h−1} + \cdots + \theta_ q \varepsilon_ {T +h−q} .$$`
-On the right side we have various future values of y and `\(\varepsilon\)`, and perhaps also
-past values, depending on the forecast horizon. We replace everything on the
-right-hand side with its projection on the time-T information set. 
+# ARMA(p, q)
+
+`\(T + h\)` хугацаанд `\(y\)` цувааны утга,
+`$$y_{T +h} = \phi_ 1 y_{T +h-1} + \cdots + \phi_ p y_{T +h-p} + \varepsilon_{T +h} + \theta_ 1 \varepsilon_{T +h-1} + \cdots + \theta_ q \varepsilon_ {T +h-q} .$$`
+`\(\Omega_T\)` -руу проекцолбол
+`$$\color{#e64173}{y_{ T +h,T}} = \phi _1 \color{#e64173}{y_{T +h-1,T}} + \cdots + \phi_p \color{#e64173}{y_{T+h-p,T}} + \color{#e64173}{\varepsilon_{ T +h,T}} + \theta_1 \color{#e64173}{\varepsilon_{T +h-1,T }}+ \cdots + \theta_q \color{#e64173}{\varepsilon_{T +h-q,T}} .$$`
+
+
+When evaluating this formula, note that the optimal time-T "forecast" of
+any value of `\(y\)` or `\(\varepsilon\)` dated time `\(T\)` or earlier is just `\(y\)` or `\(\varepsilon\)` itself.
+
 
 ---
-That is,
-we replace all future values of y with optimal forecasts (built up recursively
-using the chain rule) and all future values of `\(\varepsilon\)` with optimal forecasts (0),
-yielding
-`$$y_{ T +h,T} = \phi _1 y_{T +h−1,T} + \cdots + \phi_p y_{T+h−p,T} + \varepsilon_{ T +h,T} + \theta_1 \varepsilon_{T +h−1,T }+ \cdots + \theta_q \varepsilon_{T +h−q,T} .$$`
-When evaluating this formula, note that the optimal time-T “forecast” of
-any value of y or `\(\varepsilon\)` dated time T or earlier is just y or `\(\varepsilon\)` itself.
-As an example, consider forecasting the ARM A(1, 1) process, $$y t = \phi y t−1 + \varepsilon t + \theta\varepsilon_{t-1}
-\varepsilon t ∼ W N (0, \sigma_2 ).$$`
+# ARMA(1,1)
 
----
-Let’s find `\(y_{T +1,T}\)` . The process at time T + 1 is
-`$$y T +1 = \phi y T + \varepsilon T +1 + \theta\varepsilon T .$$`
-Projecting the right-hand side on `\(\Omega_T\)` yields
-`$$y_{T +1,T} = \phi y _T + \theta\varepsilon _T .$$`
-Now let’s find `\(y{T +2,T}\)` . The process at time `\(T + 2\)` is
+`$$y_t = \phi y_{t-1} + \varepsilon_ t + \theta\varepsilon_{t-1}, \quad 
+\varepsilon_t \sim  WN(0,\sigma^2).$$`
+
+ `\(T + 1\)` хугацаанд `\(y\)` цувааны утга,
+`$$y_ {T +1} = \phi y_ T + \varepsilon_{ T +1} + \theta\varepsilon_T .$$`
+Иймд
+`$$\color{#e64173}{y_{ T +1,T}} = \phi y_T + \theta\varepsilon_T .$$`
+
+--
+
+`\(T + 2\)` хугацаанд `\(y\)` цувааны утга,
 `$$y_{T+2} = \phi y _{T +1} + \varepsilon_{T+2} + \theta\varepsilon _{T +1 }.$$`
 Projecting the right-hand side on `\(\Omega_T\)` yields
-`$$y{T +2,T} = \phi y_{T +1,T} .$$`
-Substituting our earlier-computed 1-step-ahead forecast yields
-`$$y_{T +2,T} = \phi (\phi y_ T + \theta\varepsilon_ T ) 
-= \phi^2 y _T + \phi\theta\varepsilon _T .$$`
-Continuing, it is clear that
-`$$y_{T +h,T} = \phi y_{T +h−1,T },$$`
-for all `\(h &gt; 1\)`.
+`$$\color{#e64173}{y_{ T +2,T}} = \phi \color{#e64173}{y_{ T +1,T}} .$$`
+---
+# Хэрэглээ: Канадын ажил эрхлэлт
+
+<div id="htmlwidget-ed62d732c29c673fef21" style="width:756px;height:504px;" class="dygraphs html-widget"></div>
+<script type="application/json" data-for="htmlwidget-ed62d732c29c673fef21">{"x":{"attrs":{"title":"Canadian Employment Index: MA(4) forecasts","labels":["quarter","fit","Actual","Predicted"],"retainDateWindow":false,"axes":{"x":{"pixelsPerLabel":60,"drawAxis":true},"y":{"drawAxis":true}},"showRangeSelector":true,"rangeSelectorHeight":40,"rangeSelectorPlotFillColor":" #A7B1C4","rangeSelectorPlotStrokeColor":"#808FAB","interactionModel":"Dygraph.Interaction.defaultModel","series":{"Actual":{"axis":"y"},"Predicted":{"axis":"y"}},"customBars":true,"legend":"always","labelsDivWidth":250,"labelsShowZeroValues":true,"labelsSeparateLines":false,"highlightCircleSize":5,"highlightSeriesBackgroundAlpha":0.5,"highlightSeriesOpts":{"strokeWidth":2},"hideOverlayOnMouseOut":true,"stackedGraph":false,"fillGraph":false,"fillAlpha":0.15,"stepPlot":false,"drawPoints":false,"pointSize":1,"drawGapEdgePoints":false,"connectSeparatedPoints":false,"strokeWidth":1,"strokeBorderColor":"white","colorValue":0.5,"colorSaturation":1,"includeZero":false,"drawAxesAtZero":false,"logscale":false,"axisTickSize":3,"axisLineColor":"navy","axisLineWidth":0.3,"axisLabelColor":"black","axisLabelFontSize":14,"axisLabelWidth":60,"drawGrid":true,"gridLineColor":"grey","gridLineWidth":0.3,"rightGap":5,"digitsAfterDecimal":2,"labelsKMB":false,"labelsKMG2":false,"labelsUTC":false,"maxNumberWidth":6,"animatedZooms":false,"mobileDisableYTouch":true,"disableZoom":false},"scale":"quarterly","annotations":[],"shadings":[],"events":[],"format":"date","data":[["1961-01-01T00:00:00.000Z","1961-04-01T00:00:00.000Z","1961-07-01T00:00:00.000Z","1961-10-01T00:00:00.000Z","1962-01-01T00:00:00.000Z","1962-04-01T00:00:00.000Z","1962-07-01T00:00:00.000Z","1962-10-01T00:00:00.000Z","1963-01-01T00:00:00.000Z","1963-04-01T00:00:00.000Z","1963-07-01T00:00:00.000Z","1963-10-01T00:00:00.000Z","1964-01-01T00:00:00.000Z","1964-04-01T00:00:00.000Z","1964-07-01T00:00:00.000Z","1964-10-01T00:00:00.000Z","1965-01-01T00:00:00.000Z","1965-04-01T00:00:00.000Z","1965-07-01T00:00:00.000Z","1965-10-01T00:00:00.000Z","1966-01-01T00:00:00.000Z","1966-04-01T00:00:00.000Z","1966-07-01T00:00:00.000Z","1966-10-01T00:00:00.000Z","1967-01-01T00:00:00.000Z","1967-04-01T00:00:00.000Z","1967-07-01T00:00:00.000Z","1967-10-01T00:00:00.000Z","1968-01-01T00:00:00.000Z","1968-04-01T00:00:00.000Z","1968-07-01T00:00:00.000Z","1968-10-01T00:00:00.000Z","1969-01-01T00:00:00.000Z","1969-04-01T00:00:00.000Z","1969-07-01T00:00:00.000Z","1969-10-01T00:00:00.000Z","1970-01-01T00:00:00.000Z","1970-04-01T00:00:00.000Z","1970-07-01T00:00:00.000Z","1970-10-01T00:00:00.000Z","1971-01-01T00:00:00.000Z","1971-04-01T00:00:00.000Z","1971-07-01T00:00:00.000Z","1971-10-01T00:00:00.000Z","1972-01-01T00:00:00.000Z","1972-04-01T00:00:00.000Z","1972-07-01T00:00:00.000Z","1972-10-01T00:00:00.000Z","1973-01-01T00:00:00.000Z","1973-04-01T00:00:00.000Z","1973-07-01T00:00:00.000Z","1973-10-01T00:00:00.000Z","1974-01-01T00:00:00.000Z","1974-04-01T00:00:00.000Z","1974-07-01T00:00:00.000Z","1974-10-01T00:00:00.000Z","1975-01-01T00:00:00.000Z","1975-04-01T00:00:00.000Z","1975-07-01T00:00:00.000Z","1975-10-01T00:00:00.000Z","1976-01-01T00:00:00.000Z","1976-04-01T00:00:00.000Z","1976-07-01T00:00:00.000Z","1976-10-01T00:00:00.000Z","1977-01-01T00:00:00.000Z","1977-04-01T00:00:00.000Z","1977-07-01T00:00:00.000Z","1977-10-01T00:00:00.000Z","1978-01-01T00:00:00.000Z","1978-04-01T00:00:00.000Z","1978-07-01T00:00:00.000Z","1978-10-01T00:00:00.000Z","1979-01-01T00:00:00.000Z","1979-04-01T00:00:00.000Z","1979-07-01T00:00:00.000Z","1979-10-01T00:00:00.000Z","1980-01-01T00:00:00.000Z","1980-04-01T00:00:00.000Z","1980-07-01T00:00:00.000Z","1980-10-01T00:00:00.000Z","1981-01-01T00:00:00.000Z","1981-04-01T00:00:00.000Z","1981-07-01T00:00:00.000Z","1981-10-01T00:00:00.000Z","1982-01-01T00:00:00.000Z","1982-04-01T00:00:00.000Z","1982-07-01T00:00:00.000Z","1982-10-01T00:00:00.000Z","1983-01-01T00:00:00.000Z","1983-04-01T00:00:00.000Z","1983-07-01T00:00:00.000Z","1983-10-01T00:00:00.000Z","1984-01-01T00:00:00.000Z","1984-04-01T00:00:00.000Z","1984-07-01T00:00:00.000Z","1984-10-01T00:00:00.000Z","1985-01-01T00:00:00.000Z","1985-04-01T00:00:00.000Z","1985-07-01T00:00:00.000Z","1985-10-01T00:00:00.000Z","1986-01-01T00:00:00.000Z","1986-04-01T00:00:00.000Z","1986-07-01T00:00:00.000Z","1986-10-01T00:00:00.000Z","1987-01-01T00:00:00.000Z","1987-04-01T00:00:00.000Z","1987-07-01T00:00:00.000Z","1987-10-01T00:00:00.000Z","1988-01-01T00:00:00.000Z","1988-04-01T00:00:00.000Z","1988-07-01T00:00:00.000Z","1988-10-01T00:00:00.000Z","1989-01-01T00:00:00.000Z","1989-04-01T00:00:00.000Z","1989-07-01T00:00:00.000Z","1989-10-01T00:00:00.000Z","1990-01-01T00:00:00.000Z","1990-04-01T00:00:00.000Z","1990-07-01T00:00:00.000Z","1990-10-01T00:00:00.000Z","1991-01-01T00:00:00.000Z","1991-04-01T00:00:00.000Z","1991-07-01T00:00:00.000Z","1991-10-01T00:00:00.000Z","1992-01-01T00:00:00.000Z","1992-04-01T00:00:00.000Z","1992-07-01T00:00:00.000Z","1992-10-01T00:00:00.000Z","1993-01-01T00:00:00.000Z","1993-04-01T00:00:00.000Z","1993-07-01T00:00:00.000Z","1993-10-01T00:00:00.000Z","1994-01-01T00:00:00.000Z","1994-04-01T00:00:00.000Z","1994-07-01T00:00:00.000Z","1994-10-01T00:00:00.000Z","1995-01-01T00:00:00.000Z","1995-04-01T00:00:00.000Z","1995-07-01T00:00:00.000Z","1995-10-01T00:00:00.000Z","1996-01-01T00:00:00.000Z","1996-04-01T00:00:00.000Z","1996-07-01T00:00:00.000Z","1996-10-01T00:00:00.000Z","1997-01-01T00:00:00.000Z","1997-04-01T00:00:00.000Z","1997-07-01T00:00:00.000Z","1997-10-01T00:00:00.000Z","1998-01-01T00:00:00.000Z","1998-04-01T00:00:00.000Z","1998-07-01T00:00:00.000Z","1998-10-01T00:00:00.000Z","1999-01-01T00:00:00.000Z","1999-04-01T00:00:00.000Z","1999-07-01T00:00:00.000Z","1999-10-01T00:00:00.000Z","2000-01-01T00:00:00.000Z","2000-04-01T00:00:00.000Z","2000-07-01T00:00:00.000Z","2000-10-01T00:00:00.000Z","2001-01-01T00:00:00.000Z","2001-04-01T00:00:00.000Z","2001-07-01T00:00:00.000Z","2001-10-01T00:00:00.000Z","2002-01-01T00:00:00.000Z","2002-04-01T00:00:00.000Z","2002-07-01T00:00:00.000Z","2002-10-01T00:00:00.000Z","2003-01-01T00:00:00.000Z","2003-04-01T00:00:00.000Z","2003-07-01T00:00:00.000Z","2003-10-01T00:00:00.000Z","2004-01-01T00:00:00.000Z","2004-04-01T00:00:00.000Z","2004-07-01T00:00:00.000Z","2004-10-01T00:00:00.000Z","2005-01-01T00:00:00.000Z","2005-04-01T00:00:00.000Z","2005-07-01T00:00:00.000Z","2005-10-01T00:00:00.000Z","2006-01-01T00:00:00.000Z","2006-04-01T00:00:00.000Z","2006-07-01T00:00:00.000Z","2006-10-01T00:00:00.000Z","2007-01-01T00:00:00.000Z","2007-04-01T00:00:00.000Z","2007-07-01T00:00:00.000Z","2007-10-01T00:00:00.000Z","2008-01-01T00:00:00.000Z","2008-04-01T00:00:00.000Z","2008-07-01T00:00:00.000Z","2008-10-01T00:00:00.000Z","2009-01-01T00:00:00.000Z","2009-04-01T00:00:00.000Z","2009-07-01T00:00:00.000Z","2009-10-01T00:00:00.000Z","2010-01-01T00:00:00.000Z","2010-04-01T00:00:00.000Z","2010-07-01T00:00:00.000Z","2010-10-01T00:00:00.000Z"],[[88.7779548629894,88.7779548629894,88.7779548629894],[84.565986558368,84.565986558368,84.565986558368],[86.5845362551429,86.5845362551429,86.5845362551429],[88.6594549748689,88.6594549748689,88.6594549748689],[87.6729313930114,87.6729313930114,87.6729313930114],[88.5611655523643,88.5611655523643,88.5611655523643],[89.0649068091932,89.0649068091932,89.0649068091932],[91.207884247605,91.207884247605,91.207884247605],[89.4529723491734,89.4529723491734,89.4529723491734],[90.268793911429,90.268793911429,90.268793911429],[90.5203642459093,90.5203642459093,90.5203642459093],[91.9874811273755,91.9874811273755,91.9874811273755],[92.8861931554782,92.8861931554782,92.8861931554782],[94.1515099570871,94.1515099570871,94.1515099570871],[93.2695720029404,93.2695720029404,93.2695720029404],[96.1461813944832,96.1461813944832,96.1461813944832],[96.2255494466356,96.2255494466356,96.2255494466356],[98.1566330372818,98.1566330372818,98.1566330372818],[97.4457953117936,97.4457953117936,97.4457953117936],[100.346285368309,100.346285368309,100.346285368309],[102.906378523177,102.906378523177,102.906378523177],[102.895980002951,102.895980002951,102.895980002951],[102.325231152131,102.325231152131,102.325231152131],[103.727897792741,103.727897792741,103.727897792741],[105.171583808376,105.171583808376,105.171583808376],[103.547530611826,103.547530611826,103.547530611826],[99.9557468510422,99.9557468510422,99.9557468510422],[104.378968316281,104.378968316281,104.378968316281],[102.74991266977,102.74991266977,102.74991266977],[100.714370265248,100.714370265248,100.714370265248],[100.418134754537,100.418134754537,100.418134754537],[103.467495393397,103.467495393397,103.467495393397],[105.534194291742,105.534194291742,105.534194291742],[103.602728835439,103.602728835439,103.602728835439],[103.918389220694,103.918389220694,103.918389220694],[103.872188868056,103.872188868056,103.872188868056],[106.442073412562,106.442073412562,106.442073412562],[103.229125053538,103.229125053538,103.229125053538],[100.183011119543,100.183011119543,100.183011119543],[102.57888674487,102.57888674487,102.57888674487],[102.001817033043,102.001817033043,102.001817033043],[101.843907817423,101.843907817423,101.843907817423],[100.64744994334,100.64744994334,100.64744994334],[102.150935568561,102.150935568561,102.150935568561],[103.585809647837,103.585809647837,103.585809647837],[102.225640685368,102.225640685368,102.225640685368],[102.59128829691,102.59128829691,102.59128829691],[103.880675297902,103.880675297902,103.880675297902],[106.073182503107,106.073182503107,106.073182503107],[106.781688046945,106.781688046945,106.781688046945],[107.360011673066,107.360011673066,107.360011673066],[108.463239360549,108.463239360549,108.463239360549],[111.37634223662,111.37634223662,111.37634223662],[111.189643624618,111.189643624618,111.189643624618],[110.630551785095,110.630551785095,110.630551785095],[109.791022491765,109.791022491765,109.791022491765],[108.866101700999,108.866101700999,108.866101700999],[103.450863252668,103.450863252668,103.450863252668],[105.600555500923,105.600555500923,105.600555500923],[103.169493360358,103.169493360358,103.169493360358],[106.123200576524,106.123200576524,106.123200576524],[108.182423599387,108.182423599387,108.182423599387],[105.785669405905,105.785669405905,105.785669405905],[106.003645928226,106.003645928226,106.003645928226],[105.264826815188,105.264826815188,105.264826815188],[105.136321239196,105.136321239196,105.136321239196],[105.758247000806,105.758247000806,105.758247000806],[104.4287268221,104.4287268221,104.4287268221],[105.074258909975,105.074258909975,105.074258909975],[105.369175106814,105.369175106814,105.369175106814],[106.037173639607,106.037173639607,106.037173639607],[106.759904354864,106.759904354864,106.759904354864],[107.978956883986,107.978956883986,107.978956883986],[108.804165919725,108.804165919725,108.804165919725],[108.778301159872,108.778301159872,108.778301159872],[109.544975242096,109.544975242096,109.544975242096],[108.797624083047,108.797624083047,108.797624083047],[107.977464572635,107.977464572635,107.977464572635],[105.485581060187,105.485581060187,105.485581060187],[105.448863710515,105.448863710515,105.448863710515],[108.244397842133,108.244397842133,108.244397842133],[109.391521393678,109.391521393678,109.391521393678],[110.375850260143,110.375850260143,110.375850260143],[104.406434219593,104.406434219593,104.406434219593],[103.845919394377,103.845919394377,103.845919394377],[102.664940472009,102.664940472009,102.664940472009],[98.7330395772549,98.7330395772549,98.7330395772549],[95.709543120886,95.709543120886,95.709543120886],[91.2570855475674,91.2570855475674,91.2570855475674],[97.7675309077476,97.7675309077476,97.7675309077476],[98.7315870867327,98.7315870867327,98.7315870867327],[97.2811105462598,97.2811105462598,97.2811105462598],[95.6955122136673,95.6955122136673,95.6955122136673],[90.8707492407113,90.8707492407113,90.8707492407113],[96.1806744278494,96.1806744278494,96.1806744278494],[94.7321270743107,94.7321270743107,94.7321270743107],[93.5942405146967,93.5942405146967,93.5942405146967],[95.5335950256466,95.5335950256466,95.5335950256466],[95.9662234999687,95.9662234999687,95.9662234999687],[97.6793261202374,97.6793261202374,97.6793261202374],[95.0261218573777,95.0261218573777,95.0261218573777],[98.8278450468824,98.8278450468824,98.8278450468824],[99.0825330279798,99.0825330279798,99.0825330279798],[94.8736595573793,94.8736595573793,94.8736595573793],[97.5221791057079,97.5221791057079,97.5221791057079],[109.458173625965,109.458173625965,109.458173625965],[104.878417051479,104.878417051479,104.878417051479],[104.752998022324,104.752998022324,104.752998022324],[106.489795097694,106.489795097694,106.489795097694],[105.884939119087,105.884939119087,105.884939119087],[107.732226337101,107.732226337101,107.732226337101],[103.119086235919,103.119086235919,103.119086235919],[107.410850530074,107.410850530074,107.410850530074],[106.728045281787,106.728045281787,106.728045281787],[108.03855243902,108.03855243902,108.03855243902],[105.623055305952,105.623055305952,105.623055305952],[103.666791294388,103.666791294388,103.666791294388],[101.872095815091,101.872095815091,101.872095815091],[100.697229264394,100.697229264394,100.697229264394],[98.0824759976546,98.0824759976546,98.0824759976546],[93.0468967498362,93.0468967498362,93.0468967498362],[89.1879036108706,89.1879036108706,89.1879036108706],[89.3895447938477,89.3895447938477,89.3895447938477],[88.5618570406441,88.5618570406441,88.5618570406441],[86.4249291234562,86.4249291234562,86.4249291234562],[93.9976639055383,93.9976639055383,93.9976639055383],[90.1227022591007,90.1227022591007,90.1227022591007],[89.2758817949333,89.2758817949333,89.2758817949333],[88.9370550327832,88.9370550327832,88.9370550327832],[90.7290102100213,90.7290102100213,90.7290102100213],[90.4870180548646,90.4870180548646,90.4870180548646],[89.2198251625486,89.2198251625486,89.2198251625486],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null]],[[83.090255,83.090255,83.090255],[82.7996338824,82.7996338824,82.7996338824],[84.6344380294,84.6344380294,84.6344380294],[85.3774583529,85.3774583529,85.3774583529],[86.197605,86.197605,86.197605],[86.5788438824,86.5788438824,86.5788438824],[88.0497240294,88.0497240294,88.0497240294],[87.9249263529,87.9249263529,87.9249263529],[88.465131,88.465131,88.465131],[88.3984638824,88.3984638824,88.3984638824],[89.4494320294,89.4494320294,89.4494320294],[90.5563753529,90.5563753529,90.5563753529],[92.272335,92.272335,92.272335],[92.1496788824,92.1496788824,92.1496788824],[93.9564890294,93.9564890294,93.9564890294],[94.8114863529,94.8114863529,94.8114863529],[96.583434,96.583434,96.583434],[96.9646728824,96.9646728824,96.9646728824],[98.9954360294,98.9954360294,98.9954360294],[101.138164353,101.138164353,101.138164353],[102.882122,102.882122,102.882122],[103.095394882,103.095394882,103.095394882],[104.006386029,104.006386029,104.006386029],[104.777404353,104.777404353,104.777404353],[104.701732,104.701732,104.701732],[102.563504882,102.563504882,102.563504882],[103.558486029,103.558486029,103.558486029],[102.985774353,102.985774353,102.985774353],[102.098281,102.098281,102.098281],[101.471734882,101.471734882,101.471734882],[102.550696029,102.550696029,102.550696029],[104.021564353,104.021564353,104.021564353],[105.093652,105.093652,105.093652],[105.194954882,105.194954882,105.194954882],[104.594266029,104.594266029,104.594266029],[105.813184353,105.813184353,105.813184353],[105.149642,105.149642,105.149642],[102.899434882,102.899434882,102.899434882],[102.354736029,102.354736029,102.354736029],[102.033974353,102.033974353,102.033974353],[102.014299,102.014299,102.014299],[101.835654882,101.835654882,101.835654882],[102.018806029,102.018806029,102.018806029],[102.733834353,102.733834353,102.733834353],[103.134062,103.134062,103.134062],[103.263354882,103.263354882,103.263354882],[103.866416029,103.866416029,103.866416029],[105.393274353,105.393274353,105.393274353],[107.081242,107.081242,107.081242],[108.414274882,108.414274882,108.414274882],[109.297286029,109.297286029,109.297286029],[111.495994353,111.495994353,111.495994353],[112.680072,112.680072,112.680072],[113.061304882,113.061304882,113.061304882],[112.376636029,112.376636029,112.376636029],[111.244054353,111.244054353,111.244054353],[107.305192,107.305192,107.305192],[106.678644882,106.678644882,106.678644882],[104.678246029,104.678246029,104.678246029],[105.729204353,105.729204353,105.729204353],[107.837082,107.837082,107.837082],[108.022364882,108.022364882,108.022364882],[107.281706029,107.281706029,107.281706029],[107.016934353,107.016934353,107.016934353],[106.045452,106.045452,106.045452],[106.370704882,106.370704882,106.370704882],[106.049966029,106.049966029,106.049966029],[105.841184353,105.841184353,105.841184353],[106.045452,106.045452,106.045452],[106.650644882,106.650644882,106.650644882],[107.393676029,107.393676029,107.393676029],[108.668584353,108.668584353,108.668584353],[109.628702,109.628702,109.628702],[110.261894882,110.261894882,110.261894882],[110.920946029,110.920946029,110.920946029],[110.740154353,110.740154353,110.740154353],[110.048622,110.048622,110.048622],[108.190324882,108.190324882,108.190324882],[107.057746029,107.057746029,107.057746029],[108.024724353,108.024724353,108.024724353],[109.712692,109.712692,109.712692],[111.409654882,111.409654882,111.409654882],[108.765396029,108.765396029,108.765396029],[106.289084353,106.289084353,106.289084353],[103.917902,103.917902,103.917902],[100.799874882,100.799874882,100.799874882],[97.3997700294,97.3997700294,97.3997700294],[93.2438143529,93.2438143529,93.2438143529],[94.123068,94.123068,94.123068],[96.1970798824,96.1970798824,96.1970798824],[97.2754290294,97.2754290294,97.2754290294],[96.4561423529,96.4561423529,96.4561423529],[92.674237,92.674237,92.674237],[92.8536228824,92.8536228824,92.8536228824],[93.4304540294,93.4304540294,93.4304540294],[93.2055593529,93.2055593529,93.2055593529],[93.955896,93.955896,93.955896],[94.7296738824,94.7296738824,94.7296738824],[95.5665510294,95.5665510294,95.5665510294],[95.5459793529,95.5459793529,95.5459793529],[97.09503,97.09503,97.09503],[97.7573598824,97.7573598824,97.7573598824],[96.1609430294,96.1609430294,96.1609430294],[96.5861653529,96.5861653529,96.5861653529],[103.874812,103.874812,103.874812],[105.094384882,105.094384882,105.094384882],[106.804276029,106.804276029,106.804276029],[107.786744353,107.786744353,107.786744353],[106.596022,106.596022,106.596022],[107.310354882,107.310354882,107.310354882],[106.897156029,106.897156029,106.897156029],[107.210924353,107.210924353,107.210924353],[107.134682,107.134682,107.134682],[108.829774882,108.829774882,108.829774882],[107.926196029,107.926196029,107.926196029],[106.298904353,106.298904353,106.298904353],[103.365872,103.365872,103.365872],[102.029554882,102.029554882,102.029554882],[99.3000760294,99.3000760294,99.3000760294],[95.3045073529,95.3045073529,95.3045073529],[90.50099,90.50099,90.50099],[88.0984848824,88.0984848824,88.0984848824],[86.5150710294,86.5150710294,86.5150710294],[85.1143943529,85.1143943529,85.1143943529],[89.033584,89.033584,89.033584],[88.8229008824,88.8229008824,88.8229008824],[88.2666710294,88.2666710294,88.2666710294],[87.7260053529,87.7260053529,87.7260053529],[88.102896,88.102896,88.102896],[87.6546968824,87.6546968824,87.6546968824],[88.4004090294,88.4004090294,88.4004090294],[88.3618013529,88.3618013529,88.3618013529],[89.031151,89.031151,89.031151],[91.0202948824,91.0202948824,91.0202948824],[91.6732820294,91.6732820294,91.6732820294],[92.0149173529,92.0149173529,92.0149173529],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null]],[[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[94.3105109430808,90.5233783304512,86.7362457178216],[101.59325298783,94.2165097695058,86.8397665511818],[107.922081875113,97.8952138650672,87.8683458550214],[110.857074838512,99.6853972763905,88.5137197142689],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011],[111.51941990633,100.156156456171,88.792893006011]]],"fixedtz":false,"tzone":"UTC"},"evals":["attrs.interactionModel"],"jsHooks":[]}</script>
 
 ---
-# Interval and Density Forecasts
 
-The chain rule, whether applied to pure autoregressive models or to ARMA
-models, is a device for simplifying the computation of point forecasts. Interval
-and density forecasts require the h-step-ahead forecast error variance, which
-we get from the moving average representation, as discussed earlier. It is
-`$$\sigma_h^2 
-= \sigma_2\sum_{i=0}^\infty b_i^2$$`
-which we operationalize as
-`$$\hat\sigma_h^2
-= \hat\sigma^2
-\sum_{i=0}^\infty \hat b_i^2$$`
-
----
-Note that we don’t actually estimate the moving average representation;
-rather, we solve backward for as many b’s as we need, in terms of the original
-model parameters, which we then replace with estimates.
-
----
-Let’s illustrate by constructing a 2-step-ahead 95% interval forecast for the
-ARM A(1, 1) process. We already constructed the 2-step-ahead point forecast, `\(y_{T +2,T}\)`; we need only compute the 2-step-ahead forecast error variance.
-The process is
-`$$y_t = \phi y_{t−1} + \varepsilon_t + \theta\varepsilon_{t-1}$$`
-
-Substitute backward for y t−1 to get
-`$$y_t = \phi(\phi y_{t−2} + \varepsilon_{t-1} + \theta\varepsilon_{t−2 }) + \varepsilon_t + \theta\varepsilon_{t-1}= \varepsilon_t + (\phi + \theta)\varepsilon_{t-1} + \cdots$$`
-We need not substitute back any farther, because the 2-step-ahead forecast
-error variance is
-`$$\sigma _2^2 = \sigma^2 (1+b^2_1 ),$$`
-where `\(b_1\)` is the coefficient on `\(\varepsilon_{t-1}\)` in the moving average representation of the
-ARMA(1,1) process, which we just calculated to be `\(( \phi + \theta )\)`. 
-
----
-Thus the 2-step-pahead interval forecast is `\(y_{T +2,T} \pm 1.96\sigma_2\)` , or `\((\phi^2 y_T + \phi\theta\varepsilon_T ) \pm 1.96\sigma\sqrt{  1 + (\phi + \theta)^2}\)` .
-We make this operational as
+<div id="htmlwidget-af4ea3ef8dc3566711ab" style="width:756px;height:504px;" class="dygraphs html-widget"></div>
+<script type="application/json" data-for="htmlwidget-af4ea3ef8dc3566711ab">{"x":{"attrs":{"title":"Canadian Employment Index: AR(2) forecasts","labels":["quarter","fit","Actual","Predicted"],"retainDateWindow":false,"axes":{"x":{"pixelsPerLabel":60,"drawAxis":true},"y":{"drawAxis":true}},"showRangeSelector":true,"rangeSelectorHeight":40,"rangeSelectorPlotFillColor":" #A7B1C4","rangeSelectorPlotStrokeColor":"#808FAB","interactionModel":"Dygraph.Interaction.defaultModel","series":{"Actual":{"axis":"y"},"Predicted":{"axis":"y"}},"customBars":true,"legend":"always","labelsDivWidth":250,"labelsShowZeroValues":true,"labelsSeparateLines":false,"highlightCircleSize":5,"highlightSeriesBackgroundAlpha":0.5,"highlightSeriesOpts":{"strokeWidth":2},"hideOverlayOnMouseOut":true,"stackedGraph":false,"fillGraph":false,"fillAlpha":0.15,"stepPlot":false,"drawPoints":false,"pointSize":1,"drawGapEdgePoints":false,"connectSeparatedPoints":false,"strokeWidth":1,"strokeBorderColor":"white","colorValue":0.5,"colorSaturation":1,"includeZero":false,"drawAxesAtZero":false,"logscale":false,"axisTickSize":3,"axisLineColor":"navy","axisLineWidth":0.3,"axisLabelColor":"black","axisLabelFontSize":14,"axisLabelWidth":60,"drawGrid":true,"gridLineColor":"grey","gridLineWidth":0.3,"rightGap":5,"digitsAfterDecimal":2,"labelsKMB":false,"labelsKMG2":false,"labelsUTC":false,"maxNumberWidth":6,"animatedZooms":false,"mobileDisableYTouch":true,"disableZoom":false},"scale":"quarterly","annotations":[],"shadings":[],"events":[],"format":"date","data":[["1961-01-01T00:00:00.000Z","1961-04-01T00:00:00.000Z","1961-07-01T00:00:00.000Z","1961-10-01T00:00:00.000Z","1962-01-01T00:00:00.000Z","1962-04-01T00:00:00.000Z","1962-07-01T00:00:00.000Z","1962-10-01T00:00:00.000Z","1963-01-01T00:00:00.000Z","1963-04-01T00:00:00.000Z","1963-07-01T00:00:00.000Z","1963-10-01T00:00:00.000Z","1964-01-01T00:00:00.000Z","1964-04-01T00:00:00.000Z","1964-07-01T00:00:00.000Z","1964-10-01T00:00:00.000Z","1965-01-01T00:00:00.000Z","1965-04-01T00:00:00.000Z","1965-07-01T00:00:00.000Z","1965-10-01T00:00:00.000Z","1966-01-01T00:00:00.000Z","1966-04-01T00:00:00.000Z","1966-07-01T00:00:00.000Z","1966-10-01T00:00:00.000Z","1967-01-01T00:00:00.000Z","1967-04-01T00:00:00.000Z","1967-07-01T00:00:00.000Z","1967-10-01T00:00:00.000Z","1968-01-01T00:00:00.000Z","1968-04-01T00:00:00.000Z","1968-07-01T00:00:00.000Z","1968-10-01T00:00:00.000Z","1969-01-01T00:00:00.000Z","1969-04-01T00:00:00.000Z","1969-07-01T00:00:00.000Z","1969-10-01T00:00:00.000Z","1970-01-01T00:00:00.000Z","1970-04-01T00:00:00.000Z","1970-07-01T00:00:00.000Z","1970-10-01T00:00:00.000Z","1971-01-01T00:00:00.000Z","1971-04-01T00:00:00.000Z","1971-07-01T00:00:00.000Z","1971-10-01T00:00:00.000Z","1972-01-01T00:00:00.000Z","1972-04-01T00:00:00.000Z","1972-07-01T00:00:00.000Z","1972-10-01T00:00:00.000Z","1973-01-01T00:00:00.000Z","1973-04-01T00:00:00.000Z","1973-07-01T00:00:00.000Z","1973-10-01T00:00:00.000Z","1974-01-01T00:00:00.000Z","1974-04-01T00:00:00.000Z","1974-07-01T00:00:00.000Z","1974-10-01T00:00:00.000Z","1975-01-01T00:00:00.000Z","1975-04-01T00:00:00.000Z","1975-07-01T00:00:00.000Z","1975-10-01T00:00:00.000Z","1976-01-01T00:00:00.000Z","1976-04-01T00:00:00.000Z","1976-07-01T00:00:00.000Z","1976-10-01T00:00:00.000Z","1977-01-01T00:00:00.000Z","1977-04-01T00:00:00.000Z","1977-07-01T00:00:00.000Z","1977-10-01T00:00:00.000Z","1978-01-01T00:00:00.000Z","1978-04-01T00:00:00.000Z","1978-07-01T00:00:00.000Z","1978-10-01T00:00:00.000Z","1979-01-01T00:00:00.000Z","1979-04-01T00:00:00.000Z","1979-07-01T00:00:00.000Z","1979-10-01T00:00:00.000Z","1980-01-01T00:00:00.000Z","1980-04-01T00:00:00.000Z","1980-07-01T00:00:00.000Z","1980-10-01T00:00:00.000Z","1981-01-01T00:00:00.000Z","1981-04-01T00:00:00.000Z","1981-07-01T00:00:00.000Z","1981-10-01T00:00:00.000Z","1982-01-01T00:00:00.000Z","1982-04-01T00:00:00.000Z","1982-07-01T00:00:00.000Z","1982-10-01T00:00:00.000Z","1983-01-01T00:00:00.000Z","1983-04-01T00:00:00.000Z","1983-07-01T00:00:00.000Z","1983-10-01T00:00:00.000Z","1984-01-01T00:00:00.000Z","1984-04-01T00:00:00.000Z","1984-07-01T00:00:00.000Z","1984-10-01T00:00:00.000Z","1985-01-01T00:00:00.000Z","1985-04-01T00:00:00.000Z","1985-07-01T00:00:00.000Z","1985-10-01T00:00:00.000Z","1986-01-01T00:00:00.000Z","1986-04-01T00:00:00.000Z","1986-07-01T00:00:00.000Z","1986-10-01T00:00:00.000Z","1987-01-01T00:00:00.000Z","1987-04-01T00:00:00.000Z","1987-07-01T00:00:00.000Z","1987-10-01T00:00:00.000Z","1988-01-01T00:00:00.000Z","1988-04-01T00:00:00.000Z","1988-07-01T00:00:00.000Z","1988-10-01T00:00:00.000Z","1989-01-01T00:00:00.000Z","1989-04-01T00:00:00.000Z","1989-07-01T00:00:00.000Z","1989-10-01T00:00:00.000Z","1990-01-01T00:00:00.000Z","1990-04-01T00:00:00.000Z","1990-07-01T00:00:00.000Z","1990-10-01T00:00:00.000Z","1991-01-01T00:00:00.000Z","1991-04-01T00:00:00.000Z","1991-07-01T00:00:00.000Z","1991-10-01T00:00:00.000Z","1992-01-01T00:00:00.000Z","1992-04-01T00:00:00.000Z","1992-07-01T00:00:00.000Z","1992-10-01T00:00:00.000Z","1993-01-01T00:00:00.000Z","1993-04-01T00:00:00.000Z","1993-07-01T00:00:00.000Z","1993-10-01T00:00:00.000Z","1994-01-01T00:00:00.000Z","1994-04-01T00:00:00.000Z","1994-07-01T00:00:00.000Z","1994-10-01T00:00:00.000Z","1995-01-01T00:00:00.000Z","1995-04-01T00:00:00.000Z","1995-07-01T00:00:00.000Z","1995-10-01T00:00:00.000Z","1996-01-01T00:00:00.000Z","1996-04-01T00:00:00.000Z","1996-07-01T00:00:00.000Z","1996-10-01T00:00:00.000Z","1997-01-01T00:00:00.000Z","1997-04-01T00:00:00.000Z","1997-07-01T00:00:00.000Z","1997-10-01T00:00:00.000Z","1998-01-01T00:00:00.000Z","1998-04-01T00:00:00.000Z","1998-07-01T00:00:00.000Z","1998-10-01T00:00:00.000Z","1999-01-01T00:00:00.000Z","1999-04-01T00:00:00.000Z","1999-07-01T00:00:00.000Z","1999-10-01T00:00:00.000Z","2000-01-01T00:00:00.000Z","2000-04-01T00:00:00.000Z","2000-07-01T00:00:00.000Z","2000-10-01T00:00:00.000Z","2001-01-01T00:00:00.000Z","2001-04-01T00:00:00.000Z","2001-07-01T00:00:00.000Z","2001-10-01T00:00:00.000Z","2002-01-01T00:00:00.000Z","2002-04-01T00:00:00.000Z","2002-07-01T00:00:00.000Z","2002-10-01T00:00:00.000Z","2003-01-01T00:00:00.000Z","2003-04-01T00:00:00.000Z","2003-07-01T00:00:00.000Z","2003-10-01T00:00:00.000Z","2004-01-01T00:00:00.000Z","2004-04-01T00:00:00.000Z","2004-07-01T00:00:00.000Z","2004-10-01T00:00:00.000Z","2005-01-01T00:00:00.000Z","2005-04-01T00:00:00.000Z","2005-07-01T00:00:00.000Z","2005-10-01T00:00:00.000Z","2006-01-01T00:00:00.000Z","2006-04-01T00:00:00.000Z","2006-07-01T00:00:00.000Z","2006-10-01T00:00:00.000Z","2007-01-01T00:00:00.000Z","2007-04-01T00:00:00.000Z","2007-07-01T00:00:00.000Z","2007-10-01T00:00:00.000Z","2008-01-01T00:00:00.000Z","2008-04-01T00:00:00.000Z","2008-07-01T00:00:00.000Z","2008-10-01T00:00:00.000Z","2009-01-01T00:00:00.000Z","2009-04-01T00:00:00.000Z","2009-07-01T00:00:00.000Z","2009-10-01T00:00:00.000Z","2010-01-01T00:00:00.000Z","2010-04-01T00:00:00.000Z","2010-07-01T00:00:00.000Z","2010-10-01T00:00:00.000Z"],[[85.2958374915796,85.2958374915796,85.2958374915796],[83.2558011429897,83.2558011429897,83.2558011429897],[83.0040998110199,83.0040998110199,83.0040998110199],[85.8019561408844,85.8019561408844,85.8019561408844],[86.0096530549547,86.0096530549547,86.0096530549547],[86.8465837637471,86.8465837637471,86.8465837637471],[87.0106280631758,87.0106280631758,87.0106280631758],[88.962456147892,88.962456147892,88.962456147892],[88.0844475314792,88.0844475314792,88.0844475314792],[88.9267879156,88.9267879156,88.9267879156],[88.5741207811401,88.5741207811401,88.5741207811401],[90.1294245402383,90.1294245402383,90.1294245402383],[91.2362155798398,91.2362155798398,91.2362155798398],[93.1994398558213,93.1994398558213,93.1994398558213],[92.2083887611036,92.2083887611036,92.2083887611036],[94.8860575087803,94.8860575087803,94.8860575087803],[95.2693671571116,95.2693671571116,95.2693671571116],[97.4331651519862,97.4331651519862,97.4331651519862],[97.1461347751497,97.1461347751497,97.1461347751497],[99.9096894687944,99.9096894687944,99.9096894687944],[102.053835328475,102.053835328475,102.053835328475],[103.56677539475,103.56677539475,103.56677539475],[103.049490376787,103.049490376787,103.049490376787],[104.269185097007,104.269185097007,104.269185097007],[104.955284611253,104.955284611253,104.955284611253],[104.480175028309,104.480175028309,104.480175028309],[101.416004315306,101.416004315306,101.416004315306],[103.871884802785,103.871884802785,103.871884802785],[102.57002050862,102.57002050862,102.57002050862],[101.554737391376,101.554737391376,101.554737391376],[101.066959802402,101.066959802402,101.066959802402],[102.928184401921,102.928184401921,102.928184401921],[104.549332901724,104.549332901724,104.549332901724],[105.406591835876,105.406591835876,105.406591835876],[105.045381680929,105.045381680929,105.045381680929],[104.126484987977,104.126484987977,104.126484987977],[106.178367363889,106.178367363889,106.178367363889],[104.638687782623,104.638687782623,104.638687782623],[101.690768406334,101.690768406334,101.690768406334],[101.967467407949,101.967467407949,101.967467407949],[101.760564459199,101.760564459199,101.760564459199],[101.884053254801,101.884053254801,101.884053254801],[101.634376869086,101.634376869086,101.634376869086],[101.984574580843,101.984574580843,101.984574580843],[102.934434720128,102.934434720128,102.934434720128],[103.175826570309,103.175826570309,103.175826570309],[103.173602605931,103.173602605931,103.173602605931],[103.986655432508,103.986655432508,103.986655432508],[105.914516159062,105.914516159062,105.914516159062],[107.638152363491,107.638152363491,107.638152363491],[108.77084647743,108.77084647743,108.77084647743],[109.419302080105,109.419302080105,109.419302080105],[112.188547754488,112.188547754488,112.188547754488],[112.863235687326,112.863235687326,112.863235687326],[112.854798198939,112.854798198939,112.854798198939],[111.68148248037,111.68148248037,111.68148248037],[110.363925117002,110.363925117002,110.363925117002],[105.190054251649,105.190054251649,105.190054251649],[106.148370860838,106.148370860838,106.148370860838],[103.545094510816,103.545094510816,103.545094510816],[106.016812374781,106.016812374781,106.016812374781],[108.574777374997,108.574777374997,108.574777374997],[107.844444168011,107.844444168011,107.844444168011],[106.682817360374,106.682817360374,106.682817360374],[106.649958312881,106.649958312881,106.649958312881],[105.366968706466,105.366968706466,105.366968706466],[106.298927123127,106.298927123127,106.298927123127],[105.679772345504,105.679772345504,105.679772345504],[105.529081196177,105.529081196177,105.529081196177],[105.924176621376,105.924176621376,105.924176621376],[106.704788252869,106.704788252869,106.704788252869],[107.495234543142,107.495234543142,107.495234543142],[108.991480290923,108.991480290923,108.991480290923],[109.779272247747,109.779272247747,109.779272247747],[110.242268525265,110.242268525265,110.242268525265],[110.897689700193,110.897689700193,110.897689700193],[110.323239725353,110.323239725353,110.323239725353],[109.406326197012,109.406326197012,109.406326197012],[107.039868640355,107.039868640355,107.039868640355],[106.278517758434,106.278517758434,106.278517758434],[108.217205530573,108.217205530573,108.217205530573],[110.20617838599,110.20617838599,110.20617838599],[111.866503567111,111.866503567111,111.866503567111],[107.228598625374,107.228598625374,107.228598625374],[104.891564760208,104.891564760208,104.891564760208],[102.627355911324,102.627355911324,102.627355911324],[99.2305379629628,99.2305379629628,99.2305379629628],[95.7787019976576,95.7787019976576,95.7787019976576],[91.3647038240363,91.3647038240363,91.3647038240363],[94.609036748846,94.609036748846,94.609036748846],[97.1992764310783,97.1992764310783,97.1992764310783],[97.779773393159,97.779773393159,97.779773393159],[96.0809115236957,96.0809115236957,96.0809115236957],[90.9861233989727,90.9861233989727,90.9861233989727],[93.038508936007,93.038508936007,93.038508936007],[93.7897931981938,93.7897931981938,93.7897931981938],[93.1903675003919,93.1903675003919,93.1903675003919],[94.3847980191558,94.3847980191558,94.3847980191558],[95.1510352806857,95.1510352806857,95.1510352806857],[95.9976455842307,95.9976455842307,95.9976455842307],[95.5712101566325,95.5712101566325,95.5712101566325],[97.8267958376131,97.8267958376131,97.8267958376131],[98.0529300052076,98.0529300052076,98.0529300052076],[95.4245319773418,95.4245319773418,95.4245319773418],[96.7975946453617,96.7975946453617,96.7975946453617],[107.16326167709,107.16326167709,107.16326167709],[105.477202814126,105.477202814126,105.477202814126],[107.378251826716,107.378251826716,107.378251826716],[107.992302368492,107.992302368492,107.992302368492],[105.800367143822,105.800367143822,105.800367143822],[107.400321031089,107.400321031089,107.400321031089],[106.462724758362,106.462724758362,106.462724758362],[107.113452651409,107.113452651409,107.113452651409],[106.854215223171,106.854215223171,106.854215223171],[109.347918364597,109.347918364597,109.347918364597],[107.234563115966,107.234563115966,107.234563115966],[105.303513088596,105.303513088596,105.303513088596],[101.82236083235,101.82236083235,101.82236083235],[101.27496251731,101.27496251731,101.27496251731],[97.9510273299507,97.9510273299507,97.9510273299507],[93.451739524848,93.451739524848,93.451739524848],[88.38109733768,88.38109733768,88.38109733768],[87.1743786209944,87.1743786209944,87.1743786209944],[86.0173099481189,86.0173099481189,86.0173099481189],[84.7369950453326,84.7369950453326,84.7369950453326],[91.0828983355941,91.0828983355941,91.0828983355941],[88.9200762454975,88.9200762454975,88.9200762454975],[88.2134923342558,88.2134923342558,88.2134923342558],[87.6932340678783,87.6932340678783,87.6932340678783],[88.4958863282723,88.4958863282723,88.4958863282723],[87.6674657693534,87.6674657693534,87.6674657693534],[88.9610193910718,88.9610193910718,88.9610193910718],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null]],[[83.090255,83.090255,83.090255],[82.7996338824,82.7996338824,82.7996338824],[84.6344380294,84.6344380294,84.6344380294],[85.3774583529,85.3774583529,85.3774583529],[86.197605,86.197605,86.197605],[86.5788438824,86.5788438824,86.5788438824],[88.0497240294,88.0497240294,88.0497240294],[87.9249263529,87.9249263529,87.9249263529],[88.465131,88.465131,88.465131],[88.3984638824,88.3984638824,88.3984638824],[89.4494320294,89.4494320294,89.4494320294],[90.5563753529,90.5563753529,90.5563753529],[92.272335,92.272335,92.272335],[92.1496788824,92.1496788824,92.1496788824],[93.9564890294,93.9564890294,93.9564890294],[94.8114863529,94.8114863529,94.8114863529],[96.583434,96.583434,96.583434],[96.9646728824,96.9646728824,96.9646728824],[98.9954360294,98.9954360294,98.9954360294],[101.138164353,101.138164353,101.138164353],[102.882122,102.882122,102.882122],[103.095394882,103.095394882,103.095394882],[104.006386029,104.006386029,104.006386029],[104.777404353,104.777404353,104.777404353],[104.701732,104.701732,104.701732],[102.563504882,102.563504882,102.563504882],[103.558486029,103.558486029,103.558486029],[102.985774353,102.985774353,102.985774353],[102.098281,102.098281,102.098281],[101.471734882,101.471734882,101.471734882],[102.550696029,102.550696029,102.550696029],[104.021564353,104.021564353,104.021564353],[105.093652,105.093652,105.093652],[105.194954882,105.194954882,105.194954882],[104.594266029,104.594266029,104.594266029],[105.813184353,105.813184353,105.813184353],[105.149642,105.149642,105.149642],[102.899434882,102.899434882,102.899434882],[102.354736029,102.354736029,102.354736029],[102.033974353,102.033974353,102.033974353],[102.014299,102.014299,102.014299],[101.835654882,101.835654882,101.835654882],[102.018806029,102.018806029,102.018806029],[102.733834353,102.733834353,102.733834353],[103.134062,103.134062,103.134062],[103.263354882,103.263354882,103.263354882],[103.866416029,103.866416029,103.866416029],[105.393274353,105.393274353,105.393274353],[107.081242,107.081242,107.081242],[108.414274882,108.414274882,108.414274882],[109.297286029,109.297286029,109.297286029],[111.495994353,111.495994353,111.495994353],[112.680072,112.680072,112.680072],[113.061304882,113.061304882,113.061304882],[112.376636029,112.376636029,112.376636029],[111.244054353,111.244054353,111.244054353],[107.305192,107.305192,107.305192],[106.678644882,106.678644882,106.678644882],[104.678246029,104.678246029,104.678246029],[105.729204353,105.729204353,105.729204353],[107.837082,107.837082,107.837082],[108.022364882,108.022364882,108.022364882],[107.281706029,107.281706029,107.281706029],[107.016934353,107.016934353,107.016934353],[106.045452,106.045452,106.045452],[106.370704882,106.370704882,106.370704882],[106.049966029,106.049966029,106.049966029],[105.841184353,105.841184353,105.841184353],[106.045452,106.045452,106.045452],[106.650644882,106.650644882,106.650644882],[107.393676029,107.393676029,107.393676029],[108.668584353,108.668584353,108.668584353],[109.628702,109.628702,109.628702],[110.261894882,110.261894882,110.261894882],[110.920946029,110.920946029,110.920946029],[110.740154353,110.740154353,110.740154353],[110.048622,110.048622,110.048622],[108.190324882,108.190324882,108.190324882],[107.057746029,107.057746029,107.057746029],[108.024724353,108.024724353,108.024724353],[109.712692,109.712692,109.712692],[111.409654882,111.409654882,111.409654882],[108.765396029,108.765396029,108.765396029],[106.289084353,106.289084353,106.289084353],[103.917902,103.917902,103.917902],[100.799874882,100.799874882,100.799874882],[97.3997700294,97.3997700294,97.3997700294],[93.2438143529,93.2438143529,93.2438143529],[94.123068,94.123068,94.123068],[96.1970798824,96.1970798824,96.1970798824],[97.2754290294,97.2754290294,97.2754290294],[96.4561423529,96.4561423529,96.4561423529],[92.674237,92.674237,92.674237],[92.8536228824,92.8536228824,92.8536228824],[93.4304540294,93.4304540294,93.4304540294],[93.2055593529,93.2055593529,93.2055593529],[93.955896,93.955896,93.955896],[94.7296738824,94.7296738824,94.7296738824],[95.5665510294,95.5665510294,95.5665510294],[95.5459793529,95.5459793529,95.5459793529],[97.09503,97.09503,97.09503],[97.7573598824,97.7573598824,97.7573598824],[96.1609430294,96.1609430294,96.1609430294],[96.5861653529,96.5861653529,96.5861653529],[103.874812,103.874812,103.874812],[105.094384882,105.094384882,105.094384882],[106.804276029,106.804276029,106.804276029],[107.786744353,107.786744353,107.786744353],[106.596022,106.596022,106.596022],[107.310354882,107.310354882,107.310354882],[106.897156029,106.897156029,106.897156029],[107.210924353,107.210924353,107.210924353],[107.134682,107.134682,107.134682],[108.829774882,108.829774882,108.829774882],[107.926196029,107.926196029,107.926196029],[106.298904353,106.298904353,106.298904353],[103.365872,103.365872,103.365872],[102.029554882,102.029554882,102.029554882],[99.3000760294,99.3000760294,99.3000760294],[95.3045073529,95.3045073529,95.3045073529],[90.50099,90.50099,90.50099],[88.0984848824,88.0984848824,88.0984848824],[86.5150710294,86.5150710294,86.5150710294],[85.1143943529,85.1143943529,85.1143943529],[89.033584,89.033584,89.033584],[88.8229008824,88.8229008824,88.8229008824],[88.2666710294,88.2666710294,88.2666710294],[87.7260053529,87.7260053529,87.7260053529],[88.102896,88.102896,88.102896],[87.6546968824,87.6546968824,87.6546968824],[88.4004090294,88.4004090294,88.4004090294],[88.3618013529,88.3618013529,88.3618013529],[89.031151,89.031151,89.031151],[91.0202948824,91.0202948824,91.0202948824],[91.6732820294,91.6732820294,91.6732820294],[92.0149173529,92.0149173529,92.0149173529],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null]],[[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[91.3664955975612,88.5516397488478,85.7367839001345],[93.8028008833505,88.8451670819917,83.887533280633],[95.9320114111649,89.180759683746,82.429507956327],[97.7600703642187,89.5281991804457,81.2963279966727],[99.3306690684251,89.8728790337164,80.4150889990078],[100.690053610453,90.2079434704177,79.7258333303828],[101.877464132883,90.5303751766796,79.1832862204762],[102.924005037424,90.8390486739232,78.7540923104221],[103.853836133091,91.1337621830921,78.4136882330932],[104.685718564628,91.4147565453762,78.1437945261242],[105.434354538973,91.6824765624008,77.9305985858284],[106.111420270123,91.9374529753702,77.7634856806177],[106.726327335044,92.1802444616366,77.6341615882291],[107.286774878645,92.411409472563,77.5360440664815],[107.79914940768,92.6314928924537,77.4638363772273],[108.268816012072,92.8410200429929,77.4132240739141],[108.700332762765,93.0404943133491,77.3806558639329],[109.097610635362,93.2303965656664,77.3631824959704],[109.464034519981,93.4111853962684,77.3583362725562],[109.802556137162,93.5832977961055,77.3640394550486],[110.115766417536,93.7471499844904,77.3785335514451],[110.405952667795,93.9031383048644,77.4003239419341],[110.675144310904,94.0516401283693,77.4281359458347],[110.925149928318,94.1930147393423,77.4608795503665],[111.157587593278,94.3276041909004,77.4976207885224],[111.373909964148,94.4557341257277,77.5375582873072],[111.575425236402,94.5777145605901,77.5800038847783],[111.763314785035,94.6938406347507,77.6243664844662],[111.938648134602,94.8043933232377,77.6701385118731],[112.102395750549,94.9096401162659,77.7168844819827],[112.25544003838,95.0098356662397,77.7642312940989],[112.398584856386,95.1052224038008,77.8118599512153],[112.532563786004,95.1960311243551,77.8594984627062],[112.658047356435,95.2824815464742,77.9069157365137],[112.77564938321,95.3647828435083,77.9539163038063],[112.885932551448,95.4431341496907,78.0003357479333],[112.98941335161,95.517725041955,78.0460367323],[113.086566457298,95.5887359986291,78.0909055399606],[113.177828619921,95.6563388361157,78.1348490523104],[113.263602143171,95.7206971246146,78.1777921060582],[113.344257990528,95.7819665838933,78.2196751772581],[113.420138571074,95.840295460062,78.2604523490502],[113.491560242294,95.8958248842673,78.3000895262409],[113.558815563106,95.9486892141687,78.3385628652312],[113.622175325777,95.9990163590279,78.3758573922792],[113.68189039155,96.0469280891946,78.4119657868389],[113.738193351604,96.0925403307391,78.4468873098747],[113.791300032161,96.1359634459445,78.4806268597279],[113.841410860293,96.1773025003363,78.5131941403801],[113.888712104898,96.2166575168966,78.5446029288953],[113.933377005668,96.2541237180772,78.5748704304867],[113.97556680132,96.2897917561977,78.6040167110757],[114.015431667125,96.3237479327856,78.6320641984458],[114.053111570621,96.3560744073894,78.659037244158],[114.088737053419,96.3868493963699,78.6849617393206],[114.122429946188,96.4161473621503,78.7098647781125],[114.154304023107,96.4440391933843,78.733774363662],[114.184465601452,96.4705923764763,78.7567191515002],[114.213014091389,96.4958711588695,78.77872822635],[114.240042500512,96.5199367044981,78.7998309084839],[114.265637897248,96.5428472417776,78.8200565863076],[114.289881836794,96.5646582044933,78.8394345721927],[114.312850752941,96.5854223659261,78.8579939789111],[114.33461631877,96.6051899665419,78.8757636143138],[114.355245778951,96.6240088355517,78.8927718921527],[114.374802256104,96.6419245066386,78.9090467571734],[114.393345033448,96.6589803281296,78.9246156228117],[114.410929815758,96.6752175678804,78.9395053200029],[114.427608970471,96.6906755131257,78.9537420557809],[114.443431750596,96.7053915655384,78.9673513804808]]],"fixedtz":false,"tzone":"UTC"},"evals":["attrs.interactionModel"],"jsHooks":[]}</script>
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
