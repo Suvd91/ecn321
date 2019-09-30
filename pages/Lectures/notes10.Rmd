@@ -1,0 +1,14 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+Serially Correlated Disturbances The full model is: $$y_t = \text{TIME}_t(\theta) +\sum_{i=1}^s\gamma_iD_{it} + \varepsilon_t$$
+$$ \Phi(L)\varepsilon_t = \nu_t$$ 
+$$\Phi(L) = 1 − \phi_1L −\ldots− \phi_p L^p,\quad \nu_t \sim WN(0, \sigma^2).$$
+
+- $\text{TIME}_t(\theta)$ is a trend, with underlying parameters \theta. 
+- The disturbances follow an AR(p) process. In any particular application, of course, various trend effects, seasonal and other calendar effects, and autoregressive cyclical effects may not be needed and so could be dropped.
+- Finally, $v_t$ is the underlying white noise shock that drives everything. 
+
+Now consider constructing an h-step-ahead point forecast at time T, $yT+h,T$ . At time $T + h$, $$y_{T+h} = \text{TIME}_{T+h}(\theta) +\sum_{i=1}^s\gamma_iD_{i,{T+h}} + \varepsilon_{T+h}.$$

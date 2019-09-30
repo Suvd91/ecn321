@@ -1,0 +1,45 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+load("C:/Users/MBA01/Downloads/ch10data.Rdata")
+library(dplyr)
+library(magrittr)
+library(lubridate)
+library(forecast)
+estimation_data <- ch10data %>% 
+  filter(date > as.Date("1967-12-01") & date < as.Date("1994-12-01"))
+estimation_data %<>% mutate(lsales = log(liquor))
+
+```
+```{r}
+plot(estimation_data$date, estimation_data$liquor, type="l")
+```
+
+```{r}
+plot(estimation_data$date, estimation_data$lsales, type="l")
+```
+```{r}
+y <- estimation_data$lsales
+```
+```{r}
+time <- 1:length(y)
+seasonal <- as.factor(month(estimation_data$date))
+X <- cbind(time, time2 = time^2, model.matrix(~seasonal - 1))
+reg <- arima(y, order = c(3, 0, 0), xreg = X, include.mean = FALSE)
+broom::tidy(reg)
+```
+
+
+
+```{r}
+reg1 <- Arima(y, order = c(3, 0, 0), xreg = X, include.mean = FALSE)
+broom::tidy(reg1)
+```
+```{r}
+forecast(reg1, h=1)
+```
+
+
