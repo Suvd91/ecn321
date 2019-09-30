@@ -36,6 +36,6 @@ description:
 [Florian Heiss *"Using R for Introductory Econometrics"*](http://www.urfie.net/)
 
 
-## Бие даалт - 1
+## Бие даалт
 
 [Бие даалт - 1](pages/HW/hw1.html)
