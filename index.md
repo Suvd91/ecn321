@@ -34,3 +34,8 @@ description:
 [Christoph Hanck, Martin Arnold, Alexander Gerber and Martin Schmelzer *"Introduction to Econometrics with R"*](https://www.econometrics-with-r.org/index.html)
 
 [Florian Heiss *"Using R for Introductory Econometrics"*](http://www.urfie.net/)
+
+
+## Бие даалт - 1
+
+[Бие даалт - 1](pages/HW/hw1.html)
