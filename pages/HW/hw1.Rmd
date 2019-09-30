@@ -6,7 +6,7 @@ output: html_document
 ---
 Дараахи дасгалуудыг гүйцэтгэн гаргацтай, цэвэр бичин хураалгана уу! 
 
-<span style="color:red">Deadline: 2019-10-7</span>, 
+<span style="color:red">Deadline: 2019-10-7</span> 
 
 ## 1. Магадлалын онол, статистикийн мэдлэгээ бататгах
 
