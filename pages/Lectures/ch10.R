@@ -23,7 +23,6 @@ X <- cbind(time, time2 = time^2, model.matrix(~seasonal - 1))
 reg <- arima(y, order = c(3, 0, 0), xreg = X, include.mean = FALSE)
 summary(reg)
 reg <- arima(y, order = c(3, 0, 0), xreg = X, include.mean = FALSE)
-summary(reg)
 library("forecast")
 
 plot <- forecast(reg, h = 12, level = 95)
