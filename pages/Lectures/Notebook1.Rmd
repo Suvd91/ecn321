@@ -1,10 +1,12 @@
 ---
 title: 'Diebold Chapter 5: R codes'
 author: "D. Khashbaatar"
+monofont: "Fira Code"
 output:
-  html_document:
-    theme: united
-    highlight: tango
+html_document:
+    theme: null
+    highlight: null
+    css: custom.css
 ---
 
 
@@ -14,8 +16,8 @@ library(dplyr)
 mw16 <- ch5data %>% 
   filter(date >= as.Date("1955-01-01") & date<=as.Date("1993-12-01")) %>% 
   select(date, m16, w16) %>% 
-  mutate(time        = row_number(), 
-         time2       = time^2)
+  mutate(time  = row_number(), 
+         time2 = time^2)
 ```
 
 ```{r}
@@ -80,8 +82,7 @@ nyse <- ch5data %>%
          time2       = time^2)
 reg1 <- lm(nysevol ~ time + time2, data = nyse)
 reg2 <- nls(nysevol ~ beta0 * exp(beta1 * time), data = nyse , 
-            start = list(beta0 = 1000, beta1 = 0),
-            trace = TRUE)
+            start = list(beta0 = 1000, beta1 = 0))
 ```
 
 ```{r}
@@ -141,19 +142,19 @@ RTRR <- ch5data %>%
   mutate(time        = row_number(), 
          time2       = time^2)
 estimation_data <- RTRR %>% filter(date < as.Date("1994-01-01"))
-evaluatuion_data <- RTRR %>% filter(date >= as.Date("1994-01-01"))
-reg1 <- lm(rtrr~time, data = estimation_data)
-reg2 <- lm(rtrr~time + time2, data = estimation_data)
-reg3 <- nls(rtrr~beta0*exp(beta1*time), data = estimation_data,
+evaluation_data <- RTRR %>% filter(date >= as.Date("1994-01-01"))
+reg1 <- lm(rtrr ~ time, data = estimation_data)
+reg2 <- lm(rtrr ~ time + time2, data = estimation_data)
+reg3 <- nls(rtrr ~ beta0*exp(beta1*time), data = estimation_data,
             start = list(beta0 = 1000, beta1 = 0))
 plot(rtrr ~ date, data =  estimation_data, 
      type = "l", 
-     lwd = 2, 
+     lwd  = 2, 
      xlab = "Time", 
-     ylab="Sales",
+     ylab = "Sales",
      main = "Monthly Retail Sales: 1955.01-1993.12")
-lines(estimation_data$date, fitted(reg1), col="blue", lty=2)
-lines(estimation_data$date, fitted(reg2), col="red", lty=3, lwd=2)
+lines(estimation_data$date, fitted(reg1), col = "blue", lty = 2)
+lines(estimation_data$date, fitted(reg2), col="red", lty = 3, lwd = 2)
 lines(estimation_data$date, fitted(reg3), col="green4", lty=4)
 legend("topleft", c("Linear", "Quadratic", "Exponential"), 
        lty = c(2, 3, 4), 
@@ -168,14 +169,14 @@ plot_data <- RTRR %>%
   filter(date > as.Date("1990-01-01") & date <= as.Date("1995-01-01"))
 plot(plot_data$date, plot_data$rtrr,  
      type = "l", 
-     lwd = 2, 
+     lwd  = 2, 
      xlab = "Time", 
-     ylab="History, Forecasts, Realization",
+     ylab = "History, Forecasts, Realization",
      main = "Monthly Retail Sales", ylim=c(110000, 200000))
 polygon(c(as.Date("1994-01-01") ,  as.Date("1994-01-01"), as.Date("1995-01-01"), as.Date("1995-01-01")), 
         c(110000, 200000,  200000, 11000), col = "grey85", border = NA)
 lines(plot_data$date, plot_data$rtrr, lwd = 2) 
-point_forecasts <- predict(reg1, evaluatuion_data) # shugaman trend zagvariin taamaglal
+point_forecasts <- predict(reg1, evaluation_data) # shugaman trend zagvariin taamaglal
 # interval forecasts
 lower <- point_forecasts - 1.96*summary(reg1)$sigma
 upper <- point_forecasts + 1.96*summary(reg1)$sigma

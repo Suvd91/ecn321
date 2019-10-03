@@ -15,7 +15,7 @@ estimation_data %<>% mutate(lsales = log(liquor))
 y <- estimation_data$lsales
 library(xts)
 
-liq <- xts(estimation_data[,1], order.by=estimation_data[,2])
+liq <- xts::xts(estimation_data[,1], order.by=estimation_data[,2])
 
 lsales <- xts(estimation_data[,3], order.by=estimation_data[,2])
 

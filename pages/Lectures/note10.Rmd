@@ -12,7 +12,6 @@ library(forecast)
 estimation_data <- ch10data %>% 
   filter(date > as.Date("1967-12-01") & date < as.Date("1994-12-01"))
 estimation_data %<>% mutate(lsales = log(liquor))
-
 ```
 ```{r}
 plot(estimation_data$date, estimation_data$liquor, type="l")
