@@ -2,7 +2,7 @@
 title: "Эконометрикс II"
 subtitle: "Лекц 10: Вектор Авторегресс Загвар (VAR) <html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>"
 author: "багш: Д. Хашбаатар"
-date: "2019/09/30"
+date: "2019/10/21"
 output:
   xaringan::moon_reader:
     css: ['default', 'metropolis', 'metropolis-fonts', 'my-css.css']
