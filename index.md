@@ -22,7 +22,8 @@ description:
 |8.    	|[Мөчлөгийн оновчтой таамаглал](pages/Lectures/slide7.html)                                	|       	|                                                                                                                          	|                                        	|
 |9.     	|Семинар                                                                                        	|10       	|                                                                                                                          	|                                        	|[data 10](pages/Lectures/ch10data.Rdata), [ch10.csv](https://www.dropbox.com/s/a58j9w4wfglo4x5/ch10data.csv?dl=0) 
 |     	|                                                                                             	|       	|                                                                                                                          	|                                        	|
-
+| 10. 	| ARDL Загвар                                                                                 	| 10    	|                                                                                                                          	|                                        	|
+| 11. 	| [Вектор Авторегресс Загвар](pages/Lectures/slide9.html)                                     	| 10    	|                                                                                                                          	|                                        	|
 ## Сурах бичиг
 
 [Diebold Francis *"Elements of Forecasting"*](https://www.sas.upenn.edu/~fdiebold/Textbooks.html)

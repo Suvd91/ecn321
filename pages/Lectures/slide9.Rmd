@@ -1,0 +1,230 @@
+---
+title: "Эконометрикс II"
+subtitle: "Лекц 10: Вектор Авторегресс Загвар (VAR) <html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html>"
+author: "багш: Д. Хашбаатар"
+date: "2019/09/30"
+output:
+  xaringan::moon_reader:
+    css: ['default', 'metropolis', 'metropolis-fonts', 'my-css.css']
+    # self_contained: true
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{R, setup, include = F}
+options(htmltools.dir.version = FALSE)
+library(pacman)
+p_load(
+  broom, here, tidyverse,
+  latex2exp, ggplot2, ggthemes, viridis, extrafont, gridExtra,
+  kableExtra,
+  data.table,
+  dplyr,
+  lubridate,
+  magrittr, knitr, parallel
+)
+# Define pink color
+red_pink <- "#e64173"
+turquoise <- "#20B2AA"
+grey_light <- "grey70"
+grey_mid <- "grey50"
+grey_dark <- "grey20"
+# Dark slate grey: #e64173
+# Knitr options
+opts_chunk$set(
+  comment = "#>",
+  fig.align = "center",
+  fig.height = 7,
+  fig.width = 10.5,
+  warning = F,
+  message = F
+)
+opts_chunk$set(dev = "svg")
+options(device = function(file, width, height) {
+  svg(tempfile(), width = width, height = height)
+})
+# A blank theme for ggplot
+theme_empty <- theme_bw() + theme(
+  line = element_blank(),
+  rect = element_blank(),
+  strip.text = element_blank(),
+  axis.text = element_blank(),
+  plot.title = element_blank(),
+  axis.title = element_blank(),
+  plot.margin = structure(c(0, 0, -0.5, -1), unit = "lines", valid.unit = 3L, class = "unit"),
+  legend.position = "none"
+)
+theme_simple <- theme_bw() + theme(
+  line = element_blank(),
+  panel.grid = element_blank(),
+  rect = element_blank(),
+  strip.text = element_blank(),
+  axis.text.x = element_text(size = 18, family = "STIXGeneral"),
+  axis.text.y = element_blank(),
+  axis.ticks = element_blank(),
+  plot.title = element_blank(),
+  axis.title = element_blank(),
+  # plot.margin = structure(c(0, 0, -1, -1), unit = "lines", valid.unit = 3L, class = "unit"),
+  legend.position = "none"
+)
+theme_axes_math <- theme_void() + theme(
+  text = element_text(family = "MathJax_Math"),
+  axis.title = element_text(size = 22),
+  axis.title.x = element_text(hjust = .95, margin = margin(0.15, 0, 0, 0, unit = "lines")),
+  axis.title.y = element_text(vjust = .95, margin = margin(0, 0.15, 0, 0, unit = "lines")),
+  axis.line = element_line(
+    color = "grey70",
+    size = 0.25,
+    arrow = arrow(angle = 30, length = unit(0.15, "inches")
+  )),
+  plot.margin = structure(c(1, 0, 1, 0), unit = "lines", valid.unit = 3L, class = "unit"),
+  legend.position = "none"
+)
+theme_axes_serif <- theme_void() + theme(
+  text = element_text(family = "MathJax_Main"),
+  axis.title = element_text(size = 22),
+  axis.title.x = element_text(hjust = .95, margin = margin(0.15, 0, 0, 0, unit = "lines")),
+  axis.title.y = element_text(vjust = .95, margin = margin(0, 0.15, 0, 0, unit = "lines")),
+  axis.line = element_line(
+    color = "grey70",
+    size = 0.25,
+    arrow = arrow(angle = 30, length = unit(0.15, "inches")
+  )),
+  plot.margin = structure(c(1, 0, 1, 0), unit = "lines", valid.unit = 3L, class = "unit"),
+  legend.position = "none"
+)
+theme_axes <- theme_void() + theme(
+  text = element_text(family = "Fira Sans Book"),
+  axis.title = element_text(size = 18),
+  axis.title.x = element_text(hjust = .95, margin = margin(0.15, 0, 0, 0, unit = "lines")),
+  axis.title.y = element_text(vjust = .95, margin = margin(0, 0.15, 0, 0, unit = "lines")),
+  axis.line = element_line(
+    color = grey_light,
+    size = 0.25,
+    arrow = arrow(angle = 30, length = unit(0.15, "inches")
+  )),
+  plot.margin = structure(c(1, 0, 1, 0), unit = "lines", valid.unit = 3L, class = "unit"),
+  legend.position = "none"
+)
+theme_set(theme_gray(base_size = 20))
+```
+
+# Оновчтой таамаглал
+
+.hi-pink[Vector autoregression]: VAR(1) -г $y_t$, $x_t$ цувааны хувьд тодорхойлбол 
+
+$$\begin{matrix}
+    y_{t} & = &\beta_{10}+\beta_{11}y_{t-1}+\gamma_{11}x_{t-1}  +\varepsilon_{1t}\\
+     x_t & = &\beta_{20}+\beta_{21}y_{t-1}+\gamma_{21}x_{t-1}+\varepsilon_{2t}  
+  \end{matrix}$$
+
+- $\beta$, $\gamma$-ууд үл мэдэгдэх параметрүүд
+
+- $n$ хэмжээст вектор процесс нь нийт $n^2p+n$параметртэй). 
+
+- $p=1$ ухралттай, $n=2$ хувьсагчийн модел нь 6 коэффиценттэй байна.
+
+---
+# VAR(1)
+
+Дээрх тэгшитгэлийн системийг вектор хэлбэрт бичвэл
+
+$$\boldsymbol{y}_t=\boldsymbol{\beta} + \boldsymbol{\Phi} \boldsymbol{y}_{t-1}+\boldsymbol{\varepsilon}_t$$
+
+- $\boldsymbol{y}_t=\begin{pmatrix}y_t\\x_t\end{pmatrix},$
+$\boldsymbol{\beta}= \begin{pmatrix} \beta_{10}\\ \beta_{20}\end{pmatrix}$, 
+$\boldsymbol {\varepsilon}_t= \begin{pmatrix}\varepsilon_{1t}\\ \varepsilon_{2t} \end{pmatrix}$, $\boldsymbol {\Phi}=\begin{pmatrix}\beta_{11}&\gamma_{11}\\\beta_{21}&\gamma_{21}\end{pmatrix}$
+
+- $\varepsilon_{1t}\sim WN(0, \sigma_1^2)$, $\varepsilon_{2t}\sim WN(0, \sigma_2^2)$
+
+--
+- $\mathrm{E}\boldsymbol{y}_t=(I_2-\Phi)^{-1}\beta$
+- стационарь
+
+---
+# VAR(1)
+
+- матрицан олон гишүүнт (ө.х элемент бүр нь lag polynomial) ашиглан  
+ 
+ $$\Phi (L)\boldsymbol  y_t = \boldsymbol  \beta + \boldsymbol\varepsilon_t$$
+гэж бичиж болно. Энд $$\Phi(L) = I_2-\Phi L$$
+
+- Олон хувьсагчийн моделийн хувьд стационарь (векторын элемент бүр стационарь) байх нөхцөл нь AR(1) модельтэй адилхан. 
+
+ * $| I_k-\Phi z|=0$ шийдүүд нэгж тойргоос гадна оршиж байвал $\boldsymbol y_t$ нь стационарь байна. $\Phi(1)$ матриц урвуутай.
+ 
+---
+# VAR
+
+Параметрийн тоо олон болох тусам таарамж (model fit) сайжрах боловч, прогноз мууддаг(overfitting problem). Тэгэхээр оролцох цувааны тоог төдийлэн ихгүй байхаар, мөн аль болох хоорондоо хамааралтай байдлаар сонгох нь зүйтэй. 
+
+ > Жишээлбэл,  эдийн засгийн онолд инфляци, богино хугацааны хүү, ажилгүйдэл хамааралтай гэж үздэг учир эдгээр 3 хувьсагч нэг нэгээ таамаглахад хэрэг болно. Тиймд энэ 3 хувьсагчийг нэг моделд оруулж болох юм.
+
+---
+# VAR-ийн статистик үнэлгээ 
+
+.hi-pink[үнэлгээ]: OLSE нь нийцтэй байх учир параметрүүдийг ХБКА-аар үнэлж болно. Мөн их түүвэрт нормал тархалттай учир коэффициентүүдийн тухай таамаглалыг ердийн аргаар шалгаж болно. (Wald шинжүүр нь $\chi^2$ асимптотик тархалттай байна.)
+
+.hi-pink[lag order selection]: Нэг хувьсагчийн загварийн адилаар мэдээллийн шинжүүрээр тодорхойлно.
+
+$\widehat{ Var(\boldsymbol \varepsilon})=\hat\Sigma$ бол
+
+$$BIC(p)=\log(\det(\hat\Sigma))+(n^2p+n)\frac{\ln(T)}{T}$$
+$$AIC(p)=\log(\det(\hat\Sigma))+(n^2p+n)\frac{2}{T}$$
+
+---
+# Predictive Causality
+
+.hi-pink[Granger Causality]
+- Шалтгаан нь үр дагавраас өмнө явагдана
+- Шалтгааны цуваа нь үр дагаврын цувааг таамаглахад шаардлагатай мэдээллийг агуулна 
+
+$x_t$ нь $y_t$-ийн таамаглалт шалтгаан болж байвал VAR загварын $y$-ийн тэгшитгэлийн коэффициент нь $0$ биш байна.
+
+--
+
+$$\begin{matrix}
+    y_{t} & = &\beta_{10}+\beta_{11}y_{t-1}+\gamma_{11}x_{t-1}  +\varepsilon_{1t}\\
+     x_t & = &\beta_{20}+\beta_{21}y_{t-1}+\gamma_{21}x_{t-1}+\varepsilon_{2t}  
+  \end{matrix}$$
+  
+  $$\gamma_{11}\neq 0$$
+---
+# Impulse Response Function
+
+Инновацийн цуваа ($\varepsilon$) таамаглах цувааны ($y$) одоогийн болон ирээдүйн утгад хэрхэн нөлөөлөх вэ?
+
+$$y_t=b_0\epsilon_t+b_1\epsilon_{t-1}+...,\quad \epsilon_t\sim WN(0,1)$$
+.hi-pink[Impulse Response Function]
+$$\frac{\partial y_t}{\partial \varepsilon_{t-j}}=b_j$$
+---
+# VAR Impulse Response Function
+
+
+$$\begin{matrix}
+    y_{1t} & = &\phi_{11}y_{1,t-1}+\phi_{12}y_{2,t-1}  +\varepsilon_{1t}\\
+     y_{2t} & = &\phi_{21}y_{1,t-1}+\phi_{22}y_{2,t-1}+\varepsilon_{2t}  
+  \end{matrix}$$
+
+$MA(\infty)$
+
+$$\begin{matrix}
+    y_{1t} & =\varepsilon_{1t} + \phi_{11}\varepsilon_{1,t-1}+\phi_{12}\varepsilon_{2,t-1}  +...\\
+     y_{2t} & =\varepsilon_{1t}+ \phi_{21}\varepsilon_{1,t-1}+\phi_{22}\varepsilon_{2,t-1}+...  
+  \end{matrix}$$
+
+--
+Cholesky Decomposition 
+$$\begin{matrix}
+    y_{1t}&=& b^0_{11}\epsilon_{1t} + b^1_{11}\epsilon_{1,t-1}+b^1_{12}\epsilon_{2,t-1}  +...\\
+y_{2t} &=& b^0_{21}\epsilon_{1t}+b^0_{22}\epsilon_{2t}+ b_{21}^2\epsilon_{1,t-1}+b^1_{22}\epsilon_{2,t-1}+...  
+  \end{matrix}$$
+---
+# Variance Decompostion
+
+Инновацийн цуваа ($\varepsilon$) $h$-алхмын дараахи таамаглалын вариацад хэрэхэн нөлөөлөх вэ?
+
+---
+# Хэрэглээ: Housing Starts and Completion

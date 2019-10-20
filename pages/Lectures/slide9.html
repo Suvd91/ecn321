@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Эконометрикс II</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="багш: Д. Хашбаатар" />
+    <link href="slide9_files/remark-css/default.css" rel="stylesheet" />
+    <link href="slide9_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="slide9_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Эконометрикс II
+## Лекц 10: Вектор Авторегресс Загвар (VAR)
+<html>
+<div style="float:left">
+
+</div>
+<hr color='#EB811B' size=1px width=796px>
+</html>
+### багш: Д. Хашбаатар
+### 2019/09/30
+
+---
+
+
+
+
+# Оновчтой таамаглал
+
+.hi-pink[Vector autoregression]: VAR(1) -г `\(y_t\)`, `\(x_t\)` цувааны хувьд тодорхойлбол 
+
+`$$\begin{matrix}
+    y_{t} &amp; = &amp;\beta_{10}+\beta_{11}y_{t-1}+\gamma_{11}x_{t-1}  +\varepsilon_{1t}\\
+     x_t &amp; = &amp;\beta_{20}+\beta_{21}y_{t-1}+\gamma_{21}x_{t-1}+\varepsilon_{2t}  
+  \end{matrix}$$`
+
+- `\(\beta\)`, `\(\gamma\)`-ууд үл мэдэгдэх параметрүүд
+
+- `\(n\)` хэмжээст вектор процесс нь нийт `\(n^2p+n\)`параметртэй). 
+
+- `\(p=1\)` ухралттай, `\(n=2\)` хувьсагчийн модел нь 6 коэффиценттэй байна.
+
+---
+# VAR(1)
+
+Дээрх тэгшитгэлийн системийг вектор хэлбэрт бичвэл
+
+`$$\boldsymbol{y}_t=\boldsymbol{\beta} + \boldsymbol{\Phi} \boldsymbol{y}_{t-1}+\boldsymbol{\varepsilon}_t$$`
+
+- `\(\boldsymbol{y}_t=\begin{pmatrix}y_t\\x_t\end{pmatrix},\)`
+`\(\boldsymbol{\beta}= \begin{pmatrix} \beta_{10}\\ \beta_{20}\end{pmatrix}\)`, 
+`\(\boldsymbol {\varepsilon}_t= \begin{pmatrix}\varepsilon_{1t}\\ \varepsilon_{2t} \end{pmatrix}\)`, `\(\boldsymbol {\Phi}=\begin{pmatrix}\beta_{11}&amp;\gamma_{11}\\\beta_{21}&amp;\gamma_{21}\end{pmatrix}\)`
+
+- `\(\varepsilon_{1t}\sim WN(0, \sigma_1^2)\)`, `\(\varepsilon_{2t}\sim WN(0, \sigma_2^2)\)`
+
+--
+- `\(\mathrm{E}\boldsymbol{y}_t=(I_2-\Phi)^{-1}\beta\)`
+- стационарь
+
+---
+# VAR(1)
+
+- матрицан олон гишүүнт (ө.х элемент бүр нь lag polynomial) ашиглан  
+ 
+ `$$\Phi (L)\boldsymbol  y_t = \boldsymbol  \beta + \boldsymbol\varepsilon_t$$`
+гэж бичиж болно. Энд `$$\Phi(L) = I_2-\Phi L$$`
+
+- Олон хувьсагчийн моделийн хувьд стационарь (векторын элемент бүр стационарь) байх нөхцөл нь AR(1) модельтэй адилхан. 
+
+ * `\(| I_k-\Phi z|=0\)` шийдүүд нэгж тойргоос гадна оршиж байвал `\(\boldsymbol y_t\)` нь стационарь байна. `\(\Phi(1)\)` матриц урвуутай.
+ 
+---
+# VAR
+
+Параметрийн тоо олон болох тусам таарамж (model fit) сайжрах боловч, прогноз мууддаг(overfitting problem). Тэгэхээр оролцох цувааны тоог төдийлэн ихгүй байхаар, мөн аль болох хоорондоо хамааралтай байдлаар сонгох нь зүйтэй. 
+
+ &gt; Жишээлбэл,  эдийн засгийн онолд инфляци, богино хугацааны хүү, ажилгүйдэл хамааралтай гэж үздэг учир эдгээр 3 хувьсагч нэг нэгээ таамаглахад хэрэг болно. Тиймд энэ 3 хувьсагчийг нэг моделд оруулж болох юм.
+
+---
+# VAR-ийн статистик үнэлгээ 
+
+.hi-pink[үнэлгээ]: OLSE нь нийцтэй байх учир параметрүүдийг ХБКА-аар үнэлж болно. Мөн их түүвэрт нормал тархалттай учир коэффициентүүдийн тухай таамаглалыг ердийн аргаар шалгаж болно. (Wald шинжүүр нь `\(\chi^2\)` асимптотик тархалттай байна.)
+
+.hi-pink[lag order selection]: Нэг хувьсагчийн загварийн адилаар мэдээллийн шинжүүрээр тодорхойлно.
+
+`\(\widehat{ Var(\boldsymbol \varepsilon})=\hat\Sigma\)` бол
+
+`$$BIC(p)=\log(\det(\hat\Sigma))+(n^2p+n)\frac{\ln(T)}{T}$$`
+`$$AIC(p)=\log(\det(\hat\Sigma))+(n^2p+n)\frac{2}{T}$$`
+
+---
+# Predictive Causality
+
+.hi-pink[Granger Causality]
+- Шалтгаан нь үр дагавраас өмнө явагдана
+- Шалтгааны цуваа нь үр дагаврын цувааг таамаглахад шаардлагатай мэдээллийг агуулна 
+
+`\(x_t\)` нь `\(y_t\)`-ийн таамаглалт шалтгаан болж байвал VAR загварын `\(y\)`-ийн тэгшитгэлийн коэффициент нь `\(0\)` биш байна.
+
+--
+
+`$$\begin{matrix}
+    y_{t} &amp; = &amp;\beta_{10}+\beta_{11}y_{t-1}+\gamma_{11}x_{t-1}  +\varepsilon_{1t}\\
+     x_t &amp; = &amp;\beta_{20}+\beta_{21}y_{t-1}+\gamma_{21}x_{t-1}+\varepsilon_{2t}  
+  \end{matrix}$$`
+  
+  `$$\gamma_{11}\neq 0$$`
+---
+# Impulse Response Function
+
+Инновацийн цуваа ($\varepsilon$) таамаглах цувааны ($y$) одоогийн болон ирээдүйн утгад хэрхэн нөлөөлөх вэ?
+
+`$$y_t=b_0\epsilon_t+b_1\epsilon_{t-1}+...,\quad \epsilon_t\sim WN(0,1)$$`
+.hi-pink[Impulse Response Function]
+`$$\frac{\partial y_t}{\partial \varepsilon_{t-j}}=b_j$$`
+---
+# VAR Impulse Response Function
+
+
+`$$\begin{matrix}
+    y_{1t} &amp; = &amp;\phi_{11}y_{1,t-1}+\phi_{12}y_{2,t-1}  +\varepsilon_{1t}\\
+     y_{2t} &amp; = &amp;\phi_{21}y_{1,t-1}+\phi_{22}y_{2,t-1}+\varepsilon_{2t}  
+  \end{matrix}$$`
+
+`\(MA(\infty)\)`
+
+`$$\begin{matrix}
+    y_{1t} &amp; =\varepsilon_{1t} + \phi_{11}\varepsilon_{1,t-1}+\phi_{12}\varepsilon_{2,t-1}  +...\\
+     y_{2t} &amp; =\varepsilon_{1t}+ \phi_{21}\varepsilon_{1,t-1}+\phi_{22}\varepsilon_{2,t-1}+...  
+  \end{matrix}$$`
+
+--
+Cholesky Decomposition 
+`$$\begin{matrix}
+    y_{1t}&amp;=&amp; b^0_{11}\epsilon_{1t} + b^1_{11}\epsilon_{1,t-1}+b^1_{12}\epsilon_{2,t-1}  +...\\
+y_{2t} &amp;=&amp; b^0_{21}\epsilon_{1t}+b^0_{22}\epsilon_{2t}+ b_{21}^2\epsilon_{1,t-1}+b^1_{22}\epsilon_{2,t-1}+...  
+  \end{matrix}$$`
+---
+# Variance Decompostion
+
+Инновацийн цуваа ($\varepsilon$) `\(h\)`-алхмын дараахи таамаглалын вариацад хэрэхэн нөлөөлөх вэ?
+
+---
+# Хэрэглээ: Housing Starts and Completion
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
