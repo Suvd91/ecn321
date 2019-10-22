@@ -1,14 +1,127 @@
 ---
-title: "Untitled"
-output: html_document
+title: "Diebold Chapter 7, 8 Codes"
+author: "Д. Хашбаатар"
+output:
+  html_document:
+    fig_caption: yes
+    fig_height: 6
+    fig_width: 7
+    highlight: tango
+    number_sections: yes
+    theme: "united"
+    toc: yes
+    toc_depth: 2
+    toc_float: yes
+  pdf_document:
+    toc: yes
+    toc_depth: '2'
+  word_document:
+    toc: yes
+    toc_depth: '2'
 ---
 
-Serially Correlated Disturbances The full model is: $$y_t = \text{TIME}_t(\theta) +\sum_{i=1}^s\gamma_iD_{it} + \varepsilon_t$$
-$$ \Phi(L)\varepsilon_t = \nu_t$$ 
-$$\Phi(L) = 1 − \phi_1L −\ldots− \phi_p L^p,\quad \nu_t \sim WN(0, \sigma^2).$$
+```{r message=FALSE}
+library(dplyr)
+library(vars)
+library(stargazer)
+load("ch11data.Rdata")
+plot(data11$date, data11$starts,
+     type = "l", lty = 2, col="blue",
+     xlab = "Date", ylab = "")
+lines(data11$date, data11$comps)
 
-- $\text{TIME}_t(\theta)$ is a trend, with underlying parameters \theta. 
-- The disturbances follow an AR(p) process. In any particular application, of course, various trend effects, seasonal and other calendar effects, and autoregressive cyclical effects may not be needed and so could be dropped.
-- Finally, $v_t$ is the underlying white noise shock that drives everything. 
+```
+```{r}
+library(dplyr)
+estimation_data <- filter(data11, date < as.Date("1992-01-01"))
+estimation_data <- ts(estimation_data[,-1], start = c(1968, 1), freq=12)
 
-Now consider constructing an h-step-ahead point forecast at time T, $yT+h,T$ . At time $T + h$, $$y_{T+h} = \text{TIME}_{T+h}(\theta) +\sum_{i=1}^s\gamma_iD_{i,{T+h}} + \varepsilon_{T+h}.$$
+```
+
+## Lag Selection
+
+```{r}
+VARselect(estimation_data, lag.max=8,
+  type="const")[["selection"]]
+
+```
+
+## Estimation
+
+```{r}
+var1 <- VAR(estimation_data, p=4, type="const")
+```
+
+
+
+```{r}
+summary(var1)
+```
+
+
+$$\Phi_1 =
+\begin{bmatrix} 0.237& 0.075 \\ 0.032  & 0.660 \end{bmatrix} $$
+
+$$\Phi_2=
+\begin{bmatrix}  0.206 & 0.040 \\ -0.121 & 0.230 \end{bmatrix} $$
+$$\Phi_3=
+\begin{bmatrix}  0.121 & 0.047 \\ -0.021 &  0.143* \end{bmatrix}$$
+$$\Phi_4=
+\begin{bmatrix}   0.157 & 0.047 \\ 0.082 &  0.008* \end{bmatrix}$$
+
+
+## Var Cov
+
+```{r}
+summary(var1)$covres
+```
+
+```{r}
+summary(var1)$corres
+```
+
+## Granger Causality
+
+```{r}
+causality(var1, cause = "starts")
+```
+```{r}
+causality(var1, cause = "comps")
+```
+
+
+## IRF
+
+```{r}
+ir.1 <- irf(var1, impulse = "comps", response = "starts", n.ahead = 20, ortho = FALSE)
+plot(ir.1)
+```
+```{r}
+ir.2 <- irf(var1, impulse = "starts", response = "comps", n.ahead = 20, ortho = FALSE)
+plot(ir.2)
+```
+```{r}
+ir.3 <- irf(var1, impulse = "starts", response = "starts", n.ahead = 20, ortho = FALSE)
+plot(ir.3)
+```
+```{r}
+ir.4 <- irf(var1, impulse = "comps", response = "comps", n.ahead = 20, ortho = FALSE)
+plot(ir.4)
+```
+
+## Forecast Error Variance Demposition
+
+```{r}
+fevd1 <- fevd(var1, n.ahead=20)
+plot(fevd1)
+```
+
+```{r}
+library(forecast)
+forecast(var1,h=12)
+```
+
+```{r}
+plot(forecast(var1,h=12))
+```
+
