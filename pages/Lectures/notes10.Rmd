@@ -1,5 +1,5 @@
 ---
-title: "Diebold Chapter 7, 8 Codes"
+title: "Diebold Chapter 11 Codes"
 author: "Д. Хашбаатар"
 output:
   html_document:
