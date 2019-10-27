@@ -1,11 +1,23 @@
 ---
-title: "R Notebook"
+title: "Diebold Chapter 7, 8 Codes"
+author: "Д. Хашбаатар"
 output:
   html_document:
-    df_print: paged
-  html_notebook: default
-  pdf_document: default
-  word_document: default
+    fig_caption: yes
+    fig_height: 6
+    fig_width: 7
+    highlight: tango
+    number_sections: yes
+    theme: "united"
+    toc: yes
+    toc_depth: 2
+    toc_float: yes
+  pdf_document:
+    toc: yes
+    toc_depth: '2'
+  word_document:
+    toc: yes
+    toc_depth: '2'
 ---
 ```{r}
 plot(cumsum(rnorm(100)), type="l", ylab="", xlab="Time", main="Random Walk")
