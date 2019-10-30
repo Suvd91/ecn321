@@ -23,7 +23,7 @@ description:
 |9. |Семинар |10 |[R Notebook 10](pages/Lectures/Notebook4.html) | |[data 10](pages/Lectures/ch10data.Rdata), [ch10.csv](https://www.dropbox.com/s/a58j9w4wfglo4x5/ch10data.csv?dl=0) | | | | | |
 | 10. 	| ARDL Загвар                                                                                 	| 11    	|                                                                                                                          	|                                        	|
 | 11. 	| [Вектор Авторегресс Загвар](pages/Lectures/slide9.html)                                     	| 10    	| [R Notebook 11](pages/Lectures/notes10.html)                                                                             	| [data 11](pages/Lectures/ch11data.Rdata) 	|
-| 12. 	|                                      	|    	|                                                                              	| [data 12](https://www.dropbox.com/search/personal?path=%2F&preview=id%3Ad2cINNFmFRIAAAAAAABzeg&query=macro.rdata&search_session_id=64845150765936633357303773353880&search_token=DEeeD%2FwItnCLIDaFH8BBChozMtDnX7McHppHMHQXIPE%3D) 	|
+| 12. 	|                                      	|    	|                                                                              	| [data 12](pages/Lectures/macro.Rdata) 	|
 
 ## Сурах бичиг
 
