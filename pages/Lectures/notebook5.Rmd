@@ -1,0 +1,133 @@
+---
+title: "Diebold Chapter 7, 8 Codes"
+author: "Д. Хашбаатар"
+output:
+  html_document:
+    fig_caption: yes
+    fig_height: 6
+    fig_width: 7
+    highlight: tango
+    number_sections: yes
+    theme: "united"
+    toc: yes
+    toc_depth: 2
+    toc_float: yes
+  pdf_document:
+    toc: yes
+    toc_depth: '2'
+  word_document:
+    toc: yes
+    toc_depth: '2'
+---
+
+# Data
+
+2-week-ahead-prediction
+
+```{r, message=FALSE}
+library(dplyr)
+load("data12.Rdata")
+```
+```{r, echo=FALSE}
+DT::datatable(data12)
+```
+
+# Таамаглал
+
+```{r, echo=FALSE, message=FALSE}
+library(dygraphs)
+library(xts)
+data12xts<- as.xts(data12[, c(2, 4)], order.by = data12$date)
+dygraph(data12xts, main = "Overseas Shipping: Quantative Forecast vs Realization") %>% 
+      dyHighlight(highlightCircleSize = 5, 
+              highlightSeriesBackgroundAlpha = 0.2,
+              hideOnMouseOut = FALSE) %>% 
+  dyRangeSelector()
+```
+
+
+```{r, echo=FALSE}
+data12xts<- as.xts(data12[, c(2, 3)], order.by = data12$date)
+dygraph(data12xts, main = "Overseas Shipping: Judgemental Forecast vs Realization") %>% 
+    dyHighlight(highlightCircleSize = 5, 
+              highlightSeriesBackgroundAlpha = 0.2,
+              hideOnMouseOut = FALSE) %>% 
+  dyRangeSelector()
+
+```
+
+# Таамаглалын алдаа
+
+```{r}
+data12 <- data12 %>% 
+  mutate(errorq = vol - volq,
+         errorj = vol - volj)
+```
+
+```{r, echo=FALSE}
+data12xts<- as.xts(data12[, c(5, 6)], order.by = data12$date)
+dygraph(data12xts, main = "Overseas Shipping: Judgemental Forecast vs Realization") %>% 
+      dyHighlight(highlightCircleSize = 5, 
+              highlightSeriesBackgroundAlpha = 0.2,
+              hideOnMouseOut = FALSE) %>% 
+  dyRangeSelector()
+
+```
+```{r, echo=FALSE, message=FALSE}
+library(highcharter)
+h <- hist(data12$errorq, breaks = 20, plot = FALSE)
+hchart(h)
+```
+```{r, echo=FALSE, message=FALSE}
+library(highcharter)
+h <- hist(data12$errorj, breaks = 30, plot = FALSE)
+hchart(h)
+```
+
+
+# Forecast Optimality
+
+$$y_{t+2}=\beta_0+\beta_1 y_{t+2,t}+e_{t+2}$$
+
+## $RMSE_Q$
+
+```{r}
+lm1 <- lm(vol~volq, data = data12)
+summary(lm1, type = "text")
+```
+
+```{r}
+T <- nrow(data12)
+eq <- data12$errorq
+sqrt(sum(eq^2)/T)
+```
+
+
+## $RMSE_J$
+
+```{r}
+lm2 <- lm(vol~volj, data = data12)
+summary(lm2, type = "text")
+```
+
+```{r}
+ej <- data12$errorj
+sqrt(sum(ej^2)/T)
+```
+
+# Forecast Combination
+
+## $RMSE_C$
+
+$$y_{t+2}=\beta_0+\beta_1 y^Q_{t+2,t}+ \beta_2 y^J_{t+2,t}+e_{t+2}$$
+```{r}
+combination <- lm(vol~volj + volq, data = data12)
+summary(combination, type = "text")
+```
+
+
+```{r}
+ec <- data12$vol-combination$fitted.values
+sqrt(sum(ec^2)/T)
+```
+
