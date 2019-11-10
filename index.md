@@ -23,9 +23,9 @@ description:
 |9. |Семинар |10 |[R Notebook 10](pages/Lectures/notebook4.html) | |[data 10](pages/Lectures/ch10data.Rdata), [ch10.csv](https://www.dropbox.com/s/a58j9w4wfglo4x5/ch10data.csv?dl=0) | | | | | |
 | 10. 	| ARDL Загвар                                                                                 	| 11    	|                                                                                                                          	|                                        	|
 | 11. 	| [Вектор Авторегресс Загвар](pages/Lectures/slide9.html)                                     	| 10    	| [R Notebook 11](pages/Lectures/notes10.html)                                                                             	| [data 11](pages/Lectures/ch11data.Rdata) 	|
-| 12. 	|                                      	|    	|                                                                              	| [data 12](pages/Lectures/macro.Rdata) 	|
+| 12. 	| Таамаглалыг үнэлэх, нэгтгэх                                     	|    	|                                                                              	| [data 12](pages/Lectures/macro.Rdata) 	|
 
-| 13. 	|                                      	|    	|                                                                              	| [data 13](pages/Lectures/ch13.Rdata) 	|
+| 13. 	|  Нэгжийн Язгуурт Процесс, ARIMA                   	|    	|                                                                              	| [data 13](pages/Lectures/ch13.Rdata) 	|
 ## Сурах бичиг
 
 [Diebold Francis *"Elements of Forecasting"*](https://www.sas.upenn.edu/~fdiebold/Textbooks.html)
