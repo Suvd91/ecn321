@@ -44,3 +44,5 @@ description:
 [Бие даалт - 1](pages/HW/hw1.html)
 
 [Бие даалт - 2](pages/HW/hw2.html)
+
+[Бие даалт - 3](pages/HW/hw3.html)
