@@ -19,7 +19,7 @@ $$y_t=\phi_1 y_{t-1}+\phi_2y_{t-2}+\epsilon_t$$
 
 ## A. 2
 
- ${y _t }$, ${z t }$ нь $I(1)$ цуваанууд бөгөөд $y-\beta z_t$ нь I(0) ($\beta\neq 0$) бол $\delta\neq\beta$ байх үед $y_t -\delta z_t$ нь $I(1)$ болохыг үзүүл.    
+ ${y_t }$, ${z_t }$ нь $I(1)$ цуваанууд бөгөөд $y-\beta z_t$ нь I(0) ($\beta\neq 0$) бол $\delta\neq\beta$ байх үед $y_t -\delta z_t$ нь $I(1)$ болохыг үзүүл.    
 
 ## S.1 
 
